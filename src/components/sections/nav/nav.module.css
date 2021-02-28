@@ -1,0 +1,23 @@
+.header {
+  right: 80px;
+  left: 80px;
+  padding: 20px 50px;
+  z-index: 1000;
+  background-color: transparent;
+  opacity: 0.9;
+}
+
+.navbar {
+  background: transparent !important;
+  border: none !important;
+}
+
+.drawer {
+  text-align: center;
+  background-color: transparent;
+}
+
+.item {
+  border: 0 !important;
+  color: black;
+}

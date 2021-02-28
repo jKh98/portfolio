@@ -1,11 +1,12 @@
 import React from "react";
+import { Layout } from "antd";
 
-import { Menu } from "&components/skeleton/menu/menu.component";
+import { Nav } from "&components/sections/nav/nav.component";
 
 export function Landing() {
   return (
-    <div>
-      <Menu />
-    </div>
+    <Layout>
+      <Nav />
+    </Layout>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { ConfigProvider } from "antd";
 import { useTranslation } from "react-i18next";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 
@@ -16,7 +17,11 @@ function App() {
 
   return (
     <ConfigProvider direction={i18n?.dir()}>
-      <Landing />
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Landing} />
+        </Switch>
+      </BrowserRouter>
     </ConfigProvider>
   );
 }
