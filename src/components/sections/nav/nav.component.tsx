@@ -3,11 +3,14 @@ import { useTranslation } from "react-i18next";
 import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Row, Col, Menu, Button, Drawer, Switch, Typography } from "antd";
+
 import {
   MenuOutlined,
   CloseOutlined,
   TranslationOutlined,
 } from "@ant-design/icons";
+
+import { FaSun, FaMoon } from "react-icons/all";
 
 import styles from "./nav.module.css";
 import { sections } from "&config/meta";
@@ -76,8 +79,8 @@ export function Nav() {
         <Switch
           checked={isDarkMode}
           onChange={toggleTheme}
-          checkedChildren={"🌙"}
-          unCheckedChildren={"☀️"}
+          checkedChildren={<FaMoon className={styles.icon} />}
+          unCheckedChildren={<FaSun className={styles.icon} />}
         />
       </Menu.Item>
     </>
@@ -90,12 +93,13 @@ export function Nav() {
         justify="space-between"
         align="middle"
         style={
-          scrollPosition > 32
+          scrollPosition > 0
             ? {
                 position: "fixed",
                 top: 0,
+                opacity: 0.6,
               }
-            : undefined
+            : { opacity: 0.9 }
         }
       >
         <Col>

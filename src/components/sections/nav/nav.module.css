@@ -1,7 +1,7 @@
 .header {
   padding: 2vh 3vw;
   z-index: 1000;
-  background: transparent !important;
+  width: 100vw;
   opacity: 0.9;
 }
 
@@ -23,4 +23,10 @@
 .title {
   font-size: 20;
   font-weight: 600;
+}
+
+.icon {
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
 }
