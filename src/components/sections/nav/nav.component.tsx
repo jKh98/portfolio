@@ -105,7 +105,7 @@ export function Nav() {
             to={sections[0]?.href}
           >
             <Text strong style={{ fontSize: 20 }}>
-              Jihad
+              {t("FULL_NAME")}
             </Text>
           </HashLink>
         </Col>
