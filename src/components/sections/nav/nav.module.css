@@ -3,7 +3,6 @@
   left: 80px;
   padding: 20px 50px;
   z-index: 1000;
-  background-color: transparent;
   opacity: 0.9;
 }
 
@@ -14,10 +13,10 @@
 
 .drawer {
   text-align: center;
-  background-color: transparent;
 }
 
 .item {
   border: 0 !important;
-  color: black;
+  background: transparent !important;
+  font-weight: 600;
 }

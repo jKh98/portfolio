@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HashLink } from "react-router-hash-link";
-import { Row, Col, Menu, Button, Drawer } from "antd";
+import { useThemeSwitcher } from "react-css-theme-switcher";
+import { Row, Col, Menu, Button, Drawer, Switch } from "antd";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
 import styles from "./nav.module.css";
-
-const sections = require("&config/sections");
+import { sections } from "&config/meta";
 
 export function Nav() {
   const collapseWidth = 800;
   const { t } = useTranslation();
+  const { switcher, currentTheme, themes } = useThemeSwitcher();
 
   const [width, setWidth] = useState(window.innerWidth);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isDrawerOpen, showDrawer] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(currentTheme === "dark");
+
+  /** Toggles between dark and light themes */
+  const toggleTheme = (isChecked: boolean) => {
+    setIsDarkMode(isChecked);
+    switcher({ theme: isChecked ? themes.dark : themes.light });
+  };
 
   /** Handles window resize events */
   useEffect(() => {
@@ -38,14 +46,25 @@ export function Nav() {
     window.scrollTo({ top: yCoordinate + yOffset, behavior: "smooth" });
   };
 
-  const renderMenuContent = () =>
-    sections.map((key: string) => (
-      <Menu.Item key={key} className={styles.item}>
-        <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={`#${key}`}>
-          {t(key.toUpperCase())}
-        </HashLink>
+  const renderMenuContent = () => (
+    <>
+      {sections.map(({ key, title, href }) => (
+        <Menu.Item key={key} className={styles.item}>
+          <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={href}>
+            {t(title)}
+          </HashLink>
+        </Menu.Item>
+      ))}
+      <Menu.Item key="theme" className={styles.item}>
+        <Switch
+          checked={isDarkMode}
+          onChange={toggleTheme}
+          checkedChildren={"🌙"}
+          unCheckedChildren={"☀️"}
+        />
       </Menu.Item>
-    ));
+    </>
+  );
 
   return (
     <>
@@ -58,13 +77,8 @@ export function Nav() {
             ? {
                 position: "fixed",
                 top: 0,
-                borderBottomLeftRadius: "32px",
-                borderBottomRightRadius: "32px",
               }
-            : {
-                borderTopLeftRadius: "32px",
-                borderTopRightRadius: "32px",
-              }
+            : undefined
         }
       >
         <Col>
@@ -90,7 +104,7 @@ export function Nav() {
         onClose={() => showDrawer(false)}
         visible={isDrawerOpen && width <= collapseWidth}
       >
-        <Menu>{renderMenuContent()}</Menu>
+        <Menu mode="vertical">{renderMenuContent()}</Menu>
       </Drawer>
     </>
   );

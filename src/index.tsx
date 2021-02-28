@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -7,11 +8,18 @@ import reportWebVitals from "./reportWebVitals";
 import { I18nextProvider } from "react-i18next";
 import i18n from "&config/i18n";
 
+const themes = {
+  dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
+  light: `${process.env.PUBLIC_URL}/light-theme.css`,
+};
+
 ReactDOM.render(
   <React.StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <App />
-    </I18nextProvider>
+    <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
+      <I18nextProvider i18n={i18n}>
+        <App />
+      </I18nextProvider>
+    </ThemeSwitcherProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

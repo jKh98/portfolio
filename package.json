@@ -16,6 +16,7 @@
     "i18next": "^19.7.0",
     "i18next-browser-languagedetector": "^6.0.1",
     "react": "^17.0.1",
+    "react-css-theme-switcher": "^0.2.2",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.7.2",
     "react-router-dom": "^5.2.0",
@@ -25,6 +26,13 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "autoprefixer": "^9.0.0",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-debug": "^4.0.0",
+    "gulp-less": "^4.0.1",
+    "gulp-postcss": "^9.0.0",
+    "less-plugin-npm-import": "^2.1.0",
     "prettier": "2.1.1",
     "react-app-rewired": "^2.1.6",
     "serve": "^11.3.2"
