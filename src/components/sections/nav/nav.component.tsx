@@ -2,15 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import { Row, Col, Menu, Button, Drawer, Switch } from "antd";
-import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
+import { Row, Col, Menu, Button, Drawer, Switch, Typography } from "antd";
+import {
+  MenuOutlined,
+  CloseOutlined,
+  TranslationOutlined,
+} from "@ant-design/icons";
 
 import styles from "./nav.module.css";
 import { sections } from "&config/meta";
 
+const { Text } = Typography;
+
 export function Nav() {
   const collapseWidth = 800;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { switcher, currentTheme, themes } = useThemeSwitcher();
 
   const [width, setWidth] = useState(window.innerWidth);
@@ -55,6 +61,17 @@ export function Nav() {
           </HashLink>
         </Menu.Item>
       ))}
+      <Menu.SubMenu
+        key="i18n"
+        className={styles.item}
+        title={<TranslationOutlined />}
+      >
+        {i18n.languages.map((lang) => (
+          <Menu.Item key={lang} onClick={() => i18n.changeLanguage(lang)}>
+            {t(lang.toUpperCase())}
+          </Menu.Item>
+        ))}
+      </Menu.SubMenu>
       <Menu.Item key="theme" className={styles.item}>
         <Switch
           checked={isDarkMode}
@@ -82,7 +99,15 @@ export function Nav() {
         }
       >
         <Col>
-          <a href={"#"}>jihad</a>
+          <HashLink
+            scroll={(el) => scrollWithOffset(el)}
+            smooth
+            to={sections[0]?.href}
+          >
+            <Text strong style={{ fontSize: 20 }}>
+              Jihad
+            </Text>
+          </HashLink>
         </Col>
         <Col>
           {width > collapseWidth ? (
@@ -97,14 +122,15 @@ export function Nav() {
         </Col>
       </Row>
       <Drawer
-        className={styles.drawer}
         closeIcon={<CloseOutlined />}
         placement="right"
         closable={true}
         onClose={() => showDrawer(false)}
         visible={isDrawerOpen && width <= collapseWidth}
       >
-        <Menu mode="vertical">{renderMenuContent()}</Menu>
+        <Menu mode="vertical" className={styles.drawer}>
+          {renderMenuContent()}
+        </Menu>
       </Drawer>
     </>
   );

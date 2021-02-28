@@ -10,10 +10,11 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: en,
-      ar: ar,
+      en: { translation: en },
+      ar: { translation: ar },
     },
-    fallbackLng: "en",
+    fallbackLng: ["en", "ar"],
+    ns: ["translation"],
     debug: false,
 
     keySeparator: false, // we use content as keys

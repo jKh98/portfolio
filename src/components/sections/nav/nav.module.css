@@ -1,8 +1,7 @@
 .header {
-  right: 80px;
-  left: 80px;
-  padding: 20px 50px;
+  padding: 2vh 3vw;
   z-index: 1000;
+  background: transparent !important;
   opacity: 0.9;
 }
 
@@ -12,11 +11,16 @@
 }
 
 .drawer {
-  text-align: center;
+  border: none !important;
 }
 
 .item {
-  border: 0 !important;
-  background: transparent !important;
+  border: none !important;
+  background: none !important;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 20;
   font-weight: 600;
 }
