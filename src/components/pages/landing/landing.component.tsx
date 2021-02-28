@@ -1,5 +1,11 @@
 import React from "react";
 
+import { Menu } from "&components/skeleton/menu/menu.component";
+
 export function Landing() {
-  return <div>landing</div>;
+  return (
+    <div>
+      <Menu />
+    </div>
+  );
 }

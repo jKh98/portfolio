@@ -1,6 +1,7 @@
 import React from "react";
 import { ConfigProvider } from "antd";
 import { useTranslation } from "react-i18next";
+import "antd/dist/antd.css";
 import "./App.css";
 
 import { Landing } from "./components/pages/landing/landing.component";
