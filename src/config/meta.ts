@@ -1,8 +1,25 @@
 export const sections = [
-  { key: "home", href: "#home", title: "HOME" },
-  { key: "projects", href: "#projects", title: "PROJECTS" },
-  { key: "about", href: "#about", title: "ABOUT" },
-  { key: "contact", href: "#contact", title: "CONTACT" },
+  {
+    key: "about",
+    href: "#about",
+    name: "ABOUT",
+    title: "ABOUT_TITLE",
+    description: "ABOUT_DESC",
+  },
+  {
+    key: "projects",
+    href: "#projects",
+    name: "PROJECTS",
+    title: "PROJECTS_TITLE",
+    description: "PROJECTS_DESC",
+  },
+  {
+    key: "contact",
+    href: "#contact",
+    name: "CONTACT",
+    title: "CONTACT_TITLE",
+    description: "CONTACT_DESC",
+  },
 ];
 
 /** Object with social media urls. */

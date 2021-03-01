@@ -1,3 +1,10 @@
 .full {
   min-height: 100vh !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.profile {
+  border-radius: 60px !important;
+  background-color: aliceblue !important;
 }

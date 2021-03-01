@@ -25,7 +25,7 @@ export function Nav() {
   const [width, setWidth] = useState(window.innerWidth);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isDrawerOpen, showDrawer] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(currentTheme === "dark");
+  const [isDarkMode, setIsDarkMode] = useState(currentTheme === themes.dark);
 
   /** Toggles between dark and light themes */
   const toggleTheme = (isChecked: boolean) => {
@@ -57,10 +57,10 @@ export function Nav() {
 
   const renderMenuContent = () => (
     <>
-      {sections.map(({ key, title, href }) => (
+      {sections.map(({ key, name, href }) => (
         <Menu.Item key={key} className={styles.item}>
           <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={href}>
-            {t(title)}
+            {t(name)}
           </HashLink>
         </Menu.Item>
       ))}
@@ -95,11 +95,10 @@ export function Nav() {
         style={
           scrollPosition > 0
             ? {
-                position: "fixed",
                 top: 0,
-                opacity: 0.6,
+                position: "fixed",
               }
-            : { opacity: 0.9 }
+            : { position: "absolute" }
         }
       >
         <Col>

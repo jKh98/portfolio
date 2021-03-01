@@ -4,7 +4,14 @@ export const en = {
   EN: "English",
   AR: "العربية",
   HOME: "Home",
-  PROJECTS: "Projects",
+  PROJECTS: "My Projects",
   ABOUT: "About me",
   CONTACT: "Contact me",
+
+  ABOUT_TITLE: "Full-stack Web and Mobile Software Engineer",
+  ABOUT_DESC: "",
+  PROJECTS_TITLE: "",
+  PROJECTS_DESC: "",
+  CONTACT_TITLE: "",
+  CONTACT_DESC: "",
 };
