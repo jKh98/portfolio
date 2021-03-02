@@ -10,7 +10,7 @@ import {
   TranslationOutlined,
 } from "@ant-design/icons";
 
-import { FaSun, FaMoon } from "react-icons/all";
+import { RiSunFill, RiMoonFill } from "react-icons/all";
 
 import styles from "./nav.module.css";
 import { sections } from "&config/meta";
@@ -79,8 +79,8 @@ export function Nav() {
         <Switch
           checked={isDarkMode}
           onChange={toggleTheme}
-          checkedChildren={<FaMoon className={styles.icon} />}
-          unCheckedChildren={<FaSun className={styles.icon} />}
+          checkedChildren={<RiMoonFill className={styles.icon} />}
+          unCheckedChildren={<RiSunFill className={styles.icon} />}
         />
       </Menu.Item>
     </>
