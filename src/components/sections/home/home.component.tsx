@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Col, Layout, Row, Typography } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 
-import styles from "./about.module.css";
+import styles from "./home.module.css";
+
 import DayBg from "&assets/images/day.jpg";
 import NightBg from "&assets/images/night.jpg";
-
 import Profile from "&assets/images/profile.jpg";
 
 const { Title } = Typography;
@@ -15,7 +15,7 @@ const lightGradient = "linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4))";
 const darkGradient =
   "linear-gradient(rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.1))";
 
-export function About() {
+export function Home() {
   const { currentTheme, themes } = useThemeSwitcher();
   const { t } = useTranslation();
 

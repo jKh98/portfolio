@@ -8,8 +8,7 @@ export const en = {
   ABOUT: "About me",
   CONTACT: "Contact me",
 
-  ABOUT_TITLE: "Jihad Al-Khurfan",
-  ABOUT_DESC: "I'm a Full-stack Web and Mobile Software Engineer.",
+  HOME_MESSAGE: "I'm a Full-stack Web and Mobile Software Engineer.",
   PROJECTS_TITLE: "",
   PROJECTS_DESC: "",
   CONTACT_TITLE: "",

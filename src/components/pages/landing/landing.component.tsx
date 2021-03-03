@@ -3,13 +3,13 @@ import { Layout } from "antd";
 
 import { Nav } from "&components/sections/nav/nav.component";
 import { Social } from "&components/sections/social/social.component";
-import { About } from "&components/sections/about/about.component";
+import { Home } from "&components/sections/home/home.component";
 
 export function Landing() {
   return (
     <Layout>
       <Nav />
-      <About />
+      <Home />
       <Social />
     </Layout>
   );
