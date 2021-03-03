@@ -1,24 +1,19 @@
+// Here name is an i18n key
 export const sections = [
   {
     key: "about",
     href: "#about",
     name: "ABOUT",
-    title: "ABOUT_TITLE",
-    description: "ABOUT_DESC",
   },
   {
     key: "projects",
     href: "#projects",
     name: "PROJECTS",
-    title: "PROJECTS_TITLE",
-    description: "PROJECTS_DESC",
   },
   {
     key: "contact",
     href: "#contact",
     name: "CONTACT",
-    title: "CONTACT_TITLE",
-    description: "CONTACT_DESC",
   },
 ];
 

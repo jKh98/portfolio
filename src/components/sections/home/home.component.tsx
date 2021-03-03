@@ -7,7 +7,6 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import styles from "./about.module.css";
 import DayBg from "&assets/images/day.jpg";
 import NightBg from "&assets/images/night.jpg";
-import { sections } from "&config/meta";
 
 import Profile from "&assets/images/profile.jpg";
 
@@ -46,10 +45,10 @@ export function About() {
           <Row justify="center">
             <Col xs={22} sm={22} md={16} lg={16} xl={16} xxl={12}>
               <Title level={1} className={styles.text}>
-                <b> {t(sections[0].title)}</b>
+                <b> {t("FULL_NAME")}</b>
               </Title>
               <Title level={2} className={styles.text}>
-                {t(sections[0].description)}
+                {t("HOME_MESSAGE")}
               </Title>
             </Col>
           </Row>
