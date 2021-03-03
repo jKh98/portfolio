@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
@@ -14,15 +14,17 @@ import styles from "./nav.module.css";
 import { sections } from "&config/meta";
 
 const { Text } = Typography;
+const darkBar = "rgba(0, 0, 0, 0.7)";
+const lightBar = "rgba(255, 255, 255, 0.7)";
 
 export function Nav() {
   const collapseWidth = 800;
   const { t, i18n } = useTranslation();
   const { switcher, currentTheme, themes } = useThemeSwitcher();
 
+  const [isDrawerOpen, showDrawer] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [isDrawerOpen, showDrawer] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(currentTheme === themes.dark);
 
   /** Toggles between dark and light themes */
@@ -51,6 +53,23 @@ export function Nav() {
     const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
     const yOffset = -84;
     window.scrollTo({ top: yCoordinate + yOffset, behavior: "smooth" });
+  };
+
+  const renderBarStyle = () => {
+    let barStyle: CSSProperties = {};
+    if (scrollPosition > 0) {
+      if (scrollPosition > window.innerHeight) {
+        barStyle.background = currentTheme === themes.dark ? darkBar : lightBar;
+      } else {
+        barStyle.zIndex = -1;
+      }
+
+      barStyle.top = 0;
+      barStyle.position = "fixed";
+    } else {
+      barStyle.position = "absolute";
+    }
+    return barStyle;
   };
 
   const renderMenuContent = () => (
@@ -90,14 +109,7 @@ export function Nav() {
         className={styles.header}
         justify="space-between"
         align="middle"
-        style={
-          scrollPosition > 0
-            ? {
-                top: 0,
-                position: "fixed",
-              }
-            : { position: "absolute" }
-        }
+        style={renderBarStyle()}
       >
         <Col>
           <HashLink

@@ -45,7 +45,7 @@ export function Home() {
           <Row justify="center">
             <Col xs={22} sm={22} md={16} lg={16} xl={16} xxl={12}>
               <Title level={1} className={styles.text}>
-                <b> {t("FULL_NAME")}</b>
+                <b>{t("FULL_NAME")}</b>
               </Title>
               <Title level={2} className={styles.text}>
                 {t("HOME_MESSAGE")}
