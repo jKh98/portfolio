@@ -3,13 +3,11 @@ import { useTranslation } from "react-i18next";
 import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Row, Col, Menu, Button, Drawer, Switch, Typography } from "antd";
-
 import {
   MenuOutlined,
   CloseOutlined,
   TranslationOutlined,
 } from "@ant-design/icons";
-
 import { RiSunFill, RiMoonFill } from "react-icons/all";
 
 import styles from "./nav.module.css";
