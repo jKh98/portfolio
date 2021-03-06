@@ -12,10 +12,9 @@ import { RiSunFill, RiMoonFill } from "react-icons/all";
 
 import styles from "./nav.module.css";
 import { sections } from "&config/meta";
+import { darkBar, lightBar } from "&config/color";
 
 const { Text } = Typography;
-const darkBar = "rgba(0, 0, 0, 0.7)";
-const lightBar = "rgba(255, 255, 255, 0.7)";
 
 export function Nav() {
   const collapseWidth = 800;
@@ -74,9 +73,9 @@ export function Nav() {
 
   const renderMenuContent = () => (
     <>
-      {sections.map(({ key, name, href }) => (
+      {sections.map(({ key, name }) => (
         <Menu.Item key={key} className={styles.item}>
-          <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={href}>
+          <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={`#${key}`}>
             {t(name)}
           </HashLink>
         </Menu.Item>
@@ -115,7 +114,7 @@ export function Nav() {
           <HashLink
             scroll={(el) => scrollWithOffset(el)}
             smooth
-            to={sections[0]?.href}
+            to={`#${sections[0]?.key}`}
           >
             <Text strong style={{ fontSize: 20 }}>
               {t("FULL_NAME")}

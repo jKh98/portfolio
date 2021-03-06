@@ -1,46 +1,52 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Col, Layout, Card, Row, Typography } from "antd";
-import { useThemeSwitcher } from "react-css-theme-switcher";
+import {
+  RiCodeSSlashFill,
+  RiDatabase2Fill,
+  RiLightbulbFill,
+} from "react-icons/all";
 
 import styles from "./about.module.css";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export function About() {
-  const { currentTheme, themes } = useThemeSwitcher();
   const { t } = useTranslation();
 
   return (
-    <Layout className={styles.container}>
+    <Layout id={"about"} className={styles.container}>
       <Row justify="center">
         <Title level={1} className={styles.text}>
-          {t("ABOUT")}
+          {t("ABOUT_HEADING")}
         </Title>
       </Row>
       <Row gutter={16}>
         <Col span={8}>
-          <Card hoverable>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam,
-            itaque repudiandae quaerat atque eos rem corrupti debitis nobis
-            cumque nam laboriosam excepturi iusto praesentium sequi accusamus?
-            Aliquid excepturi obcaecati aspernatur.
+          <Card hoverable className={styles.card}>
+            <RiCodeSSlashFill className={styles.icon} />
+            <Title level={3}>
+              <b>{t("ABOUT_TITLE_1")}</b>
+            </Title>
+            <Text>{t("ABOUT_DESC_1")}</Text>
           </Card>
         </Col>
         <Col span={8}>
-          <Card hoverable>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id adipisci
-            exercitationem nemo minus, sit iure, accusamus amet nulla ipsa
-            voluptatum quaerat, illo quia necessitatibus harum dignissimos porro
-            repellendus molestias nam?
+          <Card hoverable className={styles.card}>
+            <RiDatabase2Fill className={styles.icon} />
+            <Title level={3}>
+              <b>{t("ABOUT_TITLE_2")}</b>
+            </Title>
+            <Text>{t("ABOUT_DESC_2")}</Text>
           </Card>
         </Col>
         <Col span={8}>
-          <Card hoverable>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio
-            earum ipsum laudantium impedit similique maxime voluptate, aut ad et
-            quas laboriosam dicta veniam ab placeat dolorem saepe eius magni
-            harum?
+          <Card hoverable className={styles.card}>
+            <RiLightbulbFill className={styles.icon} />
+            <Title level={3}>
+              <b>{t("ABOUT_TITLE_3")}</b>
+            </Title>
+            <Text>{t("ABOUT_DESC_3")}</Text>
           </Card>
         </Col>
       </Row>

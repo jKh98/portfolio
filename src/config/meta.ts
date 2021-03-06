@@ -2,17 +2,14 @@
 export const sections = [
   {
     key: "about",
-    href: "#about",
     name: "ABOUT",
   },
   {
     key: "projects",
-    href: "#projects",
     name: "PROJECTS",
   },
   {
     key: "contact",
-    href: "#contact",
     name: "CONTACT",
   },
 ];
@@ -25,3 +22,5 @@ export const social = {
   facebook: "https://www.facebook.com/jihadkh1998",
   instagram: "https://www.instagram.com/jihad_kh_/",
 };
+
+export const githubUser = "Jkh98";

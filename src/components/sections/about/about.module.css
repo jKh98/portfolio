@@ -1,3 +1,13 @@
 .container {
   padding: 4% 8%;
 }
+
+.card {
+  height: 100% !important;
+  text-align: center !important;
+}
+
+.icon {
+  font-size: 48px;
+  margin: 24px 0;
+}
