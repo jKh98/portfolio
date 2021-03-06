@@ -24,4 +24,6 @@ export const en = {
     "I am greatly experienced in API design and implementation using NodeJS and different SQL and NoSQL databases.\nI like to learn about and apply modern security and cryptography standards.",
   ABOUT_DESC_3:
     "I like to come up with state-of-art solutions that tackle modern problems, ranging from automation and web-scraping to computer-vision.\nI am also invested in research for latest frameworks, tools and libraries.",
+
+  GITHUB_HEADING: "My Github",
 };
