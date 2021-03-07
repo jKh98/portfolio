@@ -5,10 +5,6 @@ export const sections = [
     name: "ABOUT",
   },
   {
-    key: "experience",
-    name: "EXPERIENCE",
-  },
-  {
     key: "projects",
     name: "PROJECTS",
   },
@@ -28,3 +24,7 @@ export const social = {
 };
 
 export const githubUser = "Jkh98";
+
+export const areebaUrl = "https://www.areeba.com";
+export const tecfracUrl = "https://www.tecfrac.com";
+export const narUrl = "https://www.nar.ai";

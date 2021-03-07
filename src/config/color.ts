@@ -1,6 +1,11 @@
 export const darkBar = "rgba(0, 0, 0, 0.9)";
 export const lightBar = "rgba(255, 255, 255, 0.9)";
 
+export const lightGradient =
+  "linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4))";
+export const darkGradient =
+  "linear-gradient(rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.1))";
+
 export const githubDark = {
   background: "transparent",
   text: "#fefefe",
