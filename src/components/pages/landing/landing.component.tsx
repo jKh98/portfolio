@@ -1,5 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
+// @ts-ignore
+import { Scrollama, Step } from "react-scrollama";
 
 import { Nav } from "&components/sections/nav/nav.component";
 import { Social } from "&components/sections/social/social.component";
@@ -10,18 +12,38 @@ import { Experience } from "&components/sections/experience/experience.component
 import { sections } from "&config/meta";
 
 export function Landing() {
+  const setSection = ({ data }: { data: string }) => {
+    window.history.replaceState(null, "", `#${data}`);
+  };
+
   return (
     <Layout>
       <Nav />
-      <Layout id={"home"}>
-        <Home />
-      </Layout>
-      <Layout id={sections[0].key}>
-        <Overview />
-        <Experience />
-      </Layout>
-      <Github />
-      <Social />
+      <Scrollama onStepEnter={setSection}>
+        <Step data={"home"}>
+          <div>
+            <Layout id={"home"}>
+              <Home />
+            </Layout>
+          </div>
+        </Step>
+        <Step data={sections[0].key}>
+          <div>
+            <Layout id={sections[0].key}>
+              <Overview />
+              <Experience />
+            </Layout>
+          </div>
+        </Step>
+        <Step data={"footer"}>
+          <div>
+            <Layout id={"footer"}>
+              <Github />
+              <Social />
+            </Layout>
+          </div>
+        </Step>
+      </Scrollama>
     </Layout>
   );
 }
