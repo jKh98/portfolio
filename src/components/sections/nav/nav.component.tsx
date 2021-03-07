@@ -119,7 +119,11 @@ export function Nav() {
         </Col>
         <Col>
           {width > collapseWidth ? (
-            <Menu mode="horizontal" className={styles.navbar}>
+            <Menu
+              mode="horizontal"
+              className={styles.navbar}
+              selectedKeys={[window.location.hash.replace("#", "")]}
+            >
               {renderMenuContent()}
             </Menu>
           ) : (
@@ -136,7 +140,11 @@ export function Nav() {
         onClose={() => showDrawer(false)}
         visible={isDrawerOpen && width <= collapseWidth}
       >
-        <Menu mode="vertical" className={styles.drawer}>
+        <Menu
+          mode="vertical"
+          className={styles.drawer}
+          selectedKeys={[window.location.hash.replace("#", "")]}
+        >
           {renderMenuContent()}
         </Menu>
       </Drawer>
