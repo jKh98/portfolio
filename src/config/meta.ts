@@ -5,6 +5,10 @@ export const sections = [
     name: "ABOUT",
   },
   {
+    key: "experience",
+    name: "EXPERIENCE",
+  },
+  {
     key: "projects",
     name: "PROJECTS",
   },

@@ -1,5 +1,5 @@
-export const darkBar = "rgba(0, 0, 0, 0.7)";
-export const lightBar = "rgba(255, 255, 255, 0.7)";
+export const darkBar = "rgba(0, 0, 0, 0.9)";
+export const lightBar = "rgba(255, 255, 255, 0.9)";
 
 export const githubDark = {
   background: "transparent",
