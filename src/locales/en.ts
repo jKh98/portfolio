@@ -3,7 +3,9 @@ export const en = {
 
   EN: "English",
   AR: "العربية",
+
   HOME: "Home",
+  EXPERIENCE: "My Experience",
   PROJECTS: "My Projects",
   ABOUT: "About me",
   CONTACT: "Contact me",
@@ -24,6 +26,13 @@ export const en = {
     "I am greatly experienced in API design and implementation using NodeJS and different SQL and NoSQL databases.\nI like to learn about and apply modern security and cryptography standards.",
   ABOUT_DESC_3:
     "I like to come up with state-of-art solutions that tackle modern problems, ranging from automation and web-scraping to computer-vision.\nI am also invested in research for latest frameworks, tools and libraries.",
+
+  EXPERIENCE_HEADING: "My Experience",
+  EXPERIENCE_1_DATE: "08/2020 - Present",
+  EXPERIENCE_2_DATE: "06/2020 - 08/2020",
+  EXPERIENCE_3_DATE: "09/2019 - 11/2019",
+  EXPERIENCE_4_DATE: "06/2019 - 08/2019",
+  EXPERIENCE_5_DATE: "12/2018 - 01/2019",
 
   GITHUB_HEADING: "My Github",
 };

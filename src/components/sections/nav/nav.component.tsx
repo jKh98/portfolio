@@ -59,6 +59,7 @@ export function Nav() {
     if (scrollPosition > 0) {
       if (scrollPosition > window.innerHeight) {
         barStyle.background = currentTheme === themes.dark ? darkBar : lightBar;
+        barStyle.backdropFilter = "blur(6px)";
       } else {
         barStyle.zIndex = -1;
       }

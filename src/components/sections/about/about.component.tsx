@@ -8,21 +8,23 @@ import {
 } from "react-icons/all";
 
 import styles from "./about.module.css";
+import { sections } from "&config/meta";
 
 const { Title, Text } = Typography;
+const { Header } = Layout;
 
 export function About() {
   const { t } = useTranslation();
 
   return (
-    <Layout id={"about"} className={styles.container}>
+    <Layout id={sections[0].key} className={styles.container}>
       <Row justify="center">
-        <Title level={1} className={styles.text}>
-          {t("ABOUT_HEADING")}
+        <Title level={2}>
+          <b>{t("ABOUT_HEADING")}</b>
         </Title>
       </Row>
       <Row gutter={16}>
-        <Col span={8}>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8} xxl={8}>
           <Card hoverable className={styles.card}>
             <RiCodeSSlashFill className={styles.icon} />
             <Title level={3}>
@@ -31,7 +33,7 @@ export function About() {
             <Text>{t("ABOUT_DESC_1")}</Text>
           </Card>
         </Col>
-        <Col span={8}>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8} xxl={8}>
           <Card hoverable className={styles.card}>
             <RiDatabase2Fill className={styles.icon} />
             <Title level={3}>
@@ -40,7 +42,7 @@ export function About() {
             <Text>{t("ABOUT_DESC_2")}</Text>
           </Card>
         </Col>
-        <Col span={8}>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8} xxl={8}>
           <Card hoverable className={styles.card}>
             <RiLightbulbFill className={styles.icon} />
             <Title level={3}>

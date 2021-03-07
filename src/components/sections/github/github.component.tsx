@@ -15,10 +15,10 @@ export function Github() {
   const { currentTheme, themes } = useThemeSwitcher();
 
   return (
-    <Layout>
+    <Layout className={styles.container}>
       <Row justify="center">
-        <Title level={1} className={styles.text}>
-          {t("GITHUB_HEADING")}
+        <Title level={2}>
+          <b>{t("GITHUB_HEADING")}</b>
         </Title>
       </Row>
       <Row justify="center">
