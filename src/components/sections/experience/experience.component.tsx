@@ -1,9 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Row, List, Layout, Typography, Tag } from "antd";
-import QueueAnim from "rc-queue-anim";
-import TweenOne from "rc-tween-one";
-import { OverPack, Parallax } from "rc-scroll-anim";
+import { Parallax } from "rc-scroll-anim";
 
 import { areebaUrl, narUrl, tecfracUrl } from "&config/meta";
 import styles from "./experience.module.css";
@@ -70,14 +68,18 @@ export function Experience() {
           <b>{t("EXPERIENCE_HEADING")}</b>
         </Title>
       </Row>
-      <OverPack>
-        <List
-          size="large"
-          bordered
-          itemLayout="vertical"
-          dataSource={data}
-          renderItem={({ occupation, date, position, url, items }, index) => (
-            <List.Item key={index} extra={t(date)}>
+      <List
+        size="large"
+        bordered
+        itemLayout="vertical"
+        dataSource={data}
+        renderItem={({ occupation, date, position, url, items }, index) => (
+          <Parallax
+            key={index}
+            animation={{ opacity: 1, playScale: [0.1] }}
+            style={{ opacity: 0 }}
+          >
+            <List.Item extra={t(date)}>
               <List.Item.Meta
                 title={<b>{t(position)}</b>}
                 description={
@@ -90,11 +92,11 @@ export function Experience() {
                 size="small"
                 dataSource={items}
                 renderItem={(item) => <List.Item>{t(item)}</List.Item>}
-              ></List>
+              />
             </List.Item>
-          )}
-        />
-      </OverPack>
+          </Parallax>
+        )}
+      />
     </Layout>
   );
 }

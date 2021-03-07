@@ -14,13 +14,13 @@ const themes = {
 };
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
-      <I18nextProvider i18n={i18n}>
-        <App />
-      </I18nextProvider>
-    </ThemeSwitcherProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
+    <I18nextProvider i18n={i18n}>
+      <App />
+    </I18nextProvider>
+  </ThemeSwitcherProvider>,
+  // </React.StrictMode>,
   document.getElementById("root")
 );
 
