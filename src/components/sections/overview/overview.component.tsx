@@ -8,6 +8,7 @@ import {
 } from "react-icons/all";
 
 import styles from "./overview.module.css";
+import { Parallax } from "rc-scroll-anim";
 
 const { Title, Text } = Typography;
 
@@ -39,23 +40,28 @@ export function Overview() {
           <b>{t("ABOUT_HEADING")}</b>
         </Title>
       </Row>
-      <Row>
-        <List
-          grid={{ gutter: 16, xs: 1, sm: 1, md: 3, lg: 3, xl: 3, xxl: 3 }}
-          dataSource={data}
-          renderItem={({ title, description, icon }) => (
-            <Col flex={1} className={styles.col}>
-              <Card className={styles.card}>
-                {icon}
-                <Title level={3}>
-                  <b>{t(title)}</b>
-                </Title>
-                <Text>{t(description)}</Text>
-              </Card>
-            </Col>
-          )}
-        />
-      </Row>
+      <Parallax
+        animation={{ scale: 1, playScale: [0.1] }}
+        style={{ transform: "scale(0.7)" }}
+      >
+        <Row>
+          <List
+            grid={{ gutter: 16, xs: 1, sm: 1, md: 3, lg: 3, xl: 3, xxl: 3 }}
+            dataSource={data}
+            renderItem={({ title, description, icon }) => (
+              <Col flex={1} className={styles.col}>
+                <Card className={styles.card}>
+                  {icon}
+                  <Title level={3}>
+                    <b>{t(title)}</b>
+                  </Title>
+                  <Text>{t(description)}</Text>
+                </Card>
+              </Col>
+            )}
+          />
+        </Row>
+      </Parallax>
     </Layout>
   );
 }
