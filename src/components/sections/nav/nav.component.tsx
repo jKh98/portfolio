@@ -50,8 +50,7 @@ export function Nav() {
 
   const scrollWithOffset = (el: Element) => {
     const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
-    const yOffset = -84;
-    window.scrollTo({ top: yCoordinate + yOffset, behavior: "smooth" });
+    window.scrollTo({ top: yCoordinate, behavior: "smooth" });
   };
 
   const renderBarStyle = () => {
@@ -112,11 +111,7 @@ export function Nav() {
         style={renderBarStyle()}
       >
         <Col>
-          <HashLink
-            scroll={(el) => scrollWithOffset(el)}
-            smooth
-            to={`#${sections[0]?.key}`}
-          >
+          <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={`#home`}>
             <Text strong style={{ fontSize: 20 }}>
               {t("FULL_NAME")}
             </Text>
