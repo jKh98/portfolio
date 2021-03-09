@@ -28,3 +28,4 @@ export const githubUser = "Jkh98";
 export const areebaUrl = "https://www.areeba.com";
 export const tecfracUrl = "https://www.tecfrac.com";
 export const narUrl = "https://www.nar.ai";
+export const aubUrl = "https://www.aub.edu";

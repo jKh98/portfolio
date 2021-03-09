@@ -1,0 +1,9 @@
+.container {
+  padding: 4% 8%;
+}
+
+.logo {
+  max-height: 48px !important;
+  max-width: 48px !important;
+  margin: 4px;
+}
