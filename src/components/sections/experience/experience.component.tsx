@@ -1,12 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Row, List, Layout, Typography, Tag } from "antd";
+import { Row, List, Layout, Typography, Button } from "antd";
 import { Parallax } from "rc-scroll-anim";
 
 import { areebaUrl, narUrl, tecfracUrl } from "&config/meta";
 import styles from "./experience.module.css";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const data = [
   {
@@ -79,19 +79,29 @@ export function Experience() {
             animation={{ opacity: 1, playScale: [0.1] }}
             style={{ opacity: 0 }}
           >
-            <List.Item extra={t(date)}>
+            <List.Item
+              extra={
+                <Text type="secondary">
+                  <b>{t(date)}</b>
+                </Text>
+              }
+            >
               <List.Item.Meta
                 title={<b>{t(position)}</b>}
                 description={
-                  <a href={url}>
-                    <Tag color="blue">{t(occupation)}</Tag>
-                  </a>
+                  <Button type="primary" size="small" shape="round" href={url}>
+                    {t(occupation)}
+                  </Button>
                 }
               />
               <List
                 size="small"
                 dataSource={items}
-                renderItem={(item) => <List.Item>{t(item)}</List.Item>}
+                renderItem={(item) => (
+                  <List.Item>
+                    <Text> {t(item)}</Text>
+                  </List.Item>
+                )}
               />
             </List.Item>
           </Parallax>
