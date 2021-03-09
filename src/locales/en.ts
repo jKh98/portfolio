@@ -65,5 +65,13 @@ export const en = {
   INTERN_NAR_ITEM_2:
     "Performed important bug-fixing, updated GUI and introduced code obfuscation",
 
+  EDUCATION_HEADING: "My Education",
+  AUB: "American University of Beirut",
+  AUB_DATE: "08/2016 - 06/2020",
+  AUB_DEGREE: "BE in Computer and Comunication Engineering",
+  AUB_ITEM_1: "GPA: 3.65",
+  AUB_ITEM_2: "MSFEA Dean’s List",
+  AUB_ITEM_3: "Minor in Economics",
+
   GITHUB_HEADING: "My Github",
 };
