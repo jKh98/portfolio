@@ -14,18 +14,18 @@ const { Title, Text } = Typography;
 
 const data = [
   {
-    title: "ABOUT_TITLE_1",
-    description: "ABOUT_DESC_1",
+    title: "OVERVIEW_TITLE_1",
+    description: "OVERVIEW_DESC_1",
     icon: <RiCodeSSlashFill className={styles.icon} />,
   },
   {
-    title: "ABOUT_TITLE_2",
-    description: "ABOUT_DESC_2",
+    title: "OVERVIEW_TITLE_2",
+    description: "OVERVIEW_DESC_2",
     icon: <RiDatabase2Fill className={styles.icon} />,
   },
   {
-    title: "ABOUT_TITLE_3",
-    description: "ABOUT_DESC_3",
+    title: "OVERVIEW_TITLE_3",
+    description: "OVERVIEW_DESC_3",
     icon: <RiLightbulbFill className={styles.icon} />,
   },
 ];
@@ -37,7 +37,7 @@ export function Overview() {
     <Layout className={styles.container}>
       <Row justify="center">
         <Title level={2}>
-          <b>{t("ABOUT_HEADING")}</b>
+          <b>{t("OVERVIEW_HEADING")}</b>
         </Title>
       </Row>
       <Parallax
