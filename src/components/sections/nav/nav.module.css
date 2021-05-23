@@ -1,8 +1,6 @@
 .header {
-  padding: 2vh 3vw;
   z-index: 1000;
   width: 100vw;
-  opacity: 0.9;
 }
 
 .navbar {
