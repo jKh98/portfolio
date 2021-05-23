@@ -22,29 +22,30 @@ export function Home() {
     window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
   };
 
+  const renderProfileStyle = () =>
+    currentTheme === themes.light ? { boxShadow: "0 0 10px" } : {};
+
+  const renderLayouteStyle = () => ({
+    backgroundImage:
+      currentTheme === themes.dark
+        ? `${darkGradient}, url(${NightBg})`
+        : `${lightGradient}, url(${DayBg})`,
+  });
+
   return (
-    <Layout
-      className={styles.full}
-      style={{
-        backgroundImage:
-          currentTheme === themes.dark
-            ? `${darkGradient}, url(${NightBg})`
-            : `${lightGradient}, url(${DayBg})`,
-      }}
-    >
+    <Layout className={styles.full} style={renderLayouteStyle()}>
       <Row justify="space-around" align="middle" className={styles.full}>
         <Parallax
           animation={[{ blur: "10px", playScale: [0.9] }]}
-          style={{
-            filter: "blur(0px)",
-          }}
+          style={{ filter: "blur(0px)" }}
         >
           <Col>
             <Row justify="center">
               <img
                 className={styles.profile}
-                src={Profile}
+                style={renderProfileStyle()}
                 alt="profile_picture"
+                src={Profile}
               />
             </Row>
             <Row justify="center">

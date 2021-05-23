@@ -1,33 +1,18 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Row, List, Layout, Typography, Button } from "antd";
+import { List, Typography, Button } from "antd";
 import { Parallax } from "rc-scroll-anim";
 
-import { aubUrl } from "&config/meta";
-import styles from "./education.module.css";
+import { education as data } from "&config/data.json";
+import { Section } from "&components/styled/section/section.component";
 
 const { Title, Text } = Typography;
-
-const data = [
-  {
-    school: "AUB",
-    date: "AUB_DATE",
-    degree: "AUB_DEGREE",
-    url: aubUrl,
-    items: ["AUB_ITEM_1", "AUB_ITEM_2", "AUB_ITEM_3"],
-  },
-];
 
 export function Education() {
   const { t } = useTranslation();
 
   return (
-    <Layout className={styles.container}>
-      <Row justify="center">
-        <Title level={2}>
-          <b>{t("EDUCATION_HEADING")}</b>
-        </Title>
-      </Row>
+    <Section title={t("EDUCATION_HEADING")}>
       <List
         size="large"
         bordered
@@ -47,7 +32,7 @@ export function Education() {
               }
             >
               <List.Item.Meta
-                title={<b>{t(degree)}</b>}
+                title={<Title level={4}>{t(degree)}</Title>}
                 description={
                   <Button type="primary" size="small" shape="round" href={url}>
                     {t(school)}
@@ -59,7 +44,7 @@ export function Education() {
                 dataSource={items}
                 renderItem={(item) => (
                   <List.Item>
-                    <Text> {t(item)}</Text>
+                    <Text>{t(item)}</Text>
                   </List.Item>
                 )}
               />
@@ -67,6 +52,6 @@ export function Education() {
           </Parallax>
         )}
       />
-    </Layout>
+    </Section>
   );
 }

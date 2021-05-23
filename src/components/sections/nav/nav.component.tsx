@@ -2,7 +2,7 @@ import React, { CSSProperties, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import { Row, Col, Menu, Button, Drawer, Switch, Typography } from "antd";
+import { Row, Col, Menu, Drawer, Layout, Switch, Typography } from "antd";
 import {
   MenuOutlined,
   CloseOutlined,
@@ -12,9 +12,9 @@ import { RiSunFill, RiMoonFill } from "react-icons/all";
 
 import styles from "./nav.module.css";
 import { sections } from "&config/meta";
-import { darkBar, lightBar } from "&config/color";
 
 const { Text } = Typography;
+const { Header } = Layout;
 
 export function Nav() {
   const collapseWidth = 800;
@@ -25,12 +25,6 @@ export function Nav() {
   const [width, setWidth] = useState(window.innerWidth);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(currentTheme === themes.dark);
-
-  /** Toggles between dark and light themes */
-  const toggleTheme = (isChecked: boolean) => {
-    setIsDarkMode(isChecked);
-    switcher({ theme: isChecked ? themes.dark : themes.light });
-  };
 
   /** Handles window resize events */
   useEffect(() => {
@@ -48,6 +42,12 @@ export function Nav() {
     };
   }, []);
 
+  /** Toggles between dark and light themes */
+  const toggleTheme = (isChecked: boolean) => {
+    setIsDarkMode(isChecked);
+    switcher({ theme: isChecked ? themes.dark : themes.light });
+  };
+
   const scrollWithOffset = (el: Element) => {
     const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({ top: yCoordinate, behavior: "smooth" });
@@ -57,8 +57,7 @@ export function Nav() {
     let barStyle: CSSProperties = {};
     if (scrollPosition > 0) {
       if (scrollPosition > window.innerHeight) {
-        barStyle.background = currentTheme === themes.dark ? darkBar : lightBar;
-        barStyle.backdropFilter = "blur(6px)";
+        barStyle.boxShadow = !isDarkMode ? "0 0 10px" : "0";
       } else {
         barStyle.zIndex = -1;
       }
@@ -67,6 +66,7 @@ export function Nav() {
       barStyle.position = "fixed";
     } else {
       barStyle.position = "absolute";
+      barStyle.backgroundColor = "transparent";
     }
     return barStyle;
   };
@@ -104,39 +104,36 @@ export function Nav() {
 
   return (
     <>
-      <Row
-        className={styles.header}
-        justify="space-between"
-        align="middle"
-        style={renderBarStyle()}
-      >
-        <Col>
-          <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={`#home`}>
-            <Text strong style={{ fontSize: 20 }}>
-              {t("FULL_NAME")}
-            </Text>
-          </HashLink>
-        </Col>
-        <Col>
-          {width > collapseWidth ? (
-            <Menu
-              mode="horizontal"
-              className={styles.navbar}
-              selectedKeys={[window.location.hash.replace("#", "")]}
-            >
-              {renderMenuContent()}
-            </Menu>
-          ) : (
-            <Button onClick={() => showDrawer(true)}>
-              <MenuOutlined />
-            </Button>
-          )}
-        </Col>
-      </Row>
+      <Header style={renderBarStyle()} className={styles.header}>
+        <Row justify="space-between" align="middle">
+          <Col>
+            <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={`#home`}>
+              <Text strong style={{ fontSize: 20 }}>
+                {t("FULL_NAME")}
+              </Text>
+            </HashLink>
+          </Col>
+          <Col>
+            {width > collapseWidth ? (
+              <Menu
+                mode="horizontal"
+                className={styles.navbar}
+                selectedKeys={[window.location.hash.replace("#", "")]}
+              >
+                {renderMenuContent()}
+              </Menu>
+            ) : (
+              <MenuOutlined onClick={() => showDrawer(true)} />
+            )}
+          </Col>
+        </Row>
+      </Header>
       <Drawer
         closeIcon={<CloseOutlined />}
         placement="right"
+        width={"100vw"}
         closable={true}
+        className={styles.drawer}
         onClose={() => showDrawer(false)}
         visible={isDrawerOpen && width <= collapseWidth}
       >

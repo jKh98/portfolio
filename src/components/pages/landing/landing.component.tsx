@@ -12,6 +12,8 @@ import { Experience } from "&components/sections/experience/experience.component
 import { Education } from "&components/sections/education/education.component";
 import { sections } from "&config/meta";
 
+const { Footer } = Layout;
+
 export function Landing() {
   const setSection = ({ data }: { data: string }) => {
     window.history.replaceState(null, "", `#${data}`);
@@ -39,10 +41,10 @@ export function Landing() {
         </Step>
         <Step data={"footer"}>
           <div>
-            <Layout id={"footer"}>
+            <Footer id={"footer"}>
               <Github />
               <Social />
-            </Layout>
+            </Footer>
           </div>
         </Step>
       </Scrollama>

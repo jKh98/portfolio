@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Col, Layout, Card, Row, Typography, List } from "antd";
+import { Col, Card, Row, Typography, List } from "antd";
 import {
   RiCodeSSlashFill,
   RiDatabase2Fill,
@@ -9,6 +9,7 @@ import {
 
 import styles from "./overview.module.css";
 import { Parallax } from "rc-scroll-anim";
+import { Section } from "&components/styled/section/section.component";
 
 const { Title, Text } = Typography;
 
@@ -34,12 +35,7 @@ export function Overview() {
   const { t } = useTranslation();
 
   return (
-    <Layout className={styles.container}>
-      <Row justify="center">
-        <Title level={2}>
-          <b>{t("OVERVIEW_HEADING")}</b>
-        </Title>
-      </Row>
+    <Section title={t("OVERVIEW_HEADING")}>
       <Parallax
         animation={{ scale: 1, playScale: [0.1] }}
         style={{ transform: "scale(0.7)" }}
@@ -62,6 +58,6 @@ export function Overview() {
           />
         </Row>
       </Parallax>
-    </Layout>
+    </Section>
   );
 }

@@ -1,26 +1,19 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Row, Layout, Typography } from "antd";
+import { Row } from "antd";
 import ReactGithubCalender from "react-github-calendar";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 
 import { githubUser } from "&config/meta";
-import styles from "./github.module.css";
 import { githubDark, githubLight } from "&config/color";
-
-const { Title } = Typography;
+import { Section } from "&components/styled/section/section.component";
 
 export function Github() {
   const { t } = useTranslation();
   const { currentTheme, themes } = useThemeSwitcher();
 
   return (
-    <Layout className={styles.container}>
-      <Row justify="center">
-        <Title level={2}>
-          <b>{t("GITHUB_HEADING")}</b>
-        </Title>
-      </Row>
+    <Section title={t("GITHUB_HEADING")}>
       <Row justify="center">
         <ReactGithubCalender
           username={githubUser}
@@ -29,6 +22,6 @@ export function Github() {
           theme={currentTheme === themes.dark ? githubDark : githubLight}
         />
       </Row>
-    </Layout>
+    </Section>
   );
 }
