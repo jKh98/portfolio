@@ -50,9 +50,9 @@
   ],
   "education": [
     {
-      "school": "AUB",
+      "occupation": "AUB",
       "date": "AUB_DATE",
-      "degree": "AUB_DEGREE",
+      "position": "AUB_DEGREE",
       "url": "https://www.aub.edu.lb",
       "items": ["AUB_ITEM_1", "AUB_ITEM_2", "AUB_ITEM_3"]
     }
