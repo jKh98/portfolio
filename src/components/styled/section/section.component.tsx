@@ -18,6 +18,7 @@ export function Section(props: SectionProps) {
       <Row justify="center">
         <Title level={2}>{title}</Title>
       </Row>
+      <br />
       {children}
     </Content>
   );
