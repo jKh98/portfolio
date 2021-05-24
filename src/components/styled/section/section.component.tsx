@@ -4,7 +4,7 @@ import { Row, Layout, Typography } from "antd";
 import styles from "./section.module.css";
 
 interface SectionProps {
-  title: string;
+  title?: string;
   children: ReactNode;
 }
 

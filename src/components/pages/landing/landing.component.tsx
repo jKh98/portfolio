@@ -8,7 +8,7 @@ import { Social } from "&components/sections/social/social.component";
 import { Home } from "&components/sections/home/home.component";
 import { Overview } from "&components/sections/overview/overview.component";
 import { Github } from "&components/sections/github/github.component";
-import { Experience } from "&components/sections/experience/experience.component";
+import { About } from "&components/sections/about/about.component";
 import { sections } from "&config/meta";
 
 const { Footer } = Layout;
@@ -26,14 +26,14 @@ export function Landing() {
           <div>
             <Layout id={"home"}>
               <Home />
+              <Overview />
             </Layout>
           </div>
         </Step>
         <Step data={sections[0].key}>
           <div>
             <Layout id={sections[0].key}>
-              <Overview />
-              <Experience />
+              <About />
             </Layout>
           </div>
         </Step>
