@@ -49,7 +49,8 @@ export function Nav() {
   };
 
   const scrollWithOffset = (el: Element) => {
-    const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
+    const yCoordinate =
+      el.getBoundingClientRect().top + window.pageYOffset - 60;
     window.scrollTo({ top: yCoordinate, behavior: "smooth" });
   };
 

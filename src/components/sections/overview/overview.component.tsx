@@ -47,10 +47,10 @@ export function Overview() {
             renderItem={({ title, description, icon }) => (
               <Col flex={1} className={styles.col}>
                 <Card className={styles.card}>
-                  {icon}
-                  <Title level={3}>
-                    <b>{t(title)}</b>
-                  </Title>
+                  <Text type="secondary">
+                    {icon}
+                    <Title level={3}>{t(title)}</Title>
+                  </Text>
                   <Text>{t(description)}</Text>
                 </Card>
               </Col>
