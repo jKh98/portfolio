@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Row, Col, Typography, Button } from "antd";
 
 import { experience, education } from "&config/data.json";
-import { Section } from "&components/styled/section/section.component";
-import { Timeline } from "&components/styled/timeline/timeline.component";
+import { Section } from "&components/common/section/section.component";
+import { Timeline } from "&components/common/timeline/timeline.component";
 
 const { Title } = Typography;
 
@@ -12,34 +12,28 @@ export function About() {
   const { t } = useTranslation();
 
   return (
-    <Section title={t("ABOUT")}>
-      <Row justify="center">
+    <Section full title={t("ABOUT")}>
+      {/* <Row justify="center">
         <Button type="primary" size="large">
-          Download
+          {t("DOWNLOAD_RESUME")}
         </Button>
-      </Row>
-      <br />
-      <br />
-      <Row justify="space-between">
+      </Row> */}
+      <Row justify="center">
         <Col xs={22} sm={22} md={22} lg={11} xl={11} xxl={11}>
           <Row justify="center">
-            <Title level={2}>{t("EXPERIENCE_HEADING")}</Title>
+            <Title level={3}>{t("EXPERIENCE_HEADING")}</Title>
           </Row>
           <br />
           <Timeline data={experience} />
         </Col>
+        <Col xs={0} sm={0} md={0} lg={2} xl={2} xxl={2} />
         <Col xs={22} sm={22} md={22} lg={11} xl={11} xxl={11}>
           <Row justify="center">
-            <Title level={2}>{t("EDUCATION_HEADING")}</Title>
+            <Title level={3}>{t("EDUCATION_HEADING")}</Title>
           </Row>
           <br />
           <Timeline data={education} />
         </Col>
-      </Row>
-      <Row justify="center">
-        <Button type="primary" size="large">
-          Download
-        </Button>
       </Row>
     </Section>
   );

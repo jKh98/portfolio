@@ -6,14 +6,14 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 
 import { githubUser } from "&config/meta";
 import { githubDark, githubLight } from "&config/color";
-import { Section } from "&components/styled/section/section.component";
+import { Section } from "&components/common/section/section.component";
 
 export function Github() {
   const { t } = useTranslation();
   const { currentTheme, themes } = useThemeSwitcher();
 
   return (
-    <Section title={t("GITHUB_HEADING")}>
+    <Section full title={t("GITHUB_HEADING")}>
       <Row justify="center">
         <ReactGithubCalender
           username={githubUser}

@@ -6,10 +6,6 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Parallax } from "rc-scroll-anim";
 
 import styles from "./home.module.css";
-import { lightGradient, darkGradient } from "&config/color";
-
-import DayBg from "&assets/images/day.jpg";
-import NightBg from "&assets/images/night.jpg";
 import Profile from "&assets/images/profile.jpg";
 
 const { Title } = Typography;
@@ -25,15 +21,8 @@ export function Home() {
   const renderProfileStyle = () =>
     currentTheme === themes.light ? { boxShadow: "0 0 10px" } : {};
 
-  const renderLayouteStyle = () => ({
-    backgroundImage:
-      currentTheme === themes.dark
-        ? `${darkGradient}, url(${NightBg})`
-        : `${lightGradient}, url(${DayBg})`,
-  });
-
   return (
-    <Layout className={styles.full} style={renderLayouteStyle()}>
+    <Layout className={styles.full}>
       <Row justify="space-around" align="middle" className={styles.full}>
         <Parallax
           animation={[{ blur: "10px", playScale: [0.9] }]}

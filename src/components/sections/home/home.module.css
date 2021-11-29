@@ -1,7 +1,8 @@
 .full {
-  min-height: 100vh !important;
+  min-height: 100vh;
   background-size: cover !important;
   background-position: center !important;
+  background-image: url(../../../assets/images/waves-top.svg) !important;
 }
 
 .profile {
