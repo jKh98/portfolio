@@ -9,6 +9,7 @@ import {
   Row,
 } from "antd";
 import { Parallax } from "rc-scroll-anim";
+import RcQueueAnim from "rc-queue-anim";
 
 const { Title, Text } = Typography;
 const { Item: AntdTimelineItem } = AntdTimeline;
@@ -22,7 +23,6 @@ interface TimelineItem {
   occupation?: string;
   url?: string;
   date: string;
-  items: string[];
 }
 
 export function Timeline(props: TimelineProps) {
@@ -31,18 +31,22 @@ export function Timeline(props: TimelineProps) {
 
   return (
     <AntdTimeline mode="left">
-      {data.map(({ occupation, date, position, url, items }, index) => (
+      {data.map(({ occupation, date, position, url }, index) => (
         <AntdTimelineItem>
           <Parallax
             key={index}
-            animation={{ opacity: 1, playScale: [0.05] }}
             style={{ opacity: 0 }}
+            animation={{ opacity: 1, playScale: [0.2, 0.55] }}
           >
+            {" "}
             <Layout>
-              <Row justify="center">
-                <Title level={4}>{t(position)}</Title>
+              <Row justify="space-between">
+                <Title level={5}>{t(position)}</Title>
+                <Text type="secondary">
+                  <b>{t(date)}</b>
+                </Text>
               </Row>
-              <Row justify="center">
+              <Row justify="start">
                 <Space>
                   {occupation && (
                     <Button
@@ -55,21 +59,13 @@ export function Timeline(props: TimelineProps) {
                       {t(occupation)}
                     </Button>
                   )}
-                  <Text type="secondary">
-                    <b>{t(date)}</b>
-                  </Text>
                 </Space>
               </Row>
               <br />
-              {items.map((item) => (
-                <Text>- {t(item)}</Text>
-              ))}
             </Layout>
-            <br />
           </Parallax>
         </AntdTimelineItem>
       ))}
-      <AntdTimelineItem dot={<></>} />
     </AntdTimeline>
   );
 }

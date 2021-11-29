@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout } from "antd";
+import { BackTop, Layout } from "antd";
 // @ts-ignore
 import { Scrollama, Step } from "react-scrollama";
 
@@ -10,6 +10,7 @@ import { Overview } from "&components/sections/overview/overview.component";
 import { Github } from "&components/sections/github/github.component";
 import { About } from "&components/sections/about/about.component";
 import { sections } from "&config/meta";
+import { Articles } from "&components/sections/articles/articles.component";
 
 const { Footer } = Layout;
 
@@ -20,23 +21,38 @@ export function Landing() {
 
   return (
     <Layout>
+      <BackTop />
       <Nav />
       <Scrollama onStepEnter={setSection}>
         <Step data={"home"}>
           <div>
             <Layout id={"home"}>
               <Home />
+            </Layout>
+          </div>
+        </Step>
+        <Step data={sections.OVERVIEW}>
+          <div>
+            <Layout id={sections.OVERVIEW}>
               <Overview />
             </Layout>
           </div>
         </Step>
-        <Step data={sections[0].key}>
+        <Step data={sections.ARTICLES}>
           <div>
-            <Layout id={sections[0].key}>
+            <Layout id={sections.ARTICLES}>
+              <Articles />
+            </Layout>
+          </div>
+        </Step>
+        <Step data={sections.ABOUT}>
+          <div>
+            <Layout id={sections.ABOUT}>
               <About />
             </Layout>
           </div>
         </Step>
+
         <Step data={"footer"}>
           <div>
             <Footer id={"footer"}>

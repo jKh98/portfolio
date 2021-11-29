@@ -16,20 +16,24 @@ import { sections } from "&config/meta";
 const { Text } = Typography;
 const { Header } = Layout;
 
+const COLLAPSE_WIDTH = 800;
+const NAV_HEIGHT = 60;
+
 export function Nav() {
-  const collapseWidth = 800;
   const { t, i18n } = useTranslation();
   const { switcher, currentTheme, themes } = useThemeSwitcher();
 
   const [isDrawerOpen, showDrawer] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [isDarkMode, setIsDarkMode] = useState(currentTheme === themes.dark);
+  const [barStyle, setBarStyle] = useState<CSSProperties>({});
+  const isDarkMode = currentTheme === themes.dark;
 
   /** Handles window resize events */
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -37,47 +41,48 @@ export function Nav() {
   useEffect(() => {
     const handleScroll = () => setScrollPosition(window.pageYOffset);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    let newBarStyle: CSSProperties = {};
+
+    if (scrollPosition > 0) {
+      if (scrollPosition + NAV_HEIGHT > window.innerHeight) {
+        if (!isDarkMode) {
+          newBarStyle.boxShadow = "0 0 10px";
+        }
+      } else {
+        newBarStyle.zIndex = -1;
+      }
+
+      newBarStyle.top = 0;
+      newBarStyle.position = "fixed";
+    } else {
+      newBarStyle.position = "absolute";
+      newBarStyle.backgroundColor = "transparent";
+    }
+
+    setBarStyle(newBarStyle);
+  }, [scrollPosition, isDarkMode]);
 
   /** Toggles between dark and light themes */
   const toggleTheme = (isChecked: boolean) => {
-    setIsDarkMode(isChecked);
     switcher({ theme: isChecked ? themes.dark : themes.light });
   };
 
   const scrollWithOffset = (el: Element) => {
-    const yCoordinate =
-      el.getBoundingClientRect().top + window.pageYOffset - 60;
-    window.scrollTo({ top: yCoordinate, behavior: "smooth" });
-  };
-
-  const renderBarStyle = () => {
-    let barStyle: CSSProperties = {};
-    if (scrollPosition > 0) {
-      if (scrollPosition > window.innerHeight) {
-        barStyle.boxShadow = !isDarkMode ? "0 0 10px" : "0";
-      } else {
-        barStyle.zIndex = -1;
-      }
-
-      barStyle.top = 0;
-      barStyle.position = "fixed";
-    } else {
-      barStyle.position = "absolute";
-      barStyle.backgroundColor = "transparent";
-    }
-    return barStyle;
+    const top = el.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({ top, behavior: "smooth" });
   };
 
   const renderMenuContent = () => (
-    <>
-      {sections.map(({ key, name }) => (
+    <React.Fragment>
+      {Object.entries(sections).map(([key, value]) => (
         <Menu.Item key={key} className={styles.item}>
-          <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={`#${key}`}>
-            {t(name)}
+          <HashLink scroll={scrollWithOffset} smooth to={`#${value}`}>
+            {t(key)}
           </HashLink>
         </Menu.Item>
       ))}
@@ -100,22 +105,22 @@ export function Nav() {
           unCheckedChildren={<RiSunFill className={styles.icon} />}
         />
       </Menu.Item>
-    </>
+    </React.Fragment>
   );
 
   return (
-    <>
-      <Header style={renderBarStyle()} className={styles.header}>
+    <React.Fragment>
+      <Header style={barStyle} className={styles.header}>
         <Row justify="space-between" align="middle">
           <Col>
-            <HashLink scroll={(el) => scrollWithOffset(el)} smooth to={`#home`}>
+            <HashLink scroll={scrollWithOffset} smooth to={`#home`}>
               <Text strong style={{ fontSize: 20 }}>
                 {t("FULL_NAME")}
               </Text>
             </HashLink>
           </Col>
           <Col>
-            {width > collapseWidth ? (
+            {width > COLLAPSE_WIDTH ? (
               <Menu
                 mode="horizontal"
                 className={styles.navbar}
@@ -136,7 +141,7 @@ export function Nav() {
         closable={true}
         className={styles.drawer}
         onClose={() => showDrawer(false)}
-        visible={isDrawerOpen && width <= collapseWidth}
+        visible={isDrawerOpen && width <= COLLAPSE_WIDTH}
       >
         <Menu
           mode="vertical"
@@ -146,6 +151,6 @@ export function Nav() {
           {renderMenuContent()}
         </Menu>
       </Drawer>
-    </>
+    </React.Fragment>
   );
 }

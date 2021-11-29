@@ -1,18 +1,9 @@
-// Here name is an i18n key
-export const sections = [
-  {
-    key: "about",
-    name: "ABOUT",
-  },
-  {
-    key: "projects",
-    name: "PROJECTS",
-  },
-  {
-    key: "contact",
-    name: "CONTACT",
-  },
-];
+export const sections = {
+  OVERVIEW: "overview",
+  ARTICLES: "articles",
+  ABOUT: "about",
+  CONTACT: "contact",
+};
 
 /** Object with social media urls. */
 export const social = {
@@ -24,3 +15,6 @@ export const social = {
 };
 
 export const githubUser = "Jkh98";
+export const mediumUser = "@jalkhurfan";
+export const rssToJsonServiceURL = "https://api.rss2json.com/v1/api.json";
+export const mediumFeedURL = "https://medium.com/feed";

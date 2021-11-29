@@ -4,57 +4,45 @@
       "occupation": "AREEBA",
       "date": "JUNIOR_AREEBA_DATE",
       "position": "JUNIOR_AREEBA_POS",
-      "url": "https://www.areeba.com",
-      "items": [
-        "JUNIOR_AREEBA_ITEM_1",
-        "JUNIOR_AREEBA_ITEM_2",
-        "JUNIOR_AREEBA_ITEM_3"
-      ]
+      "url": "https://www.areeba.com"
     },
     {
       "occupation": "AREEBA",
       "date": "INTERN_AREEBA_DATE",
       "position": "INTERN_AREEBA_POS",
-      "url": "https://www.areeba.com",
-      "items": ["INTERN_AREEBA_ITEM_1"]
+      "url": "https://www.areeba.com"
     },
     {
       "occupation": "TECFRAC",
       "date": "PARTTIME_TECFRAC_DATE",
       "position": "PARTTIME_TECFRAC_POS",
-      "url": "https://www.tecfrac.com",
-      "items": [
-        "PARTTIME_TECFRAC_ITEM_1",
-        "PARTTIME_TECFRAC_ITEM_2",
-        "PARTTIME_TECFRAC_ITEM_3"
-      ]
+      "url": "https://www.tecfrac.com"
     },
     {
       "occupation": "TECFRAC",
       "date": "INTERN_TECFRAC_DATE",
       "position": "INTERN_TECFRAC_POS",
-      "url": "https://www.tecfrac.com",
-      "items": [
-        "INTERN_TECFRAC_ITEM_1",
-        "INTERN_TECFRAC_ITEM_2",
-        "INTERN_TECFRAC_ITEM_3"
-      ]
+      "url": "https://www.tecfrac.com"
     },
     {
       "occupation": "NAR",
       "date": "INTERN_NAR_DATE",
       "position": "INTERN_NAR_POS",
-      "url": "https://www.nar.ai",
-      "items": ["INTERN_NAR_ITEM_1", "INTERN_NAR_ITEM_2"]
+      "url": "https://www.nar.ai"
     }
   ],
   "education": [
     {
+      "occupation": "ASU",
+      "date": "ASU_DATE",
+      "position": "ASU_DEGREE",
+      "url": "https://www.aub.edu.lb"
+    },
+    {
       "occupation": "AUB",
       "date": "AUB_DATE",
       "position": "AUB_DEGREE",
-      "url": "https://www.aub.edu.lb",
-      "items": ["AUB_ITEM_1", "AUB_ITEM_2", "AUB_ITEM_3"]
+      "url": "https://www.aub.edu.lb"
     }
   ]
 }
