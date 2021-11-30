@@ -2,16 +2,12 @@ import React, { CSSProperties, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import { Row, Col, Menu, Drawer, Layout, Switch, Typography } from "antd";
-import {
-  MenuOutlined,
-  CloseOutlined,
-  TranslationOutlined,
-} from "@ant-design/icons";
-import { RiSunFill, RiMoonFill } from "react-icons/all";
+import { Row, Col, Drawer, Layout, Typography } from "antd";
+import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
 import styles from "./nav.module.css";
-import { sections } from "&config/meta";
+import { Menu } from "./menu.component";
+import { scroll } from "&utils/scroll";
 
 const { Text } = Typography;
 const { Header } = Layout;
@@ -20,8 +16,8 @@ const COLLAPSE_WIDTH = 850;
 const NAV_HEIGHT = 60;
 
 export function Nav() {
-  const { t, i18n } = useTranslation();
-  const { switcher, currentTheme, themes } = useThemeSwitcher();
+  const { t } = useTranslation();
+  const { currentTheme, themes } = useThemeSwitcher();
 
   const [isDrawerOpen, showDrawer] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
@@ -67,53 +63,12 @@ export function Nav() {
     setBarStyle(newBarStyle);
   }, [scrollPosition, isDarkMode]);
 
-  /** Toggles between dark and light themes */
-  const toggleTheme = (isChecked: boolean) => {
-    switcher({ theme: isChecked ? themes.dark : themes.light });
-  };
-
-  const scrollWithOffset = (el: Element) => {
-    const top = el.getBoundingClientRect().top + window.pageYOffset;
-    window.scrollTo({ top, behavior: "smooth" });
-  };
-
-  const renderMenuContent = () => (
-    <React.Fragment>
-      {Object.entries(sections).map(([key, value]) => (
-        <Menu.Item key={key} className={styles.item}>
-          <HashLink scroll={scrollWithOffset} smooth to={`#${value}`}>
-            {t(key)}
-          </HashLink>
-        </Menu.Item>
-      ))}
-      <Menu.SubMenu
-        key="i18n"
-        className={styles.item}
-        title={<TranslationOutlined />}
-      >
-        {i18n.languages.map((lang) => (
-          <Menu.Item key={lang} onClick={() => i18n.changeLanguage(lang)}>
-            {t(lang.toUpperCase())}
-          </Menu.Item>
-        ))}
-      </Menu.SubMenu>
-      <Menu.Item key="theme" className={styles.item}>
-        <Switch
-          checked={isDarkMode}
-          onChange={toggleTheme}
-          checkedChildren={<RiMoonFill className={styles.icon} />}
-          unCheckedChildren={<RiSunFill className={styles.icon} />}
-        />
-      </Menu.Item>
-    </React.Fragment>
-  );
-
   return (
     <React.Fragment>
       <Header style={barStyle} className={styles.header}>
         <Row justify="space-between" align="middle">
           <Col>
-            <HashLink scroll={scrollWithOffset} smooth to={`#home`}>
+            <HashLink scroll={scroll} smooth to={`#home`}>
               <Text strong style={{ fontSize: 20 }}>
                 {t("FULL_NAME")}
               </Text>
@@ -121,13 +76,7 @@ export function Nav() {
           </Col>
           <Col>
             {width > COLLAPSE_WIDTH ? (
-              <Menu
-                mode="horizontal"
-                className={styles.navbar}
-                selectedKeys={[window.location.hash.replace("#", "")]}
-              >
-                {renderMenuContent()}
-              </Menu>
+              <Menu mode="horizontal" className={styles.navbar} />
             ) : (
               <MenuOutlined onClick={() => showDrawer(true)} />
             )}
@@ -146,10 +95,8 @@ export function Nav() {
         <Menu
           mode="vertical"
           className={styles.drawer}
-          selectedKeys={[window.location.hash.replace("#", "")]}
-        >
-          {renderMenuContent()}
-        </Menu>
+          popupClassName={styles.submenu}
+        />
       </Drawer>
     </React.Fragment>
   );

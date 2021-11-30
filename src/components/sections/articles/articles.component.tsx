@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { Row, Col, Card, Layout } from "antd";
+import { Row, Col, Card, Layout, Button } from "antd";
 import Meta from "antd/lib/card/Meta";
 import { Parallax } from "rc-scroll-anim";
 
 import { Section } from "&components/common/section/section.component";
-import { mediumFeedURL, mediumUser, rssToJsonServiceURL } from "&config/meta";
+import {
+  mediumURL,
+  mediumUser,
+  mediumFeedURL,
+  rssToJsonServiceURL,
+} from "&config/meta";
 import styles from "./articles.module.css";
 
 interface Article {
@@ -58,6 +63,16 @@ export function Articles() {
               </Parallax>
             </Col>
           ))}
+        </Row>
+        <br />
+        <Row justify="center">
+          <Button
+            type="default"
+            size="large"
+            onClick={() => window.open(`${mediumURL}/${mediumUser}`, "_blank")}
+          >
+            {t("CHECK_ARTICLES")}
+          </Button>
         </Row>
       </Section>
     </Layout>

@@ -53,6 +53,7 @@ export const en = {
   DOWNLOAD_RESUME: "Download my resumé",
 
   // Articles
+  CHECK_ARTICLES: "Check out all my articles",
 
   // Github
   GITHUB_HEADING: "My Github",

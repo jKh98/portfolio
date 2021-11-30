@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Layout, Form, Row, Col, Input, Button, Card, message } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import { useForm } from "antd/lib/form/Form";
 
 import { Social } from "&components/sections/social/social.component";
 import { Section } from "&components/common/section/section.component";
@@ -21,7 +20,7 @@ export function Contact() {
   const { currentTheme, themes } = useThemeSwitcher();
   const [state, handleSubmit] = useFormspree(FORMSPREE_KEY, { debug: true });
   const [canSubmit, setCanSubmit] = useState(false);
-  const [form] = useForm<typeof initialValues>();
+  const [form] = Form.useForm<typeof initialValues>();
 
   const theme = currentTheme === themes.dark ? "dark" : "light";
 
@@ -43,7 +42,6 @@ export function Contact() {
       await handleSubmit(e?.nativeEvent);
       form.resetFields();
     } catch (e) {
-      console.error(e);
       message.error(t("SUBMIT_ERROR"));
     }
   };
