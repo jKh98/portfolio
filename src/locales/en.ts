@@ -57,4 +57,14 @@ export const en = {
 
   // Github
   GITHUB_HEADING: "My Github",
+
+  //Contact
+  NAME: "Your Name",
+  EMAIL: "Your Email",
+  MESSAGE: "What's on your mind?",
+  REQUIRED: "This field is required!",
+  EMAIL_INVALID: "Invalid email address!",
+  SUBMIT: "Send Message",
+  SUBMIT_SUCCESS: "Your message has been sent successfully!",
+  SUBMIT_ERROR: "There was an error sending your message!",
 };

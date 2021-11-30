@@ -16,7 +16,7 @@ import { sections } from "&config/meta";
 const { Text } = Typography;
 const { Header } = Layout;
 
-const COLLAPSE_WIDTH = 800;
+const COLLAPSE_WIDTH = 850;
 const NAV_HEIGHT = 60;
 
 export function Nav() {

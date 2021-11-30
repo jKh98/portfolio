@@ -52,5 +52,15 @@ export const ar = {
   DOWNLOAD_RESUME: "تحميل سيرتي الذاتية",
 
   // Github
-  GITHUB_HEADING: "My Github",
+  GITHUB_HEADING: "Github مشاركتي على",
+
+  //Contact
+  NAME: "اسمك",
+  EMAIL: "بريدك الإلكتروني",
+  MESSAGE: "ما الذي يدور في ذهنك؟",
+  REQUIRED: "هذا الحقل ضروري!",
+  EMAIL_INVALID: "عنوان بريد إلكتروني غير صالح!",
+  SUBMIT: "إرسال",
+  SUBMIT_SUCCESS: "تم إرسال رسالتك بنجاح!",
+  SUBMIT_ERROR: "حدث خطأ أثناء إرسال رسالتك!",
 };

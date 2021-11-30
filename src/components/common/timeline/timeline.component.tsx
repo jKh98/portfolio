@@ -9,7 +9,6 @@ import {
   Row,
 } from "antd";
 import { Parallax } from "rc-scroll-anim";
-import RcQueueAnim from "rc-queue-anim";
 
 const { Title, Text } = Typography;
 const { Item: AntdTimelineItem } = AntdTimeline;
@@ -32,13 +31,11 @@ export function Timeline(props: TimelineProps) {
   return (
     <AntdTimeline mode="left">
       {data.map(({ occupation, date, position, url }, index) => (
-        <AntdTimelineItem>
+        <AntdTimelineItem key={index}>
           <Parallax
-            key={index}
             style={{ opacity: 0 }}
             animation={{ opacity: 1, playScale: [0.2, 0.55] }}
           >
-            {" "}
             <Layout>
               <Row justify="space-between">
                 <Title level={5}>{t(position)}</Title>
