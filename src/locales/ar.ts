@@ -26,19 +26,18 @@ export const ar = {
 
   // Experience
   EXPERIENCE_HEADING: "تجربتي",
+  CME: "CME Offshore",
   AREEBA: "areeba",
   TECFRAC: "TecFrac",
   NAR: "Nar Technologies",
-  JUNIOR_AREEBA_POS: "مهندس برمجيات متكاملة ",
-  INTERN_AREEBA_POS: "مهندس برمجيات متدرب",
-  PARTTIME_TECFRAC_POS: "مطور برامج بدوام جزئي",
-  INTERN_TECFRAC_POS: "متدرب مطور البرامج",
-  INTERN_NAR_POS: "متدرب مطور البرامج",
-  JUNIOR_AREEBA_DATE: "08/2020 - Present",
-  INTERN_AREEBA_DATE: "06/2020 - 08/2020",
-  PARTTIME_TECFRAC_DATE: "09/2019 - 11/2019",
-  INTERN_TECFRAC_DATE: "06/2019 - 08/2019",
-  INTERN_NAR_DATE: "12/2018 - 01/2019",
+  CME_POS: "مهندس برمجيات متكاملة ",
+  AREEBA_POS: "مهندس برمجيات متكاملة ",
+  TECFRAC_POS: "مطور برامج بدوام جزئي",
+  NAR_POS: "مطور البرامج متدرب",
+  CME_DATE: "06/2021 - الحاضر",
+  AREEBA_DATE: "06/2020 - 06/2021",
+  TECFRAC_DATE: "06/2019 - 11/2019",
+  NAR_DATE: "12/2018 - 01/2019",
 
   // Education
   EDUCATION_HEADING: "تعليمي",

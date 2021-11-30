@@ -6,7 +6,7 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Parallax } from "rc-scroll-anim";
 
 import styles from "./home.module.css";
-import Profile from "&assets/images/profile.jpg";
+import Profile from "&assets/images/profile.png";
 import { Social } from "../social/social.component";
 
 const { Title } = Typography;
