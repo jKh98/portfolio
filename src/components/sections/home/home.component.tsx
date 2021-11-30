@@ -7,6 +7,7 @@ import { Parallax } from "rc-scroll-anim";
 
 import styles from "./home.module.css";
 import Profile from "&assets/images/profile.jpg";
+import { Social } from "../social/social.component";
 
 const { Title } = Typography;
 
@@ -47,10 +48,15 @@ export function Home() {
                 </Title>
               </Col>
             </Row>
+            <Row justify="center">
+              <Social />
+            </Row>
           </Col>
         </Parallax>
       </Row>
-      <RiMouseLine onClick={handleScroll} className={styles.icon} />
+      <Row justify="center">
+        <RiMouseLine onClick={handleScroll} className={styles.icon} />
+      </Row>
     </Layout>
   );
 }

@@ -4,15 +4,13 @@ import { BackTop, Layout } from "antd";
 import { Scrollama, Step } from "react-scrollama";
 
 import { Nav } from "&components/sections/nav/nav.component";
-import { Social } from "&components/sections/social/social.component";
 import { Home } from "&components/sections/home/home.component";
 import { Overview } from "&components/sections/overview/overview.component";
 import { Github } from "&components/sections/github/github.component";
 import { About } from "&components/sections/about/about.component";
 import { sections } from "&config/meta";
 import { Articles } from "&components/sections/articles/articles.component";
-
-const { Footer } = Layout;
+import { Contact } from "&components/sections/contact/contact.component";
 
 export function Landing() {
   const setSection = ({ data }: { data: string }) => {
@@ -49,16 +47,15 @@ export function Landing() {
           <div>
             <Layout id={sections.ABOUT}>
               <About />
+              <Github />
             </Layout>
           </div>
         </Step>
-
-        <Step data={"footer"}>
+        <Step data={sections.CONTACT}>
           <div>
-            <Footer id={"footer"}>
-              <Github />
-              <Social />
-            </Footer>
+            <Layout id={sections.CONTACT}>
+              <Contact />
+            </Layout>
           </div>
         </Step>
       </Scrollama>
