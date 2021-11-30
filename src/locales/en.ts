@@ -28,19 +28,18 @@ export const en = {
 
   // Experience
   EXPERIENCE_HEADING: "My Experience",
+  CME: "CME Offshore",
   AREEBA: "areeba",
   TECFRAC: "TecFrac",
   NAR: "Nar Technologies",
-  JUNIOR_AREEBA_POS: "Junior Full-stack Software Engineer",
-  INTERN_AREEBA_POS: "Software Engineer Intern",
-  PARTTIME_TECFRAC_POS: "Part-time Software Developer",
-  INTERN_TECFRAC_POS: "Software Developer Intern",
-  INTERN_NAR_POS: "Software Developer Intern",
-  JUNIOR_AREEBA_DATE: "08/2020 - Present",
-  INTERN_AREEBA_DATE: "06/2020 - 08/2020",
-  PARTTIME_TECFRAC_DATE: "09/2019 - 11/2019",
-  INTERN_TECFRAC_DATE: "06/2019 - 08/2019",
-  INTERN_NAR_DATE: "12/2018 - 01/2019",
+  CME_POS: "Full-stack Software Engineer",
+  AREEBA_POS: "Junior Full-stack Software Engineer",
+  TECFRAC_POS: " Software Developer (Intern & Part-time)",
+  NAR_POS: "Software Developer (Intern)",
+  CME_DATE: "06/2021 - Present",
+  AREEBA_DATE: "06/2020 - 06/2021",
+  TECFRAC_DATE: "06/2019 - 11/2019",
+  NAR_DATE: "12/2018 - 01/2019",
 
   // Education
   EDUCATION_HEADING: "My Education",

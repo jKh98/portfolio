@@ -37,11 +37,10 @@ export function Contact() {
     }
   }, [state, t]);
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (e: any) => {
     try {
       await form.validateFields();
-      console.log(values);
-      await handleSubmit(values.nativeEvent);
+      await handleSubmit(e?.nativeEvent);
       form.resetFields();
     } catch (e) {
       console.error(e);
