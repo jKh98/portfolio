@@ -50,6 +50,9 @@ export const ar = {
 
   DOWNLOAD_RESUME: "تحميل سيرتي الذاتية",
 
+  //Articles
+  CHECK_ARTICLES: "تحقق من كل المقالات",
+
   // Github
   GITHUB_HEADING: "Github مشاركتي على",
 
