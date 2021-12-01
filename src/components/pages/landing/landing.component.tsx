@@ -21,7 +21,7 @@ export function Landing() {
     <Layout>
       <BackTop />
       <Nav />
-      <Scrollama onStepEnter={setSection}>
+      <Scrollama offset={0.1} onStepEnter={setSection}>
         <Step data={"home"}>
           <div>
             <Layout id={"home"}>
