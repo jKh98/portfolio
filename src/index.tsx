@@ -13,9 +13,19 @@ const themes = {
   light: `${process.env.PUBLIC_URL}/light-theme.css`,
 };
 
+const getDefaultTheme = () => {
+  if (
+    window.matchMedia("(prefers-color-scheme: dark)").matches ||
+    localStorage.getItem("theme") === "dark"
+  ) {
+    return "dark";
+  }
+  return "light";
+};
+
 ReactDOM.render(
   // <React.StrictMode>
-  <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
+  <ThemeSwitcherProvider themeMap={themes} defaultTheme={getDefaultTheme()}>
     <I18nextProvider i18n={i18n}>
       <App />
     </I18nextProvider>

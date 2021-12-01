@@ -11,7 +11,7 @@ import { sections } from "&config/meta";
 import { scroll } from "&utils/scroll";
 
 interface MenuProps {
-  mode: "horizontal" | "vertical";
+  mode: "horizontal" | "vertical" | "inline";
   className: string;
   popupClassName?: string;
 }
@@ -24,13 +24,16 @@ export function Menu(props: MenuProps) {
 
   /** Toggles between dark and light themes */
   const toggleTheme = (isChecked: boolean) => {
-    switcher({ theme: isChecked ? themes.dark : themes.light });
+    const theme = isChecked ? themes.dark : themes.light;
+    switcher({ theme });
+    localStorage.setItem("theme", theme);
   };
 
   return (
     <AntdMenu
       mode={mode}
       className={className}
+      disabledOverflow
       selectedKeys={[window.location.hash.replace("#", "")]}
     >
       {Object.entries(sections).map(([key, value]) => (
@@ -40,6 +43,7 @@ export function Menu(props: MenuProps) {
           </HashLink>
         </AntdMenu.Item>
       ))}
+
       <AntdMenu.SubMenu
         key="i18n"
         className={styles.item}
@@ -52,6 +56,7 @@ export function Menu(props: MenuProps) {
           </AntdMenu.Item>
         ))}
       </AntdMenu.SubMenu>
+
       <AntdMenu.Item key="theme" className={styles.item}>
         <Switch
           checked={isDarkMode}

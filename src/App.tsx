@@ -6,15 +6,12 @@ import ReactGA from "react-ga";
 import "antd/dist/antd.css";
 import "./App.css";
 
-import { Landing } from "./components/pages/landing/landing.component";
+import { Landing } from "&components/pages/landing/landing.component";
+
+ReactGA.initialize("UA-161722008-02");
 
 function App() {
   const { i18n } = useTranslation();
-
-  useEffect(() => {
-    ReactGA.initialize("UA-161722008-02");
-    ReactGA.pageview(window.location.pathname + window.location.search);
-  }, []);
 
   /** This useEffect rerenders dir */
   useEffect(() => {
