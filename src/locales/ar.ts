@@ -54,7 +54,7 @@ export const ar = {
   CHECK_ARTICLES: "تحقق من كل المقالات",
 
   // Github
-  GITHUB_HEADING: "Github مشاركتي على",
+  GITHUB_HEADING: "مشاركتي على Github",
 
   //Contact
   NAME: "اسمك",
