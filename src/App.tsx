@@ -7,8 +7,9 @@ import "antd/dist/antd.css";
 import "./App.css";
 
 import { Landing } from "&components/pages/landing/landing.component";
+import { gaKey } from "&config/meta";
 
-ReactGA.initialize("UA-161722008-02");
+ReactGA.initialize(gaKey);
 
 function App() {
   const { i18n } = useTranslation();
