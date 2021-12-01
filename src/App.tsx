@@ -7,7 +7,7 @@ import "antd/dist/antd.css";
 import "./App.css";
 
 import { Landing } from "&components/pages/landing/landing.component";
-import { gaKey, sections } from "&config/meta";
+import { gaKey } from "&config/meta";
 
 ReactGA.initialize(gaKey);
 
@@ -15,7 +15,13 @@ function App() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    if (window.location.hash.includes("#/")) {
+    const hash = window.location.hash;
+
+    if (!hash || hash === "#/") {
+      return;
+    }
+
+    if (hash.includes("#/")) {
       window.location.hash = "";
     }
   }, []);
