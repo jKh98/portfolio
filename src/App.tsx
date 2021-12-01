@@ -15,8 +15,6 @@ function App() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    const validHashes = [...Object.values(sections), "home"];
-    console.log(window.location.hash);
     if (window.location.hash.includes("#/")) {
       window.location.hash = "";
     }
