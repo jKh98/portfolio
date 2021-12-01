@@ -2,7 +2,7 @@
   "name": "portfolio",
   "version": "0.1.0",
   "author": "Jihad Al-Khurfan",
-  "homepage": "http://JKh98.github.io/",
+  "homepage": "http://JKh98.github.io/portfolio",
   "private": true,
   "dependencies": {
     "@formspree/react": "^2.2.4",
@@ -59,7 +59,7 @@
     "serve": "serve -s build",
     "themes": "gulp less",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -b gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
