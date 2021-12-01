@@ -14,6 +14,10 @@ export const social = {
   instagram: "https://www.instagram.com/jihad_kh_/",
 };
 
+export const gaKey = "UA-161722008-02";
+export const recaptchaKey = "6Lc5amwdAAAAACB559miHI4ALBJVvIaVuLUbHbtB";
+export const formspreeKey = "mrgjzavr";
+
 export const githubUser = "Jkh98";
 export const mediumUser = "@jalkhurfan";
 export const rssToJsonServiceURL = "https://api.rss2json.com/v1/api.json";

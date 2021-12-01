@@ -8,9 +8,7 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Social } from "&components/sections/social/social.component";
 import { Section } from "&components/common/section/section.component";
 import styles from "./contact.module.css";
-
-const RECAPTCHA_KEY = "6Lc5amwdAAAAACB559miHI4ALBJVvIaVuLUbHbtB";
-const FORMSPREE_KEY = "mrgjzavr";
+import { formspreeKey, recaptchaKey } from "&config/meta";
 
 const fields = { NAME: "name", EMAIL: "email", MESSAGE: "message" };
 const initialValues = { _name: "", _replyto: "", message: "" };
@@ -18,7 +16,7 @@ const initialValues = { _name: "", _replyto: "", message: "" };
 export function Contact() {
   const { t } = useTranslation();
   const { currentTheme, themes } = useThemeSwitcher();
-  const [state, handleSubmit] = useFormspree(FORMSPREE_KEY, { debug: true });
+  const [state, handleSubmit] = useFormspree(formspreeKey, { debug: true });
   const [canSubmit, setCanSubmit] = useState(false);
   const [form] = Form.useForm<typeof initialValues>();
 
@@ -98,7 +96,7 @@ export function Contact() {
                 <Form.Item>
                   <ReCAPTCHA
                     theme={theme}
-                    sitekey={RECAPTCHA_KEY}
+                    sitekey={recaptchaKey}
                     onChange={() => setCanSubmit(true)}
                     onErrored={() => setCanSubmit(false)}
                     onExpired={() => setCanSubmit(false)}
