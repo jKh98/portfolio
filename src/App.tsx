@@ -15,6 +15,16 @@ function App() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
+    if (
+      navigator.userAgent.includes("Instagram") &&
+      !sessionStorage.getItem("didReloadForInAppBrowser")
+    ) {
+      sessionStorage.setItem("didReloadForInAppBrowser", "true");
+      window.location.reload();
+    }
+  }, []);
+
+  useEffect(() => {
     const hash = window.location.hash;
 
     if (!hash || hash === "#/") {
