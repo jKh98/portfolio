@@ -36,6 +36,13 @@ export function Nav() {
     showDrawer(false);
   };
 
+  // Fix instagram window.innerwidth issue
+  useEffect(() => {
+    if (window.screen.width < window.innerWidth) {
+      setWidth(window.screen.width);
+    }
+  }, []);
+
   /** Handles window resize events */
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
