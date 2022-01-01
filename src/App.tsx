@@ -15,12 +15,6 @@ function App() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    if (navigator.userAgent.includes("Instagram")) {
-      window.location.reload();
-    }
-  });
-
-  useEffect(() => {
     const hash = window.location.hash;
 
     if (!hash || hash === "#/") {
