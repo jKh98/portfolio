@@ -24,6 +24,8 @@ function App() {
     if (hash.includes("#/")) {
       window.location.hash = "";
     }
+
+    ReactGA.pageview(window.location.pathname);
   }, []);
 
   /** This useEffect rerenders dir */

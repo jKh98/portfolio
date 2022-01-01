@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Layout, Form, Row, Col, Input, Button, Card, message } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import ReactGA from "react-ga";
 
 import { Social } from "&components/sections/social/social.component";
 import { Section } from "&components/common/section/section.component";
@@ -39,8 +40,11 @@ export function Contact() {
       await form.validateFields();
       await handleSubmit(e?.nativeEvent);
       form.resetFields();
+
+      ReactGA.event({ category: "Contact", action: "Submit" });
     } catch (e) {
       message.error(t("SUBMIT_ERROR"));
+      ReactGA.event({ category: "Contact", action: "Error" });
     }
   };
 

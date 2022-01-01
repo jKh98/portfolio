@@ -14,6 +14,7 @@ const { Title } = Typography;
 export function Home() {
   const { currentTheme, themes } = useThemeSwitcher();
   const { t } = useTranslation();
+  const isMobile = window.innerWidth <= 768;
 
   const handleScroll = () => {
     window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
@@ -54,9 +55,11 @@ export function Home() {
           </Col>
         </Parallax>
       </Row>
-      <Row justify="center">
-        <RiMouseLine onClick={handleScroll} className={styles.icon} />
-      </Row>
+      {!isMobile && (
+        <Row justify="center">
+          <RiMouseLine onClick={handleScroll} className={styles.icon} />
+        </Row>
+      )}
     </Layout>
   );
 }

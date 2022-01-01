@@ -5,6 +5,7 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Menu as AntdMenu, Switch } from "antd";
 import { TranslationOutlined } from "@ant-design/icons";
 import { RiSunFill, RiMoonFill } from "react-icons/all";
+import ReactGA from "react-ga";
 
 import styles from "./nav.module.css";
 import { sections } from "&config/meta";
@@ -21,6 +22,11 @@ export function Menu(props: MenuProps) {
   const { t, i18n } = useTranslation();
   const { switcher, currentTheme, themes } = useThemeSwitcher();
   const isDarkMode = currentTheme === themes.dark;
+
+  const createLanguageHandler = (lang: string) => () => {
+    ReactGA.event({ category: "Language", action: lang });
+    i18n.changeLanguage(lang);
+  };
 
   /** Toggles between dark and light themes */
   const toggleTheme = (isChecked: boolean) => {
@@ -51,7 +57,7 @@ export function Menu(props: MenuProps) {
         title={<TranslationOutlined />}
       >
         {i18n.languages.map((lang) => (
-          <AntdMenu.Item key={lang} onClick={() => i18n.changeLanguage(lang)}>
+          <AntdMenu.Item key={lang} onClick={createLanguageHandler(lang)}>
             {t(lang.toUpperCase())}
           </AntdMenu.Item>
         ))}
