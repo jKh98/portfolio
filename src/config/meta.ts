@@ -23,4 +23,3 @@ export const mediumUser = "@jalkhurfan";
 export const rssToJsonServiceURL = "https://api.rss2json.com/v1/api.json";
 export const mediumURL = "https://medium.com";
 export const mediumFeedURL = "https://medium.com/feed";
-export const pdfFileName = "jihad-al-khurfan-resume.pdf";

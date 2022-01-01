@@ -4,8 +4,8 @@ import { Row, Col, Typography, Button } from "antd";
 
 import { Section } from "&components/common/section/section.component";
 import { Timeline } from "&components/common/timeline/timeline.component";
-import { downloadPdf } from "&utils/download";
-import { pdfFileName } from "&config/meta";
+import Modal from "antd/lib/modal/Modal";
+import { Resume } from "./resume.component";
 
 const { Title } = Typography;
 
@@ -53,6 +53,10 @@ const education = [
 
 export function About() {
   const { t } = useTranslation();
+  const [resumeOpen, setResumeOpen] = React.useState(false);
+
+  const showResume = () => setResumeOpen(true);
+  const closeResume = () => setResumeOpen(false);
 
   return (
     <Section full title={t("ABOUT")}>
@@ -74,15 +78,18 @@ export function About() {
         </Col>
       </Row>
       <Row justify="center">
-        <Button
-          type="primary"
-          size="large"
-          htmlType="submit"
-          onClick={() => downloadPdf(".", pdfFileName)}
-        >
+        <Button type="primary" size="large" onClick={showResume}>
           {t("DOWNLOAD_RESUME")}
         </Button>
       </Row>
+      <Modal
+        width={"100%"}
+        visible={resumeOpen}
+        closable={false}
+        onCancel={closeResume}
+      >
+        <Resume />
+      </Modal>
     </Section>
   );
 }
