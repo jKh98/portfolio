@@ -23,16 +23,18 @@ const getDefaultTheme = () => {
   return "light";
 };
 
-ReactDOM.render(
-  // <React.StrictMode>
-  <ThemeSwitcherProvider themeMap={themes} defaultTheme={getDefaultTheme()}>
-    <I18nextProvider i18n={i18n}>
-      <App />
-    </I18nextProvider>
-  </ThemeSwitcherProvider>,
-  // </React.StrictMode>,
-  document.getElementById("root")
-);
+window.addEventListener("load", () => {
+  ReactDOM.render(
+    // <React.StrictMode>
+    <ThemeSwitcherProvider themeMap={themes} defaultTheme={getDefaultTheme()}>
+      <I18nextProvider i18n={i18n}>
+        <App />
+      </I18nextProvider>
+    </ThemeSwitcherProvider>,
+    // </React.StrictMode>,
+    document.getElementById("root")
+  );
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
