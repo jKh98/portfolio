@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Row, Col, Typography, Button } from "antd";
+import ReactGA from "react-ga";
 
 import { Section } from "&components/common/section/section.component";
 import { Timeline } from "&components/common/timeline/timeline.component";
@@ -55,8 +56,15 @@ export function About() {
   const { t } = useTranslation();
   const [resumeOpen, setResumeOpen] = React.useState(false);
 
-  const showResume = () => setResumeOpen(true);
-  const closeResume = () => setResumeOpen(false);
+  const showResume = () => {
+    ReactGA.event({ category: "Resume", action: "Open" });
+    setResumeOpen(true);
+  };
+
+  const closeResume = () => {
+    ReactGA.event({ category: "Resume", action: "Close" });
+    setResumeOpen(false);
+  };
 
   return (
     <Section full title={t("ABOUT")}>

@@ -4,6 +4,7 @@ import moment from "moment";
 import { Row, Col, Card, Layout, Button } from "antd";
 import Meta from "antd/lib/card/Meta";
 import { Parallax } from "rc-scroll-anim";
+import ReactGA from "react-ga";
 
 import { Section } from "&components/common/section/section.component";
 import {
@@ -37,6 +38,11 @@ export function Articles() {
       .then(({ items }) => setArticles(items));
   }, []);
 
+  const createMediumLinkHandler = (link: string) => () => {
+    ReactGA.event({ category: "Medium", action: "Click", label: link });
+    window.open(link, "_blank");
+  };
+
   return (
     <Layout className={styles.full}>
       <Section full title={t("ARTICLES")}>
@@ -50,7 +56,7 @@ export function Articles() {
                 <Card
                   hoverable
                   className={styles.card}
-                  onClick={() => window.open(link, "_blank")}
+                  onClick={createMediumLinkHandler(link)}
                   cover={
                     <img alt={title} src={thumbnail} className={styles.img} />
                   }
@@ -69,7 +75,7 @@ export function Articles() {
           <Button
             type="default"
             size="large"
-            onClick={() => window.open(`${mediumURL}/${mediumUser}`, "_blank")}
+            onClick={createMediumLinkHandler(`${mediumURL}/${mediumUser}`)}
           >
             {t("CHECK_ARTICLES")}
           </Button>

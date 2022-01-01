@@ -9,6 +9,7 @@ import {
   Row,
 } from "antd";
 import { Parallax } from "rc-scroll-anim";
+import ReactGA from "react-ga";
 
 const { Title, Text } = Typography;
 const { Item: AntdTimelineItem } = AntdTimeline;
@@ -27,6 +28,10 @@ interface TimelineItem {
 export function Timeline(props: TimelineProps) {
   const { t } = useTranslation();
   const { data } = props;
+
+  const createGAEvent = (label: string) => () => {
+    ReactGA.event({ category: "Timeline", action: "Click", label });
+  };
 
   return (
     <AntdTimeline mode="left">
@@ -52,6 +57,7 @@ export function Timeline(props: TimelineProps) {
                       size="small"
                       shape="round"
                       href={url}
+                      onClick={createGAEvent(occupation)}
                     >
                       {t(occupation)}
                     </Button>

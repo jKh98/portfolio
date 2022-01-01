@@ -4,6 +4,7 @@ import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Row, Col, Drawer, Layout, Typography } from "antd";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
+import ReactGA from "react-ga";
 
 import styles from "./nav.module.css";
 import { Menu } from "./menu.component";
@@ -24,6 +25,16 @@ export function Nav() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [barStyle, setBarStyle] = useState<CSSProperties>({});
   const isDarkMode = currentTheme === themes.dark;
+
+  const onDrawerOpen = () => {
+    ReactGA.event({ category: "Navigation", action: "Drawer Open" });
+    showDrawer(true);
+  };
+
+  const onDrawerClose = () => {
+    ReactGA.event({ category: "Navigation", action: "Drawer Close" });
+    showDrawer(false);
+  };
 
   /** Handles window resize events */
   useEffect(() => {
@@ -78,7 +89,7 @@ export function Nav() {
             {width > COLLAPSE_WIDTH ? (
               <Menu mode="horizontal" className={styles.navbar} />
             ) : (
-              <MenuOutlined onClick={() => showDrawer(true)} />
+              <MenuOutlined onClick={onDrawerOpen} />
             )}
           </Col>
         </Row>
@@ -89,7 +100,7 @@ export function Nav() {
         width={"100vw"}
         closable={true}
         className={styles.drawer}
-        onClose={() => showDrawer(false)}
+        onClose={onDrawerClose}
         visible={isDrawerOpen && width <= COLLAPSE_WIDTH}
       >
         <Menu
