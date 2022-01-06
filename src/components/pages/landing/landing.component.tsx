@@ -2,6 +2,7 @@ import React from "react";
 import { BackTop, Layout } from "antd";
 // @ts-ignore
 import { Scrollama, Step } from "react-scrollama";
+import { useHistory } from "react-router-dom";
 
 import { Nav } from "&components/sections/nav/nav.component";
 import { Home } from "&components/sections/home/home.component";
@@ -13,8 +14,10 @@ import { Articles } from "&components/sections/articles/articles.component";
 import { Contact } from "&components/sections/contact/contact.component";
 
 export function Landing() {
+  const history = useHistory();
+
   const setSection = ({ data }: { data: string }) => {
-    window.history.replaceState(null, "", `#${data}`);
+    history.replace(`/#${data}`);
   };
 
   return (
