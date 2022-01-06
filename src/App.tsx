@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { ConfigProvider } from "antd";
 import { useTranslation } from "react-i18next";
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ReactGA from "react-ga";
 import "antd/dist/antd.css";
 import "./App.css";
@@ -25,16 +25,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const hash = window.location.hash;
-
-    if (!hash || hash === "#/") {
-      return;
-    }
-
-    if (hash.includes("#/")) {
-      window.location.hash = "";
-    }
-
     ReactGA.pageview(window.location.pathname);
   }, []);
 
@@ -45,11 +35,11 @@ function App() {
 
   return (
     <ConfigProvider direction={i18n?.dir()}>
-      <HashRouter>
+      <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Landing} />
         </Switch>
-      </HashRouter>
+      </BrowserRouter>
     </ConfigProvider>
   );
 }
