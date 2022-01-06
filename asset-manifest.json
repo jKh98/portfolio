@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/static/css/main.fab164bc.chunk.css",
-    "main.js": "/static/js/main.5f43c313.chunk.js",
-    "main.js.map": "/static/js/main.5f43c313.chunk.js.map",
+    "main.js": "/static/js/main.fb839fa6.chunk.js",
+    "main.js.map": "/static/js/main.fb839fa6.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.d9012e10.js",
     "runtime-main.js.map": "/static/js/runtime-main.d9012e10.js.map",
     "static/css/2.2b8316e7.chunk.css": "/static/css/2.2b8316e7.chunk.css",
-    "static/js/2.707ba828.chunk.js": "/static/js/2.707ba828.chunk.js",
-    "static/js/2.707ba828.chunk.js.map": "/static/js/2.707ba828.chunk.js.map",
+    "static/js/2.74b53233.chunk.js": "/static/js/2.74b53233.chunk.js",
+    "static/js/2.74b53233.chunk.js.map": "/static/js/2.74b53233.chunk.js.map",
     "static/js/3.e0cc9cd3.chunk.js": "/static/js/3.e0cc9cd3.chunk.js",
     "static/js/3.e0cc9cd3.chunk.js.map": "/static/js/3.e0cc9cd3.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.2b8316e7.chunk.css.map": "/static/css/2.2b8316e7.chunk.css.map",
     "static/css/main.fab164bc.chunk.css.map": "/static/css/main.fab164bc.chunk.css.map",
-    "static/js/2.707ba828.chunk.js.LICENSE.txt": "/static/js/2.707ba828.chunk.js.LICENSE.txt",
+    "static/js/2.74b53233.chunk.js.LICENSE.txt": "/static/js/2.74b53233.chunk.js.LICENSE.txt",
     "static/media/github.module.css": "/static/media/blob-scatter.8bdd4f55.svg",
     "static/media/articles.module.css": "/static/media/blob.0d48aa54.svg",
     "static/media/jihad-al-khurfan-resume.d9ea8848.pdf": "/static/media/jihad-al-khurfan-resume.d9ea8848.pdf",
@@ -24,8 +24,8 @@
   "entrypoints": [
     "static/js/runtime-main.d9012e10.js",
     "static/css/2.2b8316e7.chunk.css",
-    "static/js/2.707ba828.chunk.js",
+    "static/js/2.74b53233.chunk.js",
     "static/css/main.fab164bc.chunk.css",
-    "static/js/main.5f43c313.chunk.js"
+    "static/js/main.fb839fa6.chunk.js"
   ]
 }
