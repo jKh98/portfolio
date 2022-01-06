@@ -37,7 +37,7 @@ function App() {
     <ConfigProvider direction={i18n?.dir()}>
       <HashRouter>
         <Switch>
-          <Route exact path="/" component={Landing} />
+          <Route path="/" component={Landing} />
         </Switch>
       </HashRouter>
     </ConfigProvider>
