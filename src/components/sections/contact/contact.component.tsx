@@ -8,8 +8,10 @@ import ReactGA from "react-ga";
 
 import { Social } from "&components/sections/social/social.component";
 import { Section } from "&components/common/section/section.component";
-import styles from "./contact.module.css";
+import { useWindowSize } from "&hooks/useWindowSize";
 import { formspreeKey, recaptchaKey } from "&config/meta";
+
+import styles from "./contact.module.css";
 
 const fields = { NAME: "name", EMAIL: "email", MESSAGE: "message" };
 const initialValues = { _name: "", _replyto: "", message: "" };
@@ -20,8 +22,10 @@ export function Contact() {
   const [state, handleSubmit] = useFormspree(formspreeKey, { debug: true });
   const [canSubmit, setCanSubmit] = useState(false);
   const [form] = Form.useForm<typeof initialValues>();
+  const { width } = useWindowSize();
 
   const theme = currentTheme === themes.dark ? "dark" : "light";
+  const isMobile = width <= 768;
 
   message.config({ maxCount: 1 });
 
@@ -69,6 +73,7 @@ export function Contact() {
                   <Input
                     id="name"
                     type="text"
+                    autoComplete="name"
                     name={fields.NAME}
                     placeholder={t("NAME")}
                   />
@@ -83,6 +88,7 @@ export function Contact() {
                   <Input
                     id="email"
                     type="email"
+                    autoComplete="email"
                     name={fields.EMAIL}
                     placeholder={t("EMAIL")}
                   />
@@ -95,11 +101,13 @@ export function Contact() {
                     rows={4}
                     name={fields.MESSAGE}
                     placeholder={t("MESSAGE")}
+                    autoComplete="off"
                   />
                 </Form.Item>
                 <Form.Item>
                   <ReCAPTCHA
                     theme={theme}
+                    size={isMobile ? "compact" : "normal"}
                     sitekey={recaptchaKey}
                     onChange={() => setCanSubmit(true)}
                     onErrored={() => setCanSubmit(false)}

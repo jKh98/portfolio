@@ -6,9 +6,11 @@ import { Row, Col, Drawer, Layout, Typography } from "antd";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import ReactGA from "react-ga";
 
+import { useWindowSize } from "&hooks/useWindowSize";
+import { scroll } from "&utils/scroll";
+
 import styles from "./nav.module.css";
 import { Menu } from "./menu.component";
-import { scroll } from "&utils/scroll";
 
 const { Text } = Typography;
 const { Header } = Layout;
@@ -21,10 +23,10 @@ export function Nav() {
   const { currentTheme, themes } = useThemeSwitcher();
 
   const [isDrawerOpen, showDrawer] = useState(false);
-  const [width, setWidth] = useState(window.innerWidth);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [barStyle, setBarStyle] = useState<CSSProperties>({});
   const isDarkMode = currentTheme === themes.dark;
+  const { width } = useWindowSize();
 
   const onDrawerOpen = () => {
     ReactGA.event({ category: "Navigation", action: "Drawer Open" });
@@ -35,14 +37,6 @@ export function Nav() {
     ReactGA.event({ category: "Navigation", action: "Drawer Close" });
     showDrawer(false);
   };
-
-  /** Handles window resize events */
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   /** Handles scroll events */
   useEffect(() => {
