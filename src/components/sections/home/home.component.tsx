@@ -5,16 +5,20 @@ import { Col, Layout, Row, Typography } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Parallax } from "rc-scroll-anim";
 
-import styles from "./home.module.css";
+import { Social } from "&components/sections/social/social.component";
+import { useWindowSize } from "&hooks/useWindowSize";
 import Profile from "&assets/images/profile.png";
-import { Social } from "../social/social.component";
+
+import styles from "./home.module.css";
 
 const { Title } = Typography;
 
 export function Home() {
   const { currentTheme, themes } = useThemeSwitcher();
+  const { width } = useWindowSize();
   const { t } = useTranslation();
-  const isMobile = window.innerWidth <= 768;
+
+  const isMobile = width <= 768;
 
   const handleScroll = () => {
     window.scrollTo({ top: window.innerHeight, behavior: "smooth" });

@@ -6,7 +6,8 @@
         "&config/*": ["./src/config/*"],
         "&assets/*": ["./src/assets/*"],
         "&locales/*": ["./src/locales/*"],
-        "&utils/*": ["./src/utils/*"]
+        "&utils/*": ["./src/utils/*"],
+        "&hooks/*": ["./src/hooks/*"]
       }
     }
   }
