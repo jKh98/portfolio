@@ -56,6 +56,9 @@ export const ar = {
   // Github
   GITHUB_HEADING: "مشاركتي على Github",
 
+  // Technologies
+  TECHNOLOGIES_HEADING: "التكنولوجيا التي أستخدمها",
+
   //Contact
   NAME: "اسمك",
   EMAIL: "بريدك الإلكتروني",

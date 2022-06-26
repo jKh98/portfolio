@@ -58,6 +58,9 @@ export const en = {
   // Github
   GITHUB_HEADING: "My Github",
 
+  // Technologies
+  TECHNOLOGIES_HEADING: "Tech I use",
+
   //Contact
   NAME: "Your Name",
   EMAIL: "Your Email",

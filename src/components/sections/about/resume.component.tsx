@@ -5,7 +5,7 @@ import file from "&assets/documents/jihad-al-khurfan-resume.pdf";
 
 export function Resume() {
   return (
-    <div style={{ height: "100vh" }}>
+    <div style={{ height: "100%" }}>
       <iframe src={file} title="resume" height="100%" width="100%" />
     </div>
   );
