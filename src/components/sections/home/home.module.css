@@ -1,8 +1,11 @@
 .full {
   min-height: 100vh;
+  position: relative;
+  overflow: hidden;
   background-size: cover !important;
   background-position: center !important;
-  background-image: url(../../../assets/images/waves-top.svg) !important;
+  background-attachment: fixed !important;
+  background-image: url(../../../assets/images/top.svg) !important;
 }
 
 .profile {

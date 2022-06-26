@@ -7,6 +7,8 @@ import { Section } from "&components/common/section/section.component";
 import { Timeline } from "&components/common/timeline/timeline.component";
 import Modal from "antd/lib/modal/Modal";
 import { Resume } from "./resume.component";
+import { Technologies } from "../technologies/technologies.component";
+import { Github } from "../github/github.component";
 
 const { Title } = Typography;
 
@@ -67,7 +69,7 @@ export function About() {
   };
 
   return (
-    <Section full title={t("ABOUT")}>
+    <Section full shadow title={t("ABOUT")}>
       <Row justify="center">
         <Col xs={22} sm={22} md={22} lg={11} xl={11} xxl={11}>
           <Row justify="center">
@@ -85,6 +87,16 @@ export function About() {
           <Timeline data={education} />
         </Col>
       </Row>
+      <Row justify="center">
+        <Col xs={22} sm={22} md={22} lg={22} xl={22} xxl={22}>
+          <Row justify="center">
+            <Title level={3}>{t("TECHNOLOGIES_HEADING")}</Title>
+          </Row>
+          <br />
+          <Technologies />
+        </Col>
+      </Row>
+      <Github />
       <Row justify="center">
         <Button type="primary" size="large" onClick={showResume}>
           {t("DOWNLOAD_RESUME")}
