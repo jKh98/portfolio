@@ -8,10 +8,15 @@
   background-color: transparent !important;
 }
 
+.card:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
 .icon {
-  line-height: 83px !important;
+  line-height: 52px !important;
   background: hsl(206, 75%, 49%) !important;
-  margin-bottom: 20px !important;
+  margin-bottom: 12px !important;
 }
 
 .icon svg {

@@ -87,6 +87,7 @@ export function About() {
           <Timeline data={education} />
         </Col>
       </Row>
+      <br />
       <Row justify="center">
         <Col xs={22} sm={22} md={22} lg={22} xl={22} xxl={22}>
           <Row justify="center">
@@ -96,17 +97,30 @@ export function About() {
           <Technologies />
         </Col>
       </Row>
-      <Github />
+      <br />
+      <br />
+      <Row justify="center">
+        <Col xs={22} sm={22} md={22} lg={22} xl={22} xxl={22}>
+          <Row justify="center">
+            <Title level={3}>{t("GITHUB_HEADING")}</Title>
+          </Row>
+          <br />
+          <Github />
+        </Col>
+      </Row>
+      <br />
+      <br />
       <Row justify="center">
         <Button type="primary" size="large" onClick={showResume}>
           {t("DOWNLOAD_RESUME")}
         </Button>
       </Row>
       <Modal
-        width={"100%"}
         visible={resumeOpen}
-        closable={false}
+        closable={true}
         onCancel={closeResume}
+        title={t("DOWNLOAD_RESUME")}
+        footer={false}
       >
         <Resume />
       </Modal>

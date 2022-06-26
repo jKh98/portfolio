@@ -3,7 +3,7 @@
   position: relative;
   overflow: hidden;
   background-size: cover !important;
-  background-position: center !important;
+  background-position: top !important;
   background-attachment: fixed !important;
   background-image: url(../../../assets/images/top.svg) !important;
 }

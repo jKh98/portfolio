@@ -1,7 +1,7 @@
 .full {
   min-height: 100vh;
   background-size: cover !important;
-  background-position: center !important;
+  background-position: right !important;
   background-attachment: fixed !important;
   background-image: url(../../../assets/images/bottom.svg) !important;
 }
