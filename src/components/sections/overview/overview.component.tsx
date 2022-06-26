@@ -5,7 +5,7 @@ import {
   RiCodeSSlashFill,
   RiDatabase2Fill,
   RiLightbulbFill,
-} from "react-icons/all";
+} from "react-icons/ri";
 import { Parallax } from "rc-scroll-anim";
 
 import styles from "./overview.module.css";
@@ -35,7 +35,7 @@ export function Overview() {
   const { t } = useTranslation();
 
   return (
-    <Section full title={t("OVERVIEW_HEADING")}>
+    <Section shadow full title={t("OVERVIEW_HEADING")}>
       <Parallax
         animation={{ scale: 1, playScale: [0.2, 0.55] }}
         style={{ transform: "scale(0.8)" }}

@@ -56,6 +56,7 @@ export function Contact() {
     <Layout className={styles.full}>
       <Section full title={t("CONTACT")}>
         <Form
+          size="large"
           form={form}
           layout="vertical"
           name="contact-form"
@@ -65,7 +66,7 @@ export function Contact() {
         >
           <Row justify="center">
             <Col xs={24} sm={24} md={20} lg={16} xl={12}>
-              <Card>
+              <Card bordered>
                 <Form.Item
                   name={fields.NAME}
                   rules={[{ required: true, message: t("REQUIRED") }]}

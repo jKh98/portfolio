@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import "./index.css";
 import App from "./App";
@@ -24,15 +24,17 @@ const getDefaultTheme = () => {
 };
 
 window.addEventListener("load", () => {
-  ReactDOM.render(
+  const container = document.getElementById("root");
+  const root = createRoot(container!);
+
+  root.render(
     // <React.StrictMode>
     <ThemeSwitcherProvider themeMap={themes} defaultTheme={getDefaultTheme()}>
       <I18nextProvider i18n={i18n}>
         <App />
       </I18nextProvider>
-    </ThemeSwitcherProvider>,
-    // </React.StrictMode>,
-    document.getElementById("root")
+    </ThemeSwitcherProvider>
+    // </React.StrictMode>
   );
 });
 

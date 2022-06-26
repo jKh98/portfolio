@@ -4,7 +4,7 @@ import { HashLink } from "react-router-hash-link";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Menu as AntdMenu, Switch } from "antd";
 import { TranslationOutlined } from "@ant-design/icons";
-import { RiSunFill, RiMoonFill } from "react-icons/all";
+import { RiSunFill, RiMoonFill } from "react-icons/ri";
 import ReactGA from "react-ga";
 
 import styles from "./nav.module.css";

@@ -6,7 +6,7 @@ import {
   RiLinkedinLine,
   RiTwitterLine,
   RiGithubLine,
-} from "react-icons/all";
+} from "react-icons/ri";
 
 import styles from "./social.module.css";
 import { social } from "&config/meta";

@@ -73,7 +73,7 @@ export function Articles() {
         <br />
         <Row justify="center">
           <Button
-            type="default"
+            type="primary"
             size="large"
             onClick={createMediumLinkHandler(`${mediumURL}/${mediumUser}`)}
           >
