@@ -1,31 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.2ace563e.chunk.css",
-    "main.js": "/static/js/main.e36a63d7.chunk.js",
-    "main.js.map": "/static/js/main.e36a63d7.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.d9012e10.js",
-    "runtime-main.js.map": "/static/js/runtime-main.d9012e10.js.map",
-    "static/css/2.2b8316e7.chunk.css": "/static/css/2.2b8316e7.chunk.css",
-    "static/js/2.527d2ee7.chunk.js": "/static/js/2.527d2ee7.chunk.js",
-    "static/js/2.527d2ee7.chunk.js.map": "/static/js/2.527d2ee7.chunk.js.map",
-    "static/js/3.e0cc9cd3.chunk.js": "/static/js/3.e0cc9cd3.chunk.js",
-    "static/js/3.e0cc9cd3.chunk.js.map": "/static/js/3.e0cc9cd3.chunk.js.map",
+    "main.css": "/static/css/main.76bd45fd.css",
+    "main.js": "/static/js/main.70e1eec1.js",
+    "static/js/787.b9ec5bb0.chunk.js": "/static/js/787.b9ec5bb0.chunk.js",
+    "static/media/profile.png": "/static/media/profile.5bd760456e5c8f0a9363.png",
+    "static/media/jihad-al-khurfan-resume.pdf": "/static/media/jihad-al-khurfan-resume.9c0c1da729d793aa0417.pdf",
+    "static/media/middle.svg": "/static/media/middle.24ecc5e59f593565e3fe.svg",
+    "static/media/bottom.svg": "/static/media/bottom.8bdbf11d103c2d95c693.svg",
+    "static/media/top.svg": "/static/media/top.c41e3e16bdf25409f58a.svg",
     "index.html": "/index.html",
-    "static/css/2.2b8316e7.chunk.css.map": "/static/css/2.2b8316e7.chunk.css.map",
-    "static/css/main.2ace563e.chunk.css.map": "/static/css/main.2ace563e.chunk.css.map",
-    "static/js/2.527d2ee7.chunk.js.LICENSE.txt": "/static/js/2.527d2ee7.chunk.js.LICENSE.txt",
-    "static/media/github.module.css": "/static/media/blob-scatter.8bdd4f55.svg",
-    "static/media/articles.module.css": "/static/media/blob.0d48aa54.svg",
-    "static/media/jihad-al-khurfan-resume.d9ea8848.pdf": "/static/media/jihad-al-khurfan-resume.d9ea8848.pdf",
-    "static/media/profile.5bd76045.png": "/static/media/profile.5bd76045.png",
-    "static/media/contact.module.css": "/static/media/waves-bottom.660ec1a2.svg",
-    "static/media/home.module.css": "/static/media/waves-top.76d83c83.svg"
+    "main.76bd45fd.css.map": "/static/css/main.76bd45fd.css.map",
+    "main.70e1eec1.js.map": "/static/js/main.70e1eec1.js.map",
+    "787.b9ec5bb0.chunk.js.map": "/static/js/787.b9ec5bb0.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.d9012e10.js",
-    "static/css/2.2b8316e7.chunk.css",
-    "static/js/2.527d2ee7.chunk.js",
-    "static/css/main.2ace563e.chunk.css",
-    "static/js/main.e36a63d7.chunk.js"
+    "static/css/main.76bd45fd.css",
+    "static/js/main.70e1eec1.js"
   ]
 }
