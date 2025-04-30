@@ -3,23 +3,36 @@
 @import "~antd/lib/style/color/colorPalette.less";
 @import "~antd/dist/antd.less";
 @import "~antd/lib/style/themes/dark.less";
+@import '~antd/dist/antd.dark.css'; // Import the dark theme
 
-@primary-color: hsl(206, 75%, 49%);
+// Override the primary color
+@primary-color: #1da57a;
 
+// Override the background color
+@body-background: #191919;
+
+// Override the text color
 @text-color: #fff;
-@text-color-secondary: rgba(255, 255, 255, 0.8);
-@text-color-inverse:rgba(0, 0, 0, 0.87) ;
-@heading-color: @text-color;
-@text-color-dark: @text-color;
-@text-color-secondary-dark: @text-color-secondary;
-@text-selection-bg: hsl(162, 100%, 58%);
 
-@border-color-base:rgba(255, 255, 255, 0.3);
-@border-color-split: rgba(255, 255, 255, 0.3);
+// Override the heading color
+@heading-color: #fff;
 
-@component-background: #424242;
-@body-background: #303030;
-@layout-body-background: @component-background;
-@layout-header-background: @body-background;
-@layout-footer-background: @layout-body-background;
-@layout-sider-background: @layout-header-background;
+// Set the border color
+@border-color-base: #2f2f2f;
+
+// Set the border radius
+@border-radius-base: 4px;
+@border-radius-sm: 2px;
+
+// Set the spacing sizes
+@padding-lg: 24px;
+@padding-md: 16px;
+@padding-sm: 12px;
+@padding-xs: 8px;
+
+// Set the layout styles
+@layout-body-background: #191919;
+@layout-header-background: #1c1c1c;
+@layout-header-height: 64px;
+@layout-footer-background: #1c1c1c;
+@layout-footer-height: 48px;

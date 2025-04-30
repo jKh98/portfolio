@@ -1,17 +1,11 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Row, Card, Col } from "antd";
 import ReactGithubCalender from "react-github-calendar";
-import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Parallax } from "rc-scroll-anim";
 
 import { githubUser } from "&config/meta";
-import { githubDark, githubLight } from "&config/color";
 
 export function Github() {
-  const { t } = useTranslation();
-  const { currentTheme, themes } = useThemeSwitcher();
-
   return (
     <Row justify="center">
       <Col>
@@ -24,7 +18,10 @@ export function Github() {
               username={githubUser}
               fontSize={16}
               blockMargin={4}
-              theme={currentTheme === themes.dark ? githubDark : githubLight}
+              theme={{
+                light: ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
+                dark: ["#6f6c6c", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
+              }}
             />
           </Card>
           <br />

@@ -38,6 +38,8 @@ export function Articles() {
       .then(({ items }) => setArticles(items));
   }, []);
 
+  console.log(articles);
+
   const createMediumLinkHandler = (link: string) => () => {
     ReactGA.event({ category: "Medium", action: "Click", label: link });
     window.open(link, "_blank");
@@ -47,7 +49,7 @@ export function Articles() {
     <Layout className={styles.full}>
       <Section full title={t("ARTICLES")}>
         <Row justify="space-between">
-          {articles.map(({ guid, link, title, thumbnail, pubDate }) => (
+          {articles.map(({ guid, link, title, content, pubDate }) => (
             <Col key={guid} xs={24} sm={11} md={11} lg={7}>
               <Parallax
                 animation={{ x: 0, opacity: 1, playScale: [0.2, 0.55] }}
@@ -58,7 +60,14 @@ export function Articles() {
                   className={styles.card}
                   onClick={createMediumLinkHandler(link)}
                   cover={
-                    <img alt={title} src={thumbnail} className={styles.img} />
+                    <img
+                      alt={title}
+                      src={
+                        content.match(/<img[^>]+src="([^">]+)"/)?.[1] ||
+                        "https://via.placeholder.com/150"
+                      }
+                      className={styles.img}
+                    />
                   }
                 >
                   <Meta

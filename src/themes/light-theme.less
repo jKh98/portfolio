@@ -4,27 +4,35 @@
 @import "~antd/dist/antd.less";
 @import "~antd/lib/style/themes/default.less";
 
-// These are shared variables that can be extracted to their own file
-@primary-color: hsl(206, 75%, 49%);
- 
-@text-color: rgba(0, 0, 0, 0.87);
-@text-color-secondary: rgba(0, 0, 0, 0.54);
-@text-color-inverse: @white;
-@heading-color: @text-color;
-@text-color-dark: @text-color;
-@text-color-secondary-dark: @text-color-secondary;
-@text-selection-bg: hsl(162, 100%, 58%);
+// Override the primary color
+@primary-color: #1da57a;
 
-@border-color-base:rgba(0, 0, 0, 0.12);
-@border-color-split: rgba(0, 0, 0, 0.12);
-
-@component-background: #fafafa;
+// Override the background color
 @body-background: #fff;
-@layout-body-background: @body-background;
-@layout-header-background: @component-background;
-@layout-body-background: @component-background;
-@layout-header-background: @body-background;
-@layout-footer-background: @layout-body-background;
-@layout-sider-background: @layout-header-background;
 
+// Override the text color
+@text-color: #000;
+
+// Override the heading color
+@heading-color: #000;
+
+// Set the border color
+@border-color-base: #ddd;
+
+// Set the border radius
+@border-radius-base: 4px;
+@border-radius-sm: 2px;
+
+// Set the spacing sizes
+@padding-lg: 24px;
+@padding-md: 16px;
+@padding-sm: 12px;
+@padding-xs: 8px;
+
+// Set the layout styles
+@layout-body-background: #fff;
+@layout-header-background: #f0f2f5;
+@layout-header-height: 64px;
+@layout-footer-background: #f0f2f5;
+@layout-footer-height: 48px;
 
