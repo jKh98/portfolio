@@ -14,6 +14,7 @@ import {
   rssToJsonServiceURL,
 } from "&config/meta";
 import styles from "./articles.module.css";
+import { useThemeSwitcher } from "react-css-theme-switcher";
 
 interface Article {
   author: string;
@@ -31,6 +32,7 @@ interface Article {
 export function Articles() {
   const { t } = useTranslation();
   const [articles, setArticles] = useState<Article[]>([]);
+  const { currentTheme, themes } = useThemeSwitcher();
 
   useEffect(() => {
     fetch(`${rssToJsonServiceURL}?rss_url=${mediumFeedURL}/${mediumUser}`)
@@ -46,7 +48,12 @@ export function Articles() {
   };
 
   return (
-    <Layout className={styles.full}>
+    <Layout
+      className={styles.full}
+      style={{
+        background: currentTheme === themes.light ? "white" : "transparent",
+      }}
+    >
       <Section full title={t("ARTICLES")}>
         <Row justify="space-between">
           {articles.map(({ guid, link, title, content, pubDate }) => (
@@ -59,6 +66,10 @@ export function Articles() {
                   hoverable
                   className={styles.card}
                   onClick={createMediumLinkHandler(link)}
+                  style={{
+                    backgroundColor:
+                      currentTheme === themes.light ? "#cce6ff" : "#0d1a26",
+                  }}
                   cover={
                     <img
                       alt={title}

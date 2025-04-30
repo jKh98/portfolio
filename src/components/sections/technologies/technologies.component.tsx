@@ -31,10 +31,13 @@ import {
 import { Parallax } from "rc-scroll-anim";
 
 import styles from "./technologies.module.css";
+import { useThemeSwitcher } from "react-css-theme-switcher";
 
 const { Title } = Typography;
 
 export function Technologies() {
+  const { currentTheme, themes } = useThemeSwitcher();
+
   const lang = [
     {
       name: "Javascript",
@@ -218,7 +221,14 @@ export function Technologies() {
               animation={{ x: 0, opacity: 1, playScale: [0.2, 0.55] }}
               style={{ transform: "translateX(-100px)", opacity: 0 }}
             >
-              <Card title={group.name} size="small">
+              <Card
+                title={group.name}
+                size="small"
+                style={{
+                  backgroundColor:
+                    currentTheme === themes.light ? "#dee1e8" : "#0d1a26",
+                }}
+              >
                 <List
                   size="small"
                   grid={{
@@ -246,7 +256,7 @@ export function Technologies() {
                         disabled
                         defaultValue={proficiency}
                         style={{
-                          color: "hsl(162, 100%, 58%)",
+                          color: "#1da57a",
                           fontSize: "small",
                         }}
                       />

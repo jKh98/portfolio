@@ -22,7 +22,7 @@ export const en = {
   OVERVIEW_DESC_1:
     "I specialize in design and development of responsive web and cross-platform mobile apps.",
   OVERVIEW_DESC_2:
-    "I have good experience in designing and implementing secure and scalable services.",
+    "I have great experience in designing and implementing secure and scalable services.",
   OVERVIEW_DESC_3:
     "I come up with state-of-art digital solutions to tackle modern problems.",
 
@@ -33,10 +33,12 @@ export const en = {
   TECFRAC: "TecFrac",
   NAR: "Nar Technologies",
   CME_POS: "Full-stack Software Engineer",
+  CME_POS2: "Senior Full-stack Software Engineer",
   AREEBA_POS: "Junior Full-stack Software Engineer",
   TECFRAC_POS: " Software Developer (Intern & Part-time)",
   NAR_POS: "Software Developer (Intern)",
   CME_DATE: "06/2021 - Present",
+  CME_DATE2: "08/2022 - Present",
   AREEBA_DATE: "06/2020 - 06/2021",
   TECFRAC_DATE: "06/2019 - 11/2019",
   NAR_DATE: "12/2018 - 01/2019",

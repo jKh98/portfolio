@@ -27,7 +27,11 @@ export function Home() {
     currentTheme === themes.light ? { boxShadow: "0 0 10px" } : {};
 
   return (
-    <Layout>
+    <Layout
+      style={{
+        background: currentTheme === themes.light ? "white" : "transparent",
+      }}
+    >
       <Row justify="space-around" align="middle" className={styles.full}>
         <Col>
           <Row justify="center">

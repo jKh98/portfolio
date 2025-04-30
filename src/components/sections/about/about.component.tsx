@@ -8,11 +8,17 @@ import { Timeline } from "&components/common/timeline/timeline.component";
 import Modal from "antd/lib/modal/Modal";
 import { Resume } from "./resume.component";
 import { Technologies } from "../technologies/technologies.component";
-import { Github } from "../github/github.component";
+// import { Github } from "../github/github.component";
 
 const { Title } = Typography;
 
 const experience = [
+  {
+    occupation: "CME",
+    date: "CME_DATE2",
+    position: "CME_POS2",
+    url: "https://www.gotocme.com/",
+  },
   {
     occupation: "CME",
     date: "CME_DATE",
@@ -99,7 +105,7 @@ export function About() {
       </Row>
       <br />
       <br />
-      <Row justify="center">
+      {/* <Row justify="center">
         <Col xs={22} sm={22} md={22} lg={22} xl={22} xxl={22}>
           <Row justify="center">
             <Title level={3}>{t("GITHUB_HEADING")}</Title>
@@ -109,7 +115,7 @@ export function About() {
         </Col>
       </Row>
       <br />
-      <br />
+      <br /> */}
       <Row justify="center">
         <Button type="primary" size="large" onClick={showResume}>
           {t("DOWNLOAD_RESUME")}

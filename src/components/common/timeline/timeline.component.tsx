@@ -41,7 +41,7 @@ export function Timeline(props: TimelineProps) {
             style={{ opacity: 0 }}
             animation={{ opacity: 1, playScale: [0.2, 0.55] }}
           >
-            <Layout>
+            <Layout style={{ background: "none" }}>
               <Row justify="space-between">
                 <Title level={5}>{t(position)}</Title>
                 <Text type="secondary">

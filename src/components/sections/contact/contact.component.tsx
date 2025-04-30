@@ -53,7 +53,12 @@ export function Contact() {
   };
 
   return (
-    <Layout className={styles.full}>
+    <Layout
+      className={styles.full}
+      style={{
+        background: currentTheme === themes.light ? "white" : "transparent",
+      }}
+    >
       <Section full title={t("CONTACT")}>
         <Form
           size="large"
@@ -66,7 +71,13 @@ export function Contact() {
         >
           <Row justify="center">
             <Col xs={24} sm={24} md={20} lg={16} xl={12}>
-              <Card bordered>
+              <Card
+                bordered
+                style={{
+                  background:
+                    currentTheme === themes.light ? "#cce6ff" : "#0d1a26",
+                }}
+              >
                 <Form.Item
                   name={fields.NAME}
                   rules={[{ required: true, message: t("REQUIRED") }]}
