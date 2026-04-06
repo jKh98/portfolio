@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
 import { useReducedMotion } from "@/hooks";
-import { ANIMATION } from "@/constants";
+import { ANIMATION, SKILL_ICONS } from "@/constants";
 
 export interface SkillBadgeProps {
   name: string;
@@ -11,6 +11,7 @@ export interface SkillBadgeProps {
 
 export function SkillBadge({ name, index = 0, className }: SkillBadgeProps) {
   const reduced = useReducedMotion();
+  const iconPath = SKILL_ICONS[name];
 
   return (
     <motion.span
@@ -21,7 +22,7 @@ export function SkillBadge({ name, index = 0, className }: SkillBadgeProps) {
         delay: reduced ? 0 : index * 0.03,
       }}
       className={cn(
-        "inline-flex items-center rounded-lg px-3 py-1.5",
+        "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5",
         "text-xs font-medium",
         "bg-[var(--bg-glass)] text-[var(--text-secondary)]",
         "border border-[var(--border)]",
@@ -32,6 +33,16 @@ export function SkillBadge({ name, index = 0, className }: SkillBadgeProps) {
         className,
       )}
     >
+      {iconPath && (
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="w-4 h-4 shrink-0"
+          aria-hidden="true"
+        >
+          <path d={iconPath} />
+        </svg>
+      )}
       {name}
     </motion.span>
   );

@@ -232,10 +232,11 @@ export function Window({ appId }: WindowProps) {
             "overflow-hidden",
             "backdrop-blur-xl border",
             "bg-[var(--bg-glass)] border-[var(--border)]",
+            "glass-noise glass-gradient",
             "transition-shadow duration-300",
             windowState.isFocused
-              ? "shadow-[var(--shadow-lg)]"
-              : "shadow-[var(--shadow-md)] opacity-[0.85]",
+              ? "glass-focused shadow-[var(--shadow-lg)]"
+              : "glass-unfocused shadow-[var(--shadow-md)]",
             // Maximized: no rounded corners, fixed positioning handled by style
             isMaximized && "rounded-none",
             // Mobile: full-screen, no rounded corners

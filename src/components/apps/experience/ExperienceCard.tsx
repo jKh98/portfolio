@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { GlassCard, Badge } from "@/components/ui";
 import { useReducedMotion } from "@/hooks";
 import { ANIMATION } from "@/constants";
+import { getCompanyLogo } from "@/constants/company-logos";
 import { formatDateRange } from "@/utils/format";
 import type { Experience } from "@/types";
 
@@ -11,6 +12,35 @@ export interface ExperienceCardProps {
   experience: Experience;
   expanded: boolean;
   onToggle: () => void;
+}
+
+/** Renders a small company logo SVG or a colored-circle initial fallback. */
+function CompanyLogoIcon({ company }: { company: string }) {
+  const logo = getCompanyLogo(company);
+
+  if (!logo) {
+    const initial = company.charAt(0).toUpperCase();
+    return (
+      <span
+        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-[10px] font-bold text-white"
+        aria-hidden="true"
+      >
+        {initial}
+      </span>
+    );
+  }
+
+  return (
+    <svg
+      viewBox={logo.viewBox}
+      className="h-6 w-6 shrink-0 text-[var(--text-secondary)]"
+      aria-hidden="true"
+    >
+      {logo.paths.map((p, i) => (
+        <path key={i} d={p.d} fill={p.fill ?? "currentColor"} />
+      ))}
+    </svg>
+  );
 }
 
 export function ExperienceCard({
@@ -38,6 +68,7 @@ export function ExperienceCard({
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
+              <CompanyLogoIcon company={experience.company} />
               <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                 {experience.company}
               </h3>

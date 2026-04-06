@@ -133,6 +133,33 @@ const ar = {
     terminal: {
       title: "الطرفية",
     },
+    finder: {
+      title: "مدير الملفات",
+      back: "رجوع",
+      forward: "تقدم",
+      breadcrumb: "مسار التنقل",
+      favorites: "المفضلة",
+      empty: "هذا المجلد فارغ.",
+      name: "الاسم",
+      kind: "النوع",
+      modified: "التعديل",
+      kinds: {
+        folder: "مجلد",
+        pdf: "مستند PDF",
+        txt: "ملف نصي",
+        link: "رابط",
+      },
+    },
+    notepad: {
+      title: "المفكرة",
+      localNotice: "يتم تخزين الرسائل محلياً على هذا الجهاز.",
+      namePlaceholder: "اسمك (اختياري)",
+      messagePlaceholder: "اكتب رسالة…",
+      alreadySubmitted: "لقد أرسلت رسالة بالفعل في هذه الجلسة.",
+      submit: "إرسال",
+      noMessages: "لا توجد رسائل بعد. كن أول من يكتب!",
+      anonymous: "مجهول",
+    },
     projects: {
       title: "المشاريع",
       noResults: "لا توجد مشاريع تطابق هذا الفلتر.",
@@ -179,6 +206,14 @@ const ar = {
         dark: "داكن",
         light: "فاتح",
         accentColor: "لون التمييز",
+        wallpaper: "خلفية سطح المكتب",
+        wallpapers: {
+          "3d-shapes": "أشكال ثلاثية الأبعاد",
+          gradient: "تدرج لوني",
+          "solid-dark": "لون داكن",
+          "solid-light": "لون فاتح",
+          pattern: "نقش",
+        },
         colors: {
           blue: "أزرق",
           cyan: "سماوي",

@@ -12,6 +12,7 @@ import type {
   AnimationSpeed,
   FontSize,
   DockIconSize,
+  WallpaperType,
 } from "@/types";
 import { applyAccentColor } from "@/constants";
 
@@ -25,6 +26,7 @@ const DEFAULT_PREFERENCES: Preferences = {
   autoCascade: true,
   reduceMotion: null,
   fontSize: "normal",
+  wallpaper: "3d-shapes",
 };
 
 function loadPreferences(): Preferences {
@@ -65,6 +67,8 @@ function preferencesReducer(
       return { ...state, reduceMotion: action.value };
     case "SET_FONT_SIZE":
       return { ...state, fontSize: action.size };
+    case "SET_WALLPAPER":
+      return { ...state, wallpaper: action.wallpaper };
     case "RESET":
       return DEFAULT_PREFERENCES;
     default:
@@ -138,6 +142,11 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
     (size: FontSize) => dispatch({ type: "SET_FONT_SIZE", size }),
     [],
   );
+  const setWallpaper = useCallback(
+    (wallpaper: WallpaperType) =>
+      dispatch({ type: "SET_WALLPAPER", wallpaper }),
+    [],
+  );
   const resetPreferences = useCallback(
     () => dispatch({ type: "RESET" }),
     [],
@@ -155,6 +164,7 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
         setAutoCascade,
         setReduceMotion,
         setFontSize,
+        setWallpaper,
         resetPreferences,
       }}
     >

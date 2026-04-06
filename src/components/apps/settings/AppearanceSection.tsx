@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { Moon } from "lucide-react";
-import { Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/context";
 import { usePreferences } from "@/hooks";
 import { ACCENT_COLORS } from "@/constants";
 import { cn } from "@/utils/cn";
-import type { AccentColor } from "@/types";
+import type { AccentColor, WallpaperType } from "@/types";
 
 const ACCENT_IDS: AccentColor[] = [
   "blue",
@@ -21,10 +20,18 @@ const ACCENT_IDS: AccentColor[] = [
   "indigo",
 ];
 
+const WALLPAPER_OPTIONS: WallpaperType[] = [
+  "3d-shapes",
+  "gradient",
+  "solid-dark",
+  "solid-light",
+  "pattern",
+];
+
 export function AppearanceSection() {
   const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const { preferences, setAccentColor } = usePreferences();
+  const { preferences, setAccentColor, setWallpaper } = usePreferences();
 
   return (
     <div className="space-y-6">
@@ -84,6 +91,30 @@ export function AppearanceSection() {
               />
             );
           })}
+        </div>
+      </div>
+
+      {/* Wallpaper selector */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-[var(--text-secondary)]">
+          {t("apps.settings.appearance.wallpaper")}
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {WALLPAPER_OPTIONS.map((wp) => (
+            <button
+              key={wp}
+              onClick={() => setWallpaper(wp)}
+              aria-label={t(`apps.settings.appearance.wallpapers.${wp}`)}
+              className={cn(
+                "rounded-lg px-3 py-2 text-xs border transition-colors",
+                preferences.wallpaper === wp
+                  ? "border-[var(--accent)] bg-[var(--accent-glow)] text-[var(--text-primary)]"
+                  : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)]",
+              )}
+            >
+              {t(`apps.settings.appearance.wallpapers.${wp}`)}
+            </button>
+          ))}
         </div>
       </div>
     </div>

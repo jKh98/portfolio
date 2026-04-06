@@ -14,9 +14,10 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "rounded-xl backdrop-blur-md border",
+        "relative rounded-xl backdrop-blur-md border",
         "bg-[var(--bg-glass)] border-[var(--border)]",
         "shadow-[var(--shadow-md)]",
+        "glass-noise glass-gradient glass-inner-highlight",
         "transition-all duration-200",
         hoverable && [
           "hover:bg-[var(--bg-glass-hover)]",
@@ -29,7 +30,7 @@ export function GlassCard({
         className,
       )}
     >
-      {children}
+      <div className="relative z-[1]">{children}</div>
     </div>
   );
 }

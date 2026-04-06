@@ -20,6 +20,7 @@ export type {
   AnimationSpeed,
   FontSize,
   DockIconSize,
+  WallpaperType,
   Preferences,
   PreferencesAction,
   PreferencesContextValue,

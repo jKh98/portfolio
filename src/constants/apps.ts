@@ -1,7 +1,11 @@
 import { lazy } from "react";
 import type { AppDefinition } from "@/types";
 
-export const APP_DEFINITIONS: AppDefinition[] = [
+/**
+ * Primary apps (left side of dock divider).
+ * Order: Profile, Experience, Skills, Projects, Contact
+ */
+const PRIMARY_APPS: AppDefinition[] = [
   {
     id: "profile",
     titleKey: "apps.profile.title",
@@ -36,11 +40,26 @@ export const APP_DEFINITIONS: AppDefinition[] = [
     component: lazy(() => import("@/components/apps/skills/SkillsApp")),
   },
   {
+    id: "projects",
+    titleKey: "apps.projects.title",
+    icon: "FolderGit2",
+    component: lazy(
+      () => import("@/components/apps/projects/ProjectsApp"),
+    ),
+  },
+  {
     id: "contact",
     titleKey: "apps.contact.title",
     icon: "Mail",
     component: lazy(() => import("@/components/apps/contact/ContactApp")),
   },
+];
+
+/**
+ * Utility apps (right side of dock divider).
+ * Order: Terminal, Finder, Notepad, Settings
+ */
+const UTILITY_APPS: AppDefinition[] = [
   {
     id: "terminal",
     titleKey: "apps.terminal.title",
@@ -50,11 +69,19 @@ export const APP_DEFINITIONS: AppDefinition[] = [
     ),
   },
   {
-    id: "projects",
-    titleKey: "apps.projects.title",
-    icon: "FolderGit2",
+    id: "finder",
+    titleKey: "apps.finder.title",
+    icon: "Folder",
     component: lazy(
-      () => import("@/components/apps/projects/ProjectsApp"),
+      () => import("@/components/apps/finder/FinderApp"),
+    ),
+  },
+  {
+    id: "notepad",
+    titleKey: "apps.notepad.title",
+    icon: "StickyNote",
+    component: lazy(
+      () => import("@/components/apps/notepad/NotepadApp"),
     ),
   },
   {
@@ -65,4 +92,13 @@ export const APP_DEFINITIONS: AppDefinition[] = [
       () => import("@/components/apps/settings/SettingsApp"),
     ),
   },
+];
+
+/** Index where utility apps begin (used by Dock for divider placement) */
+export const DOCK_DIVIDER_INDEX = PRIMARY_APPS.length;
+
+/** All app definitions in dock order */
+export const APP_DEFINITIONS: AppDefinition[] = [
+  ...PRIMARY_APPS,
+  ...UTILITY_APPS,
 ];

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
 import { useWindowManager } from "@/context";
 import { useIsMobile, useIsTablet, usePreferences } from "@/hooks";
-import { APP_DEFINITIONS } from "@/constants";
+import { APP_DEFINITIONS, DOCK_DIVIDER_INDEX } from "@/constants";
 import { ContextMenu } from "@/components/ui";
 import type { ContextMenuItem } from "@/components/ui";
 import { DockIcon } from "./DockIcon";
@@ -137,6 +137,11 @@ export function Dock() {
     openWindow,
   ]);
 
+  // On mobile, only show primary apps (first DOCK_DIVIDER_INDEX items)
+  const visibleApps = isMobile
+    ? APP_DEFINITIONS.slice(0, DOCK_DIVIDER_INDEX)
+    : APP_DEFINITIONS;
+
   return (
     <>
       <nav
@@ -152,27 +157,35 @@ export function Dock() {
           isMobile ? "gap-3 bottom-2 px-4" : "gap-2",
         )}
       >
-        {APP_DEFINITIONS.map((app, index) => (
-          <DockIcon
-            key={app.id}
-            appId={app.id}
-            icon={app.icon}
-            label={t(app.titleKey)}
-            isActive={windows[app.id].isOpen}
-            onClick={() => handleIconClick(app.id)}
-            mouseX={mouseX}
-            index={index}
-            compact={isMobile}
-            iconSize={preferences.dockIconSize}
-            disableMagnification={!enableMagnification}
-            onPointerDown={
-              isDesktop
-                ? (e: React.PointerEvent) => handleLongPressStart(app.id, e)
-                : undefined
-            }
-            onPointerUp={isDesktop ? handleLongPressEnd : undefined}
-            onPointerLeave={isDesktop ? handleLongPressEnd : undefined}
-          />
+        {visibleApps.map((app, index) => (
+          <span key={app.id} className="flex items-end">
+            {/* Divider between primary and utility apps */}
+            {index === DOCK_DIVIDER_INDEX && !isMobile && (
+              <span
+                className="mx-1 self-stretch w-px bg-[var(--border)] opacity-60"
+                aria-hidden="true"
+              />
+            )}
+            <DockIcon
+              appId={app.id}
+              icon={app.icon}
+              label={t(app.titleKey)}
+              isActive={windows[app.id].isOpen}
+              onClick={() => handleIconClick(app.id)}
+              mouseX={mouseX}
+              index={index}
+              compact={isMobile}
+              iconSize={preferences.dockIconSize}
+              disableMagnification={!enableMagnification}
+              onPointerDown={
+                isDesktop
+                  ? (e: React.PointerEvent) => handleLongPressStart(app.id, e)
+                  : undefined
+              }
+              onPointerUp={isDesktop ? handleLongPressEnd : undefined}
+              onPointerLeave={isDesktop ? handleLongPressEnd : undefined}
+            />
+          </span>
         ))}
       </nav>
 

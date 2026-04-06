@@ -134,6 +134,33 @@ const en = {
     terminal: {
       title: "Terminal",
     },
+    finder: {
+      title: "Finder",
+      back: "Go back",
+      forward: "Go forward",
+      breadcrumb: "Breadcrumb navigation",
+      favorites: "Favorites",
+      empty: "This folder is empty.",
+      name: "Name",
+      kind: "Kind",
+      modified: "Modified",
+      kinds: {
+        folder: "Folder",
+        pdf: "PDF Document",
+        txt: "Text File",
+        link: "Link",
+      },
+    },
+    notepad: {
+      title: "Notepad",
+      localNotice: "Messages are stored locally on this device.",
+      namePlaceholder: "Your name (optional)",
+      messagePlaceholder: "Write a message…",
+      alreadySubmitted: "You have already submitted a message this session.",
+      submit: "Submit",
+      noMessages: "No messages yet. Be the first to write one!",
+      anonymous: "Anonymous",
+    },
     projects: {
       title: "Projects",
       noResults: "No projects match that filter.",
@@ -180,6 +207,14 @@ const en = {
         dark: "Dark",
         light: "Light",
         accentColor: "Accent Color",
+        wallpaper: "Wallpaper",
+        wallpapers: {
+          "3d-shapes": "3D Shapes",
+          gradient: "Gradient",
+          "solid-dark": "Solid Dark",
+          "solid-light": "Solid Light",
+          pattern: "Pattern",
+        },
         colors: {
           blue: "Blue",
           cyan: "Cyan",

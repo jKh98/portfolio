@@ -149,3 +149,85 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== Enhanced Glass Aesthetic ===== */
+
+/* Noise texture overlay via SVG data URI */
+.glass-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* Gradient overlay simulating top-left light source */
+.glass-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 50%
+  );
+  border-radius: inherit;
+  z-index: 0;
+}
+
+:root.dark .glass-gradient::after {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 50%
+  );
+}
+
+/* Animated accent glow on focused windows */
+@keyframes accent-glow-pulse {
+  0%,
+  100% {
+    box-shadow:
+      var(--shadow-lg),
+      0 0 20px var(--accent-glow),
+      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  }
+  50% {
+    box-shadow:
+      var(--shadow-lg),
+      0 0 30px var(--accent-glow),
+      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  }
+}
+
+.glass-focused {
+  animation: accent-glow-pulse 3s ease-in-out infinite;
+  border-color: var(--border-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-focused {
+    animation: none;
+    box-shadow:
+      var(--shadow-lg),
+      0 0 20px var(--accent-glow),
+      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  }
+}
+
+/* Enhanced inner highlight (bevel effect) */
+.glass-inner-highlight {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+}
+
+/* Deeper unfocused window treatment */
+.glass-unfocused {
+  backdrop-filter: blur(24px);
+  opacity: 0.8;
+}

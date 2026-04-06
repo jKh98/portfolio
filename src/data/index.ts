@@ -8,3 +8,5 @@ export { PROJECTS, getProjectTags } from "./projects";
 export type { Project } from "./projects";
 export { executeCommand, ASCII_BANNER, COMMAND_NAMES, getPathCompletions } from "./terminal-commands";
 export type { CommandResult, CommandHandler, CommandContext } from "./terminal-commands";
+export { FILE_TREE, resolveNode, pathSegments } from "./filesystem";
+export type { FileNode, FileAction } from "./filesystem";
