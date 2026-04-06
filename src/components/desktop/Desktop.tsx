@@ -4,6 +4,7 @@ import { useWindowManager } from "@/context";
 import { APP_DEFINITIONS } from "@/constants";
 import { TopBar } from "./TopBar";
 import { Dock } from "./Dock";
+import { BootSequence } from "./BootSequence";
 import { Window } from "@/components/window";
 import type { AppId } from "@/types";
 
@@ -31,6 +32,7 @@ export function Desktop() {
 
   return (
     <div className={cn("relative h-full w-full overflow-hidden")}>
+      <BootSequence />
       <TopBar />
 
       {/* Main window area */}
