@@ -13,8 +13,6 @@
     "deploy": "yarn build && gh-pages -d dist"
   },
   "dependencies": {
-    "@react-three/drei": "^10",
-    "@react-three/fiber": "^9",
     "clsx": "^2",
     "framer-motion": "^11",
     "i18next": "^24",
@@ -23,16 +21,16 @@
     "react": "^19",
     "react-dom": "^19",
     "react-i18next": "^15",
-    "tailwind-merge": "^3",
-    "three": "^0.172"
+    "simple-icons": "^16.15.0",
+    "tailwind-merge": "^3"
   },
   "devDependencies": {
     "@eslint/js": "^9",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/vite": "^4",
     "@types/node": "^25.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.172",
     "@vitejs/plugin-react": "^4",
     "eslint": "^9",
     "eslint-plugin-react-hooks": "^5",
