@@ -1,1 +1,1 @@
-export {};
+export { SkillsApp } from "./SkillsApp";

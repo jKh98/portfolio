@@ -1,1 +1,1 @@
-export {};
+export { ContactApp } from "./ContactApp";

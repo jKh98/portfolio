@@ -7,7 +7,8 @@ const en = {
   apps: {
     profile: {
       title: "Profile",
-      summary: "",
+      summary:
+        "Senior Fullstack Engineer with 6+ years of experience building scalable web and mobile solutions. Specializing in React, TypeScript, Node.js, and cloud infrastructure across fintech, logistics, and government digital transformation projects in MENA, Europe, and the US.",
       stats: {
         experience: "Years Experience",
         projects: "Projects Delivered",
@@ -20,6 +21,59 @@ const en = {
     },
     experience: {
       title: "Experience",
+      "cme-senior-fullstack": {
+        position: "Senior Fullstack Software Engineer",
+        highlights: [
+          "Led frontend architecture rewrite using React Query and TypeScript, improving performance by 40%",
+          "Optimized backend APIs and database queries, reducing response times by 35%",
+          "Implemented robust CI/CD pipelines with GitHub Actions and Docker",
+          "Integrated Azure cloud services for scalable deployments with 99.9% uptime",
+        ],
+      },
+      "cme-senior-frontend": {
+        position: "Senior FrontEnd Software Engineer",
+        highlights: [
+          "Spearheaded TypeScript adoption and migrated legacy Redux code to Redux Toolkit",
+          "Established reusable component library using Storybook with 95% test coverage",
+          "Delivered strategic platform for ICT vendor classification and RFP management for Saudi DGA",
+          "Developed high-impact POC for Saudi SBC investment cost calculator",
+        ],
+      },
+      "cme-fullstack": {
+        position: "Full-Stack Software Engineer",
+        highlights: [
+          "Rewrote legacy Clojure frontends to ReactJS, improving maintainability and developer velocity",
+          "Migrated backend services from GoLang to Node.js + Spring Boot",
+          "Led database migration plans with Postgres/SQL Server and abstraction layers",
+          "Built comprehensive testing platform using WebDriverIO and Cucumber",
+        ],
+      },
+      "areeba-junior-fullstack": {
+        position: "Junior Full-Stack Software Engineer",
+        highlights: [
+          "Built KYC/KYB features with OCR data extraction from identity documents",
+          "Integrated Visa/Mastercard gateways via Antelope SDK and MagicCube SDK",
+          "Contributed to full rewrite of Zaki mobile app and Transfer web platform",
+          "Delivered prototypes for invoice automation and custom business rules engines",
+        ],
+      },
+      "tecfrac-intern": {
+        position: "Intern/Part-time Software Developer",
+        highlights: [
+          "Designed native Android application for a retail client",
+          "Built structured web scraping scripts for data extraction",
+          "Provided maintenance for legacy Android applications",
+          "Delivered branded website for the mobile application",
+        ],
+      },
+      "nar-intern": {
+        position: "Software Developer Intern",
+        highlights: [
+          "Implemented UX improvements for drone inspection application",
+          "Introduced ProGuard-based obfuscation for production builds",
+          "Improved app release documentation and processes",
+        ],
+      },
     },
     skills: {
       title: "Skills",
@@ -35,8 +89,16 @@ const en = {
     contact: {
       title: "Contact",
       subtitle: "Let's Connect",
-      availability: "Available for new opportunities",
+      availability:
+        "Available for new opportunities and interesting projects. Based in Beirut, Lebanon.",
       copyFeedback: "Copied!",
+      location: "Beirut, Lebanon",
+      email: "Email",
+      phone: "Phone",
+      linkedin: "LinkedIn",
+      github: "GitHub",
+      copy: "Copy",
+      open: "Open",
     },
   },
   common: {

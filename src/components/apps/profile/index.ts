@@ -1,1 +1,1 @@
-export {};
+export { ProfileApp } from "./ProfileApp";
