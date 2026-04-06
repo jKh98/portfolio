@@ -105,6 +105,8 @@ const en = {
   common: {
     close: "Close",
     minimize: "Minimize",
+    maximize: "Maximize",
+    restore: "Restore",
     present: "Present",
     copied: "Copied!",
     openLink: "Open link",

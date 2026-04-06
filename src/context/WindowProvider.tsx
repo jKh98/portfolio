@@ -13,7 +13,23 @@ import type {
   WindowState,
 } from "@/types";
 
-const ALL_APP_IDS: AppId[] = ["profile", "experience", "skills", "contact"];
+const ALL_APP_IDS: AppId[] = [
+  "profile",
+  "experience",
+  "skills",
+  "contact",
+  "terminal",
+  "projects",
+  "notepad",
+  "settings",
+  "finder",
+];
+
+/** Cascade offset in pixels per open window */
+const CASCADE_OFFSET = 30;
+
+/** TopBar height in pixels */
+const TOPBAR_HEIGHT = 32;
 
 interface WindowManagerState {
   windows: Record<AppId, WindowState>;
@@ -28,11 +44,53 @@ function createInitialState(): WindowManagerState {
       id,
       isOpen: false,
       isMinimized: false,
+      isMaximized: false,
       isFocused: false,
       zIndex: 0,
     };
   }
   return { windows, windowOrder: [], nextZIndex: 1 };
+}
+
+/**
+ * Calculate cascade position for a new window based on the number
+ * of currently open windows. Wraps back when off-screen.
+ */
+function calculateCascadePosition(
+  openWindowCount: number,
+): { x: number; y: number } | undefined {
+  if (openWindowCount === 0) return undefined; // First window uses default centered position
+
+  const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+
+  const maxOffsetX = vw * 0.3;
+  const maxOffsetY = vh * 0.3;
+
+  let offsetX = openWindowCount * CASCADE_OFFSET;
+  let offsetY = openWindowCount * CASCADE_OFFSET;
+
+  // Wrap when cascade would push too far
+  if (offsetX > maxOffsetX) {
+    offsetX = offsetX % maxOffsetX;
+  }
+  if (offsetY > maxOffsetY) {
+    offsetY = offsetY % maxOffsetY;
+  }
+
+  return { x: offsetX, y: offsetY + TOPBAR_HEIGHT };
+}
+
+function unfocusAll(
+  windows: Record<AppId, WindowState>,
+): Record<AppId, WindowState> {
+  const updated = { ...windows };
+  for (const appId of ALL_APP_IDS) {
+    if (updated[appId].isFocused) {
+      updated[appId] = { ...updated[appId], isFocused: false };
+    }
+  }
+  return updated;
 }
 
 function windowReducer(
@@ -42,20 +100,21 @@ function windowReducer(
   switch (action.type) {
     case "OPEN": {
       const { id } = action;
-      const newOrder = [...state.windowOrder.filter((wId) => wId !== id), id];
-      const windows = { ...state.windows };
-      // Unfocus all
-      for (const appId of ALL_APP_IDS) {
-        if (windows[appId].isFocused) {
-          windows[appId] = { ...windows[appId], isFocused: false };
-        }
+      // If already open, just focus it
+      if (state.windows[id].isOpen) {
+        return windowReducer(state, { type: "FOCUS", id });
       }
+      const newOrder = [...state.windowOrder.filter((wId) => wId !== id), id];
+      const windows = unfocusAll(state.windows);
+      const cascadePos = calculateCascadePosition(state.windowOrder.length);
       windows[id] = {
         ...windows[id],
         isOpen: true,
         isMinimized: false,
+        isMaximized: false,
         isFocused: true,
         zIndex: state.nextZIndex,
+        position: cascadePos,
       };
       return {
         windows,
@@ -73,9 +132,11 @@ function windowReducer(
           ...state.windows[appId],
           isOpen: appId === id,
           isMinimized: false,
+          isMaximized: false,
           isFocused: appId === id,
           zIndex: appId === id ? state.nextZIndex : 0,
           position: undefined,
+          size: undefined,
         };
       }
       return {
@@ -94,7 +155,9 @@ function windowReducer(
         isOpen: false,
         isFocused: false,
         isMinimized: false,
+        isMaximized: false,
         position: undefined,
+        size: undefined,
       };
       // Focus the next top window
       if (newOrder.length > 0) {
@@ -126,12 +189,7 @@ function windowReducer(
     case "RESTORE": {
       const { id } = action;
       const newOrder = [...state.windowOrder.filter((wId) => wId !== id), id];
-      const windows = { ...state.windows };
-      for (const appId of ALL_APP_IDS) {
-        if (windows[appId].isFocused) {
-          windows[appId] = { ...windows[appId], isFocused: false };
-        }
-      }
+      const windows = unfocusAll(state.windows);
       windows[id] = {
         ...windows[id],
         isMinimized: false,
@@ -145,17 +203,39 @@ function windowReducer(
       };
     }
 
+    case "MAXIMIZE": {
+      const { id } = action;
+      const newOrder = [...state.windowOrder.filter((wId) => wId !== id), id];
+      const windows = unfocusAll(state.windows);
+      windows[id] = {
+        ...windows[id],
+        isMaximized: true,
+        isFocused: true,
+        zIndex: state.nextZIndex,
+      };
+      return {
+        windows,
+        windowOrder: newOrder,
+        nextZIndex: state.nextZIndex + 1,
+      };
+    }
+
+    case "UNMAXIMIZE": {
+      const { id } = action;
+      const windows = { ...state.windows };
+      windows[id] = {
+        ...windows[id],
+        isMaximized: false,
+      };
+      return { ...state, windows };
+    }
+
     case "FOCUS": {
       const { id } = action;
       const win = state.windows[id];
       if (!win.isOpen || win.isMinimized) return state;
       const newOrder = [...state.windowOrder.filter((wId) => wId !== id), id];
-      const windows = { ...state.windows };
-      for (const appId of ALL_APP_IDS) {
-        if (windows[appId].isFocused) {
-          windows[appId] = { ...windows[appId], isFocused: false };
-        }
-      }
+      const windows = unfocusAll(state.windows);
       windows[id] = {
         ...windows[id],
         isFocused: true,
@@ -172,6 +252,13 @@ function windowReducer(
       const { id, position } = action;
       const windows = { ...state.windows };
       windows[id] = { ...windows[id], position };
+      return { ...state, windows };
+    }
+
+    case "UPDATE_SIZE": {
+      const { id, size } = action;
+      const windows = { ...state.windows };
+      windows[id] = { ...windows[id], size };
       return { ...state, windows };
     }
 
@@ -236,6 +323,25 @@ export function WindowProvider({ children }: WindowProviderProps) {
     (id: AppId) => dispatch({ type: "FOCUS", id }),
     [],
   );
+  const maximizeWindow = useCallback(
+    (id: AppId) => dispatch({ type: "MAXIMIZE", id }),
+    [],
+  );
+  const unmaximizeWindow = useCallback(
+    (id: AppId) => dispatch({ type: "UNMAXIMIZE", id }),
+    [],
+  );
+  const toggleMaximize = useCallback(
+    (id: AppId) => {
+      const win = state.windows[id];
+      if (win?.isMaximized) {
+        dispatch({ type: "UNMAXIMIZE", id });
+      } else {
+        dispatch({ type: "MAXIMIZE", id });
+      }
+    },
+    [state.windows],
+  );
 
   return (
     <WindowContext.Provider
@@ -248,6 +354,9 @@ export function WindowProvider({ children }: WindowProviderProps) {
         minimizeWindow,
         restoreWindow,
         focusWindow,
+        maximizeWindow,
+        unmaximizeWindow,
+        toggleMaximize,
       }}
     >
       {children}

@@ -104,6 +104,8 @@ const ar = {
   common: {
     close: "إغلاق",
     minimize: "تصغير",
+    maximize: "تكبير",
+    restore: "استعادة",
     present: "حالياً",
     copied: "تم النسخ!",
     openLink: "فتح الرابط",
