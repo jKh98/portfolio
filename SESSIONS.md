@@ -324,24 +324,450 @@ Follow all rules in .opencode/rules/portfolio-v3.md strictly. This session is ab
 
 ---
 
-## Session 6: Deploy + Final QA
+## Session 6a: Window System Overhaul
+
+```
+I'm building a portfolio v3. Read SPEC.md (especially the new Section 24) and the rules in .opencode/rules/ before doing anything.
+
+This is Session 6a: Window System Overhaul.
+
+Sessions 1-5 are complete on the `v3` branch: fully built, responsive, accessible, performant portfolio with 4 app windows. This session focuses on making the window system feel like a real OS.
+
+Refer to SPEC.md Sections 24.1 and 24.9 for full details.
+
+Tasks (in order):
+
+1. **Update types** (`types/window.ts`):
+   - Expand `AppId` union to include: "terminal", "projects", "notepad", "settings", "finder" (apps built in later sessions, but types need to be ready)
+   - Add `isMaximized: boolean` to `WindowState`
+   - Add `size?: { width: number; height: number }` to `WindowState`
+   - Add actions: `MAXIMIZE`, `UNMAXIMIZE`, `UPDATE_SIZE`
+   - Add convenience methods: `maximizeWindow`, `unmaximizeWindow`, `toggleMaximize` to `WindowManagerContextValue`
+
+2. **Update WindowProvider** (`context/WindowProvider.tsx`):
+   - Update `ALL_APP_IDS` to include all 9 app IDs
+   - Implement `MAXIMIZE` action: sets `isMaximized=true`, stores pre-maximize position/size for restore
+   - Implement `UNMAXIMIZE` action: restores previous position/size, sets `isMaximized=false`
+   - Implement `UPDATE_SIZE` action: updates window dimensions
+   - Update `OPEN` action: calculate cascade position (30px offset per open window, wrap when off-screen)
+   - Add `maximizeWindow`, `unmaximizeWindow`, `toggleMaximize` convenience methods
+
+3. **Fix drag constraints** (`components/window/Window.tsx`):
+   - Replace static `dragConstraints={{ top: 0, left: -400, right: 400, bottom: 200 }}` with dynamic constraints
+   - Top: window cannot go above 32px (TopBar height)
+   - Left/Right/Bottom: title bar must remain at least 50% visible
+   - Use a container ref or calculate constraints based on viewport + window dimensions
+   - When maximized, disable dragging entirely
+
+4. **Green button maximize** (`components/window/WindowHeader.tsx`):
+   - Convert green `<div>` from decorative to functional `<button>`
+   - Add `onMaximize` prop
+   - On click: toggle between maximized and normal state
+   - Add hover state: show expand/collapse icon (like macOS)
+   - Add `aria-label` for accessibility
+   - Double-click title bar also toggles maximize
+
+5. **Window maximize styles** (`components/window/Window.tsx`):
+   - When maximized: `inset-0 top-[32px] rounded-none` (fills viewport below TopBar)
+   - Smooth Framer Motion transition between normal and maximized states
+   - When maximized: no drag, no resize handles
+
+6. **Window resize** (new `components/window/ResizeHandle.tsx` + hook `hooks/useWindowResize.ts`):
+   - Create `ResizeHandle` component: renders 8 invisible hit areas around window edges
+   - Create `useWindowResize` hook: tracks pointer events on handles, calculates new size
+   - Min size: 400x300px. Max size: viewport minus safe areas
+   - Correct cursor for each handle direction
+   - Desktop only (hidden on mobile/tablet)
+   - Hidden when maximized
+
+7. **Cascade offset**:
+   - Update the `OPEN` reducer to compute initial position based on number of currently open windows
+   - First window: centered. Each subsequent: +30px down and +30px right
+   - If offset would push window off-screen, wrap back to starting position
+   - Apply position as initial drag offset
+
+8. **Verify**:
+   - `yarn dev`: windows open with cascade offset
+   - Green button toggles fullscreen smoothly
+   - Windows can be resized from all edges/corners
+   - Drag constraints prevent losing windows
+   - Title bar double-click toggles maximize
+   - Mobile: no resize handles, no maximize, full-screen behavior unchanged
+   - `yarn build` passes clean
+
+9. **Commit** to v3 branch.
+
+Follow all rules in .opencode/rules/portfolio-v3.md strictly. This is a complex session - break into small, testable increments. Types first, then reducer, then UI.
+```
+
+---
+
+## Session 6b: Interactions + UI Polish
+
+```
+I'm building a portfolio v3. Read SPEC.md (especially Sections 24.3, 24.4, 24.8) and the rules in .opencode/rules/ before doing anything.
+
+This is Session 6b: Interactions + UI Polish.
+
+Session 6a is complete: window system now supports maximize, resize, cascade positioning, and proper drag constraints.
+
+Refer to SPEC.md Sections 24.3, 24.4, and 24.8 for full details.
+
+Tasks (in order):
+
+1. **Click target expansion** (Section 24.3.1):
+   - ExperienceCard: move `onClick` to the outermost card container so clicking padding triggers expand/collapse. Add `cursor-pointer` to full card area.
+   - ContactLink: make the entire card row clickable (not just the small button). Clicking anywhere on the card triggers copy (email/phone) or open (LinkedIn/GitHub).
+   - Audit all interactive components for dead click zones on padding.
+
+2. **Cursor management audit** (Section 24.3.2):
+   - Verify and fix cursors on: window title bar, traffic light buttons, dock icons, accordion headers, contact links, external links, copy buttons, TopBar buttons, desktop background.
+   - Add `cursor-pointer` where missing on clickable elements.
+   - Ensure drag handles show `cursor-grab`/`cursor-grabbing`.
+
+3. **Hover state enhancements** (Section 24.3.3):
+   - Traffic light buttons: show small icons on hover (X for close, - for minimize, expand arrows for maximize) like macOS. Use lucide icons (X, Minus, Maximize2) at 8px size, hidden by default, visible on hover.
+   - ExperienceCard: add background shift + subtle border glow on hover.
+   - ContactLink cards: add border accent + slight translateY lift on hover.
+   - GlassCard hoverable: add translateY(-1px) lift.
+   - All interactive elements: ensure smooth transition (200ms).
+
+4. **Right-click context menus** (Section 24.3.5):
+   - Create `<ContextMenu>` component in `components/ui/`: glass card, positioned at pointer, renders a list of menu items. Click-away to dismiss. Portal rendering for z-index safety.
+   - Create `useContextMenu` hook: handles `contextmenu` event, returns position + visibility state.
+   - Desktop context menu (right-click empty area): Change Wallpaper, Toggle Theme, Switch Language, About This Portfolio.
+   - Window context menu (right-click title bar): Close, Minimize, Maximize/Restore, Bring to Front, Send to Back.
+
+5. **Long press on dock icons** (Section 24.3.4):
+   - Create `useLongPress` hook (500ms threshold).
+   - On long press of dock icon: show context popover above icon.
+   - If window open: Close, Minimize, Bring to Front.
+   - If window closed: Open.
+   - Desktop only.
+
+6. **Toolbars** (Section 24.4):
+   - Create `<WindowToolbar>` reusable component: sits between WindowHeader and WindowContent, glass bg, 36px height, border-bottom.
+   - Experience App toolbar: company filter pills (All, CME, areeba, TecFrac, NAR), Expand All / Collapse All toggle.
+   - Skills App toolbar: category filter pills, search input to filter skills by name.
+   - Wire toolbars into their respective apps.
+
+7. **App-level UI polish** (Section 24.8):
+   - Profile: staggered entrance animation for sections, stats counting up from 0, subtle photo breathing animation.
+   - Experience: "Current" badge with subtle pulse on active role, tags staggered entrance, smoother accordion transition (overflow-hidden during animation).
+   - Skills: staggered badge entrance (wave effect), skill count summary text.
+   - Contact: staggered link entrance, gradient text on heading, copy success flash, live timezone indicator.
+   - General: subtle section dividers, scroll shadow at top of WindowContent when scrolled, micro-interaction press feedback on all buttons.
+
+8. **Verify**:
+   - Click targets work correctly (no dead zones)
+   - Cursors are correct everywhere
+   - Hover states provide clear visual feedback
+   - Context menus work on desktop (right-click)
+   - Long press works on dock icons (desktop)
+   - Toolbars filter and toggle correctly
+   - Animations are smooth, not janky
+   - Reduced motion respects all new animations
+   - Mobile: context menus and long press disabled gracefully
+   - `yarn build` passes clean
+
+9. **Commit** to v3 branch.
+
+Follow all rules in .opencode/rules/portfolio-v3.md strictly. This session is dense - prioritize correctness over completeness. Better to do 80% polished than 100% rushed.
+```
+
+---
+
+## Session 6c: TopBar + Keyboard + Spotlight
+
+```
+I'm building a portfolio v3. Read SPEC.md (especially Sections 24.6, 24.7) and the rules in .opencode/rules/ before doing anything.
+
+This is Session 6c: TopBar + Keyboard + Spotlight.
+
+Sessions 6a-6b are complete: window system overhaul and interaction polish done.
+
+Refer to SPEC.md Sections 24.6 and 24.7 for full details.
+
+Tasks (in order):
+
+1. **Branding menu** (Section 24.6.1):
+   - Replace the owner name text in TopBar left section with a clickable monogram/logo.
+   - Clicking opens a dropdown menu (glass card, positioned below trigger).
+   - Items: "About Jihad Al-Khurfan" (opens Profile), separator, "Restart..." (replays boot sequence by clearing sessionStorage), "Shut Down..." (fun fade-to-black animation, then restores), separator, "View Source" (opens GitHub repo in new tab).
+   - Click-away to dismiss.
+
+2. **App menu system** (Section 24.6.2):
+   - Add a dynamic menu bar in TopBar (after branding menu, before center clock).
+   - Always show "File" menu: Close Window, Close All Windows.
+   - Per-app menus change based on focused window. Each app can optionally export `menuConfig` in its app definition.
+   - Experience: View menu with Expand All / Collapse All.
+   - Terminal: Edit menu with Clear Terminal.
+   - Other apps: only default File menu.
+   - Implementation: extend `AppDefinition` type with optional `menuConfig`. TopBar reads focused window's config.
+   - On mobile: hide app menus (not enough space).
+
+3. **Status tray icons** (Section 24.6.4):
+   - Add decorative WiFi, Battery, and optionally Bell icons to the right side of TopBar.
+   - Positioned before the existing theme/language toggles.
+   - Tooltips on hover showing decorative status messages.
+   - Mobile: hide or show only 1-2 icons.
+
+4. **Spotlight search** (Section 24.6.3):
+   - Create `<Spotlight>` component: modal overlay with search input + results list.
+   - Glass background, centered, max-width 600px.
+   - Trigger: Cmd+K (or Ctrl+K) keyboard shortcut, or clicking search icon in TopBar (add a small search icon if space permits).
+   - Searchable items: app names, skills, actions (toggle theme, switch language, download resume), company names.
+   - Filter on input change. Enter selects first result. Arrow keys navigate results. Escape closes.
+   - Results show icon + label + category hint.
+   - Build a flat searchable index in a `data/spotlight-index.ts` or compute from existing data.
+
+5. **Keyboard shortcuts** (Section 24.7):
+   - Create `useKeyboardShortcuts` hook.
+   - Register in Desktop.tsx:
+     - Cmd+1 through Cmd+9: open/focus app by dock position
+     - Cmd+W: close focused window
+     - Cmd+M: minimize focused window
+     - Cmd+K: open Spotlight
+     - Cmd+`: cycle focus to next open window
+     - Escape: close focused window (already exists, ensure it still works)
+   - Arrow keys: navigate dock when dock is focused.
+   - Use `e.metaKey || e.ctrlKey` for cross-platform support.
+   - `e.preventDefault()` on captured shortcuts.
+   - NOTE: Be careful with Cmd+W -- it closes browser tabs. Consider showing a hint overlay instead of intercepting, or only intercept if a window is focused.
+
+6. **Keyboard shortcut cheat sheet**:
+   - Pressing `?` (when no input is focused) shows a modal overlay listing all shortcuts.
+   - Can also be accessed from Settings app or branding menu.
+
+7. **Update i18n** for all new menu items, Spotlight labels, and shortcut descriptions.
+
+8. **Verify**:
+   - Branding menu opens/closes correctly
+   - App menus change based on focused window
+   - Status tray icons are decorative and have tooltips
+   - Cmd+K opens Spotlight, searching works, results navigate correctly
+   - All keyboard shortcuts work as expected
+   - Shortcuts don't interfere with browser defaults when no window is focused
+   - Mobile: menus condensed or hidden, Spotlight accessible via icon
+   - RTL: menus and Spotlight mirror correctly
+   - `yarn build` passes clean
+
+9. **Commit** to v3 branch.
+
+Follow all rules in .opencode/rules/portfolio-v3.md strictly.
+```
+
+---
+
+## Session 6d: New Apps (Part 1 - Terminal, Projects, Settings)
+
+```
+I'm building a portfolio v3. Read SPEC.md (especially Sections 24.5.1, 24.5.2, 24.5.4) and the rules in .opencode/rules/ before doing anything.
+
+This is Session 6d: New Apps (Part 1).
+
+Sessions 6a-6c are complete: window system overhauled, interactions polished, TopBar enhanced, keyboard shortcuts and Spotlight working.
+
+Refer to SPEC.md Sections 24.5.1, 24.5.2, and 24.5.4 for full details.
+
+Tasks (in order):
+
+1. **Preferences context** (prerequisite for Settings app):
+   - Create `types/preferences.ts` with all preference types (accent color, wallpaper, dock settings, animation speed, font size, reduce motion override).
+   - Create `context/PreferencesProvider.tsx` with `useReducer`, `localStorage` persistence, and sensible defaults.
+   - Wire into provider hierarchy in `main.tsx` (outside ThemeProvider so preferences can control theme).
+   - Create `hooks/usePreferences.ts` for consuming.
+
+2. **Settings app** (Section 24.5.4):
+   - Create `components/apps/settings/` directory.
+   - `SettingsApp.tsx`: main container with section navigation.
+   - Sections:
+     a. Appearance: theme toggle with preview, accent color picker (cyan, purple, green, amber, rose), wallpaper thumbnail selector.
+     b. Dock: magnification toggle, icon size (small/medium/large).
+     c. Windows: animation speed (normal/fast/off), auto-cascade toggle.
+     d. Language: EN/AR toggle with direction preview.
+     e. Accessibility: reduce motion toggle, font size (small/normal/large).
+   - Changes take effect immediately (live preview).
+   - Persist all settings to localStorage.
+
+3. **Accent color system**:
+   - Define 5 accent color presets in `constants/colors.ts`:
+     - Cyan (#06b6d4) - default
+     - Purple (#8b5cf6)
+     - Green (#22c55e)
+     - Amber (#f59e0b)
+     - Rose (#f43f5e)
+   - Each preset includes: `value`, `hover`, `glow` variants.
+   - When accent changes, update all `--accent-*` CSS variables on `:root`.
+   - All existing components already use `var(--accent)` so they'll update automatically.
+
+4. **Terminal app** (Section 24.5.1):
+   - Create `components/apps/terminal/` directory.
+   - Create `data/terminal-commands.ts`: command registry mapping command names to handler functions.
+   - `TerminalApp.tsx`: terminal UI with monospace font, dark opaque background, blinking cursor, prompt display, input field.
+   - Functional commands: `help`, `about`, `skills`, `experience`, `contact`, `open <app>`, `close <app>`, `theme <dark|light>`, `clear`, `ls`, `cat resume`, `whoami`.
+   - Fun commands: `sudo hire me`, `rm -rf /`, `ping google.com`, `neofetch`, `matrix`.
+   - Unknown commands: "command not found" message.
+   - Command history: arrow up/down cycles previous commands (session-scoped).
+   - Auto-scroll output to bottom.
+   - Welcome banner with ASCII art on open.
+   - Toolbar: Clear button, font size toggle.
+
+5. **Projects app** (Section 24.5.2):
+   - Create `components/apps/projects/` directory.
+   - Create `data/projects.ts` with Project interface and 3-5 placeholder entries.
+   - `ProjectsApp.tsx`: grid of project cards (2 col desktop, 1 col mobile).
+   - `ProjectCard.tsx`: name, description, tech tags, demo + GitHub links.
+   - Featured projects: accent border + slightly larger.
+   - Toolbar: filter by technology tag.
+
+6. **Register new apps**:
+   - Add `terminal`, `projects`, `settings` to `APP_DEFINITIONS` in `constants/apps.ts`.
+   - Add dock icons: Terminal (Terminal icon), Projects (FolderGit2 icon), Settings (Settings icon).
+   - Consider dock grouping: primary apps left, utility apps right with a subtle divider gap.
+
+7. **Update i18n** for all new app content (en.ts and ar.ts):
+   - Terminal: command outputs, welcome message, help text.
+   - Projects: project names, descriptions.
+   - Settings: section labels, option labels, descriptions.
+
+8. **Verify**:
+   - Settings app opens, all preferences work and persist across refresh.
+   - Accent color changes are reflected across entire UI immediately.
+   - Terminal accepts input, commands work, history works, auto-scrolls.
+   - Projects shows card grid with placeholder data.
+   - All new apps work in both themes, both languages, RTL.
+   - Dock accommodates new icons without breaking layout.
+   - `yarn build` passes clean.
+
+9. **Commit** to v3 branch.
+
+Follow all rules in .opencode/rules/portfolio-v3.md strictly. Each app should be self-contained. Keep component files under 150 lines.
+```
+
+---
+
+## Session 6e: New Apps (Part 2) + Visual Enhancement
+
+````
+I'm building a portfolio v3. Read SPEC.md (especially Sections 24.5.3, 24.5.5, 24.2) and the rules in .opencode/rules/ before doing anything.
+
+This is Session 6e: New Apps (Part 2) + Visual Enhancement.
+
+Sessions 6a-6d are complete: window system overhauled, interactions polished, TopBar enhanced, keyboard shortcuts, Spotlight, Terminal, Projects, and Settings apps working.
+
+Refer to SPEC.md Sections 24.5.3, 24.5.5, 24.2 for full details.
+
+Tasks (in order):
+
+1. **Finder app** (Section 24.5.5):
+   - Create `data/filesystem.ts`: define virtual file tree structure.
+     ```
+     ~/
+     ├── Documents/
+     │   ├── Resume.pdf → downloads resume
+     │   ├── Resume_Detailed.pdf → downloads detailed resume
+     │   └── Azure_AZ-900.pdf → links to cert
+     ├── Projects/
+     │   └── (entries from projects data)
+     ├── About.txt → opens Profile app
+     └── Contact.txt → opens Contact app
+     ```
+   - Create `components/apps/finder/` directory.
+   - `FinderApp.tsx`: main layout with sidebar + content pane.
+   - Sidebar: collapsible folder tree (macOS Finder-like).
+   - Content pane: file list for selected folder (icon + name + type + date).
+   - Toolbar: breadcrumb path, back/forward navigation.
+   - Double-click: triggers action (download PDF, open app window, open URL).
+   - Single-click: highlight/select.
+
+2. **Notepad/Guestbook app** (Section 24.5.3):
+   - Create `components/apps/notepad/` directory.
+   - `NotepadApp.tsx`: split into input area + messages list.
+   - Input: text area (max 500 chars), optional name field, submit button.
+   - Backend: use Formspree (free tier) for submissions. If API key not configured, fallback to localStorage-only mode with a "Guestbook coming soon" message.
+   - Messages list: scrollable, shows name + message + timestamp.
+   - Rate limiting: one submission per session (sessionStorage).
+   - Styling: notepad-like appearance (subtle lined texture or clean glass).
+
+3. **Register remaining apps**:
+   - Add `finder` and `notepad` to `APP_DEFINITIONS`.
+   - Dock icons: Finder (Folder icon), Notepad (StickyNote icon).
+   - Final dock layout: Profile, Experience, Skills, Projects, Contact | (gap) | Terminal, Finder, Notepad, Settings.
+
+4. **Enhanced glass aesthetic** (Section 24.2.1):
+   - Add subtle gradient overlay on glass surfaces (top-left light source simulation):
+     `linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%)`.
+   - Add animated accent glow on focused windows: slow CSS pulse on border color.
+   - Add subtle noise texture overlay on glass (SVG filter or CSS, opacity 0.02-0.04).
+   - Add inner highlight: `inset` box shadow for bevel/reflection effect.
+   - Deeper unfocused window treatment: stronger blur + darker overlay.
+
+5. **Technology logos in skills** (Section 24.2.2):
+   - Choose approach: inline SVGs from devicon or simple-icons.
+   - Create `constants/skill-icons.ts` mapping skill names to SVG components or icon identifiers.
+   - Update `SkillBadge` to render icon (16px) + text side by side.
+   - Fallback: skills without icon show text only.
+
+6. **Company logos in experience** (Section 24.2.3):
+   - Source or create small logos for CME, areeba, TecFrac, NAR Technologies.
+   - Store in `public/assets/images/logos/` or as inline SVGs.
+   - Update `ExperienceCard` to show logo (24-32px) next to company name.
+   - Fallback: company initial in colored circle.
+
+7. **Wallpaper system** (Section 24.2.4):
+   - Implement wallpaper options: 3D Shapes (default), Gradient, Solid Dark, Solid Light, Subtle Pattern.
+   - `App.tsx` conditionally renders selected background.
+   - 3D scene only loaded/rendered when "3D Shapes" wallpaper is selected.
+   - Controlled via Settings app wallpaper selector.
+   - Persist selection in PreferencesContext.
+
+8. **Dock layout update**:
+   - With 9 apps, add a subtle divider gap between primary apps (Profile through Contact) and utility apps (Terminal through Settings).
+   - Ensure dock doesn't overflow on smaller screens. On mobile: show only primary apps, add a "more" indicator or scrollable dock.
+
+9. **Update i18n** for Finder and Notepad content (en.ts and ar.ts).
+
+10. **Verify**:
+    - Finder navigates virtual filesystem, actions work (download, open app).
+    - Notepad accepts input, submits (or falls back to localStorage).
+    - Glass enhancement is subtle and premium-feeling.
+    - Tech logos appear on skill badges.
+    - Company logos appear on experience cards.
+    - Wallpaper changes from Settings app.
+    - Dock handles 9 icons gracefully at all breakpoints.
+    - All new features work in both themes, both languages, RTL.
+    - `yarn build` passes clean.
+
+11. **Commit** to v3 branch.
+
+Follow all rules in .opencode/rules/portfolio-v3.md strictly. This is the final feature session before deployment.
+````
+
+---
+
+## Session 7: Deploy + Final QA
 
 ```
 I'm building a portfolio v3. Read SPEC.md and the rules in .opencode/rules/ before doing anything.
 
-This is Session 6: Deploy + Final QA.
+This is Session 7: Deploy + Final QA.
 
-Sessions 1-5 are complete on the `v3` branch: fully built, responsive, accessible, performant portfolio.
+Sessions 1-5 (core build) and 6a-6e (enhancements) are complete on the `v3` branch: fully built, enhanced portfolio with 9 app windows, overhauled window system, rich interactions, and visual polish.
 
 Tasks:
 
 1. **Pre-deploy checks**:
    - Run `yarn build` - must pass clean with zero warnings
    - Run `yarn preview` - verify the production build works locally
-   - Check all 4 windows render correctly in preview
+   - Check all 9 windows render correctly in preview
    - Check both themes in preview
    - Check Arabic/RTL in preview
    - Check mobile viewport in preview
+   - Check all keyboard shortcuts work
+   - Check Spotlight search works
+   - Check right-click context menus work
+   - Check window maximize, resize, and cascade work
 
 2. **GitHub Pages setup**:
    - Verify `public/CNAME` contains `jalkhurfan.com`
@@ -356,7 +782,7 @@ Tasks:
    - Verify no unused imports across all files
    - Verify no unused dependencies in package.json
    - Verify .gitignore covers: node_modules/, dist/, .env, .DS_Store
-   - Ensure SPEC.md, SESSIONS.md, and .opencode/rules/ are committed (they're documentation, fine to keep)
+   - Ensure SPEC.md, SESSIONS.md, and .opencode/rules/ are committed
 
 4. **Meta tags & SEO**:
    - Verify index.html has proper meta tags:
@@ -368,15 +794,28 @@ Tasks:
      - theme-color meta tag
    - Verify favicon.ico is present
 
-5. **Deploy**:
+5. **Performance audit**:
+   - Check bundle sizes: initial load should be reasonable (lazy loading keeps it manageable)
+   - Verify all 9 apps are code-split (separate chunks)
+   - Verify Three.js only loads when 3D wallpaper is selected
+   - Run Lighthouse and address any critical issues
+   - Check for memory leaks (open/close windows rapidly)
+
+6. **Accessibility audit**:
+   - Keyboard-only navigation through all 9 apps
+   - Screen reader testing on key flows
+   - Color contrast check for all accent color options
+   - Focus management with new context menus and Spotlight
+
+7. **Deploy**:
    - Run `yarn deploy`
    - Verify gh-pages branch is updated
    - If the DNS/custom domain is already configured, verify https://jalkhurfan.com loads
-   - If not, note that DNS configuration is needed (GitHub Pages settings + domain registrar)
+   - If not, note that DNS configuration is needed
 
-6. **Final commit** to v3 branch with any last adjustments.
+8. **Final commit** to v3 branch with any last adjustments.
 
-7. **Optionally**: merge v3 into master (ask the user first - they may want to review before merging).
+9. **Optionally**: merge v3 into master (ask the user first).
 
 Follow all rules in .opencode/rules/portfolio-v3.md strictly. This is the final session - ship it clean.
 ```

@@ -25,6 +25,8 @@
 21. [Build & Deploy](#21-build--deploy)
 22. [Cleanup Checklist](#22-cleanup-checklist)
 23. [Implementation Phases](#23-implementation-phases)
+24. [Enhancement Spec (Post-Session 5)](#24-enhancement-spec-post-session-5)
+25. [Implementation Sessions (Post-Session 5)](#25-implementation-sessions-post-session-5)
 
 ---
 
@@ -1625,13 +1627,827 @@ Files and directories to **remove** when scaffolding v3:
 5. Accessibility audit (ARIA, keyboard, contrast)
 6. Performance profiling and optimization
 
-### Phase 9: Deploy
+### Phase 9: Window System Overhaul (Session 6a)
 
-1. Build verification (`yarn build`)
+1. Dynamic drag constraints (top bar ceiling, partial off-screen)
+2. Green button maximize/fullscreen toggle
+3. Window resize from edges/corners
+4. Cascade offset for new windows
+5. Updated types and reducer
+
+### Phase 10: Interactions + UI Polish (Session 6b)
+
+1. Click target expansion
+2. Cursor management audit
+3. Hover state enhancements (traffic light icons, card lifts)
+4. Right-click context menus
+5. Long press on dock icons
+6. Window toolbars
+7. App-level micro-interactions and polish
+
+### Phase 11: TopBar + Keyboard + Spotlight (Session 6c)
+
+1. Branding menu
+2. Dynamic app menu system
+3. Status tray icons
+4. Spotlight search (Cmd+K)
+5. Keyboard shortcuts
+6. Shortcut cheat sheet
+
+### Phase 12: New Apps Part 1 (Session 6d)
+
+1. PreferencesContext
+2. Settings app (appearance, dock, windows, language, accessibility)
+3. Accent color system
+4. Terminal app (commands, Easter eggs, history)
+5. Projects app (card grid, placeholders)
+
+### Phase 13: New Apps Part 2 + Visual Enhancement (Session 6e)
+
+1. Finder app (virtual filesystem)
+2. Notepad/Guestbook app
+3. Enhanced glass aesthetic
+4. Technology logos in skills
+5. Company logos in experience
+6. Wallpaper system
+7. Dock layout update
+
+### Phase 14: Deploy + Final QA (Session 7)
+
+1. Build verification
 2. GitHub Pages configuration
-3. CNAME setup
-4. Deploy to gh-pages branch
-5. Verify live site
+3. Full regression test (9 apps)
+4. Performance and accessibility audit
+5. Deploy to gh-pages branch
+6. Verify live site
+
+---
+
+## 24. Enhancement Spec (Post-Session 5)
+
+This section specifies all enhancements planned after the initial build
+(sessions 1-5). These are organized by feature area and will be implemented
+across sessions 6a through 6e.
+
+### 24.1 Window System Enhancements
+
+#### 24.1.1 Drag Constraints (Fix)
+
+The current drag constraints use arbitrary pixel values
+(`top: 0, left: -400, right: 400, bottom: 200`). Replace with dynamic
+viewport-aware constraints:
+
+- **Top**: Window cannot be dragged above the TopBar (32px). The TopBar is the
+  absolute ceiling.
+- **Left/Right/Bottom**: The window's title bar must remain at least 50%
+  visible so the user can always grab it back. Calculate based on actual window
+  width and viewport dimensions.
+- Implementation: Replace static `dragConstraints` with a ref-based
+  `dragConstraints` that reads from a parent container ref, or compute
+  constraints dynamically in a `useMemo` based on `window.innerWidth`,
+  `window.innerHeight`, and window dimensions.
+
+#### 24.1.2 Green Button - Maximize/Fullscreen Toggle
+
+Convert the decorative green dot into a functional maximize button:
+
+- **Normal state**: Window at default size/position (centered, max-width 900px)
+- **Maximized state**: Window fills viewport minus TopBar height (32px) and
+  Dock area (~72px bottom padding). Full width, full height, no rounded
+  corners, positioned at `top: 32px, left: 0, right: 0, bottom: 0`.
+- **Toggle**: Clicking green button toggles between normal and maximized.
+- **State**: Add `isMaximized: boolean` to `WindowState`. Add `MAXIMIZE` and
+  `UNMAXIMIZE` actions to `WindowAction`.
+- **Animation**: Smooth Framer Motion transition between states.
+- **Keyboard**: Double-clicking the title bar also toggles maximize.
+- **Constraints**: When maximized, dragging is disabled. Clicking green button
+  or double-clicking title bar restores to normal size.
+
+#### 24.1.3 Window Resize
+
+Windows should be freely resizable from edges and corners:
+
+- **Resize handles**: 8 handles (N, S, E, W, NE, NW, SE, SW) rendered as
+  invisible hit areas (8px wide) around the window border.
+- **Cursor**: `cursor-ew-resize`, `cursor-ns-resize`, `cursor-nesw-resize`,
+  `cursor-nwse-resize` on respective handles.
+- **Min size**: 400px width, 300px height.
+- **Max size**: Viewport width - 32px, viewport height - 104px (top bar + dock
+  area).
+- **State**: Add `size?: { width: number; height: number }` to `WindowState`.
+  Add `UPDATE_SIZE` action to `WindowAction`.
+- **Desktop only**: Resize handles hidden on mobile/tablet.
+- **Maximized**: When maximized, resize handles are hidden.
+- **Implementation**: Custom `useWindowResize` hook that tracks pointer events
+  on resize handles and updates width/height. Not Framer Motion drag -- use
+  raw pointer events for precision.
+
+#### 24.1.4 Cascade Offset for New Windows
+
+When multiple windows are open, each new window should offset ~30px down and
+~30px right from the previous window's position:
+
+- **Offset**: 30px down, 30px right per open window.
+- **Wrap**: If the offset would push the window off-screen, reset to the
+  starting position (centered).
+- **Implementation**: In the `OPEN` reducer action, calculate position based
+  on `windowOrder.length`. Store computed position in `WindowState.position`.
+- **Starting position**: First window centered. Second window at
+  center + 30px/30px. Third at center + 60px/60px. Etc.
+
+#### 24.1.5 Window Arrange (Right-Click Context Menu)
+
+Right-clicking a window title bar shows a context menu with:
+
+- Close
+- Minimize
+- Maximize / Restore
+- Bring to Front
+- Send to Back
+
+Implementation details in Section 24.6 (Context Menus).
+
+### 24.2 Visual Enhancements ("Wow Factor")
+
+#### 24.2.1 Enhanced Glass Aesthetic
+
+Upgrade the current glass effect to feel more premium:
+
+- **Richer gradients**: Add subtle linear gradients on glass surfaces
+  (top-left light source). Example:
+  `background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%)`
+  overlaid on the glass fill.
+- **Animated accent glow**: Focused windows get a subtle animated border glow
+  using CSS `@keyframes` -- a slow pulse on the accent border color.
+- **Noise texture**: Add a very subtle noise SVG filter or CSS grain overlay
+  on glass surfaces for material depth. Keep it nearly invisible
+  (`opacity: 0.02-0.04`).
+- **Inner highlight**: Add an `inset` box shadow
+  (`0 1px 0 rgba(255,255,255,0.05) inset`) to glass surfaces for a bevel
+  effect simulating light reflection.
+- **Depth layers**: Unfocused windows get a stronger blur + darker overlay
+  to create more visual separation between layers.
+
+#### 24.2.2 Technology Logos in Skills
+
+Replace plain text skill badges with logo + text badges:
+
+- Use `devicon` or `simple-icons` SVGs for recognizable technology logos
+  (React, TypeScript, Node.js, Docker, etc.).
+- **Implementation**: Install `simple-icons` or import individual SVGs.
+  Alternatively, use a CDN-based icon sprite from devicon.
+- **Recommended approach**: Create a `SKILL_ICONS` constant mapping skill
+  names to their corresponding SVG icon components or URLs. Use inline SVGs
+  for tree-shaking.
+- **Badge layout**: Icon (16px) + text side by side in the existing SkillBadge
+  component.
+- **Fallback**: Skills without a recognized logo show just text (graceful).
+
+#### 24.2.3 Company Logos in Experience
+
+Add company logos to experience cards:
+
+- Source small logo images or SVGs for: CME, areeba, TecFrac, NAR Technologies.
+- Store in `public/assets/images/logos/` or as inline SVGs.
+- Display as a small (24-32px) logo next to the company name in
+  ExperienceCard.
+- **Fallback**: Company initial in a colored circle if no logo available.
+
+#### 24.2.4 Wallpaper System
+
+Offer 3-5 selectable backgrounds managed through the Settings app:
+
+| Wallpaper      | Description                                    |
+| -------------- | ---------------------------------------------- |
+| 3D Shapes      | Current R3F scene (default)                    |
+| Gradient       | Animated CSS gradient (no 3D overhead)         |
+| Solid Dark     | Pure dark color matching `--bg-primary`        |
+| Solid Light    | Pure light color matching `--bg-primary`       |
+| Subtle Pattern | SVG pattern (dots, grid, or topographic lines) |
+
+- **State**: Add `wallpaper` to a new `PreferencesContext` (or extend
+  `ThemeContext`). Persist to `localStorage`.
+- **Implementation**: `App.tsx` renders the selected background component
+  conditionally. The 3D scene is only loaded when selected.
+
+### 24.3 Interaction Improvements
+
+#### 24.3.1 Click Target Expansion
+
+Fix areas where clicking on padding/margins of interactive elements doesn't
+trigger the action:
+
+- **ExperienceCard accordion**: The entire GlassCard area should be clickable,
+  not just the inner content. Move the `onClick` handler to the outermost
+  container div. Add `cursor-pointer` to the entire card.
+- **ContactLink copy/open**: The entire ContactLink card should be clickable
+  (not just the small copy/open button). Wrap the card in a `<button>` or add
+  `onClick` to the outer container. Keep the explicit button as a visual
+  indicator but make the whole row actionable.
+- **General rule**: Any element that has a clickable child action should have
+  `cursor-pointer` on the full interactive area and handle clicks on the
+  parent container.
+
+#### 24.3.2 Cursor Management
+
+Audit and fix cursors across all interactive elements:
+
+| Element               | Cursor                                                          |
+| --------------------- | --------------------------------------------------------------- |
+| Window title bar      | `cursor-grab` / `cursor-grabbing`                               |
+| Resize handles        | `cursor-{direction}-resize`                                     |
+| Dock icons            | `cursor-pointer`                                                |
+| Traffic light buttons | `cursor-pointer`                                                |
+| Accordion headers     | `cursor-pointer`                                                |
+| Skill badges          | `cursor-default` (not interactive) unless we add tooltip/detail |
+| Contact link cards    | `cursor-pointer`                                                |
+| External links        | `cursor-pointer`                                                |
+| Copy buttons          | `cursor-pointer`                                                |
+| TopBar buttons        | `cursor-pointer`                                                |
+| Desktop background    | `cursor-default`                                                |
+| Text content          | `cursor-text` (browser default)                                 |
+| Disabled elements     | `cursor-not-allowed`                                            |
+
+#### 24.3.3 Hover State Enhancements
+
+Add clear hover visual feedback to all clickable elements that currently
+lack it:
+
+- **ExperienceCard**: Add background color shift + subtle border glow on
+  hover to indicate it's expandable.
+- **Traffic light buttons**: Show small icons on hover (X for close,
+  - for minimize, expand arrows for maximize) matching macOS behavior.
+- **GlassCard hoverable**: Ensure hover effect is visually distinct --
+  add a slight `translateY(-1px)` lift in addition to background change.
+- **ContactLink cards**: Add border accent color + slight lift on hover.
+
+#### 24.3.4 Long Press on Dock Icons
+
+Long-pressing (500ms) a dock icon shows a small context popover:
+
+- **If window is open**: Show "Close", "Minimize", "Bring to Front"
+- **If window is closed**: Show "Open"
+- **Implementation**: Custom `useLongPress` hook that detects pointer down
+  duration. Render a small `<ContextMenu>` component positioned above the
+  dock icon.
+- **Desktop only**: On mobile, long press is often system-reserved. Use
+  regular tap behavior.
+
+#### 24.3.5 Right-Click Context Menus
+
+##### Desktop Context Menu
+
+Right-clicking empty desktop area shows:
+
+- Change Wallpaper (opens Settings app)
+- Toggle Theme
+- Switch Language
+- About This Portfolio
+
+##### Window Context Menu
+
+Right-clicking a window title bar shows:
+
+- Close
+- Minimize
+- Maximize / Restore
+- Bring to Front
+- Send to Back
+
+##### Implementation
+
+- Create a `<ContextMenu>` UI component (glass card, positioned at pointer).
+- Create a `useContextMenu` hook that handles `contextmenu` event,
+  positioning, and click-away dismissal.
+- Render via portal to avoid z-index issues.
+
+### 24.4 Toolbars
+
+Add window-specific toolbars below the title bar where they add value:
+
+#### 24.4.1 Experience App Toolbar
+
+- Filter by company (pills: All, CME, areeba, TecFrac, NAR)
+- Expand All / Collapse All toggle
+
+#### 24.4.2 Skills App Toolbar
+
+- Filter by category (pills matching category names)
+- Search input to filter skills by name
+
+#### 24.4.3 Terminal App Toolbar
+
+- Clear button
+- Font size toggle (small/medium/large)
+
+#### 24.4.4 Finder App Toolbar
+
+- Breadcrumb navigation (current path)
+- Back/Forward buttons
+- View toggle (list/grid) -- optional
+
+#### Toolbar Component
+
+Create a reusable `<WindowToolbar>` component:
+
+- Sits between `WindowHeader` and `WindowContent`
+- Glass background matching the window, slightly different shade
+- Horizontal layout with gap-2, items-center
+- Height: 36px
+- Border-bottom matching window border
+
+### 24.5 New Apps
+
+#### 24.5.1 Terminal App
+
+An interactive terminal emulator window:
+
+- **App ID**: `"terminal"`
+- **Icon**: `Terminal` (lucide)
+- **UI**: Monospace font, dark terminal background (slightly different from
+  window glass -- more opaque, greenish/cyan tinted), blinking cursor,
+  command prompt `visitor@jalkhurfan.com ~ $`.
+- **Input**: Text input at bottom, styled as terminal prompt.
+- **Commands** (functional):
+  - `help` - List available commands
+  - `about` - Print short bio
+  - `skills` - Print skill categories
+  - `experience` - Print career summary
+  - `contact` - Print contact info
+  - `open <app>` - Open a window (profile, experience, skills, contact, etc.)
+  - `close <app>` - Close a window
+  - `theme <dark|light>` - Switch theme
+  - `clear` - Clear terminal output
+  - `ls` - List "files" (apps, documents)
+  - `cat resume` - Show resume summary / trigger download
+  - `whoami` - Print visitor info joke
+- **Commands** (fun/Easter eggs):
+  - `sudo hire me` - Fun response
+  - `rm -rf /` - Fun "nice try" response
+  - `ping google.com` - Simulated output
+  - `neofetch` - ASCII art system info
+  - `matrix` - Brief matrix rain animation
+  - Unknown command: `command not found: <cmd>. Type 'help' for available commands.`
+- **History**: Arrow up/down cycles through command history (session-scoped).
+- **Auto-scroll**: Terminal output auto-scrolls to bottom.
+- **Welcome message**: On open, prints a welcome banner with ASCII art.
+
+#### 24.5.2 Projects App
+
+Showcase portfolio projects:
+
+- **App ID**: `"projects"`
+- **Icon**: `FolderGit2` (lucide)
+- **Data**: Create `data/projects.ts` with project entries:
+  ```ts
+  interface Project {
+    id: string;
+    name: string;
+    descriptionKey: string; // i18n key
+    tags: string[];
+    url?: string;
+    githubUrl?: string;
+    imageUrl?: string;
+    featured?: boolean;
+  }
+  ```
+- **Layout**: Grid of project cards (2 columns on desktop, 1 on mobile).
+  Each card shows: project name, short description, tech tags, links
+  (demo + GitHub).
+- **Featured projects**: Highlighted with accent border/larger card.
+- **Toolbar**: Filter by technology tag.
+- **Note**: The owner will need to provide actual project data. Include 3-5
+  placeholder entries for now that can be filled in later.
+
+#### 24.5.3 Notepad / Guestbook App
+
+Visitors can leave a note:
+
+- **App ID**: `"notepad"`
+- **Icon**: `StickyNote` (lucide)
+- **Minimal backend**: Use Formspree (free tier) or a serverless function
+  (Cloudflare Workers, Vercel Edge) for submissions. Store submitted notes
+  in a simple JSON-serving endpoint or static file. Keep infrastructure
+  near-zero.
+- **UI**:
+  - Text area for writing a message (max 500 chars)
+  - Name field (optional)
+  - Submit button
+  - Below: scrollable list of previous notes (fetched on mount)
+  - If backend isn't ready, fallback to localStorage-only mode with a note
+    saying "Guestbook coming soon - notes saved locally"
+- **Rate limiting**: One submission per session (sessionStorage check).
+
+#### 24.5.4 Settings / System Preferences App
+
+Control visual and behavioral preferences:
+
+- **App ID**: `"settings"`
+- **Icon**: `Settings` (lucide)
+- **Sections**:
+  1. **Appearance**
+     - Theme toggle (dark/light) with preview
+     - Accent color picker (cyan, purple, green, amber, rose) -- changes
+       `--accent` and related CSS variables
+     - Wallpaper selector (thumbnail grid of options from Section 24.2.4)
+  2. **Dock**
+     - Position: bottom (default). Future: left/right. (Start with bottom-only)
+     - Magnification on/off toggle
+     - Icon size slider (small/medium/large)
+  3. **Windows**
+     - Animation speed (normal/fast/off)
+     - Auto-arrange (cascade on open) toggle
+  4. **Language**
+     - English / Arabic toggle
+     - Shows preview of direction change
+  5. **Accessibility**
+     - Reduce motion toggle (mirrors system preference but allows override)
+     - Font size (small/normal/large) -- adjusts base rem
+- **State**: Create a `PreferencesContext` with `useReducer`. Persist all
+  preferences to `localStorage`. On mount, load from storage with sensible
+  defaults.
+- **Implementation note**: Settings changes should take effect immediately
+  (live preview) without needing to close the settings window.
+
+#### 24.5.5 Finder / File Browser App
+
+Browse a virtual file system:
+
+- **App ID**: `"finder"`
+- **Icon**: `Folder` (lucide)
+- **Virtual file tree**:
+  ```
+  ~/
+  ├── Documents/
+  │   ├── Resume.pdf          → opens/downloads resume PDF
+  │   ├── Resume_Detailed.pdf → opens/downloads detailed resume
+  │   └── Azure_AZ-900.pdf    → link to cert (or placeholder)
+  ├── Projects/
+  │   ├── portfolio-v3/       → opens Projects app or links to GitHub
+  │   └── ... (matches projects data)
+  ├── About.txt               → opens Profile app
+  └── Contact.txt             → opens Contact app
+  ```
+- **UI**:
+  - Left sidebar: folder tree (collapsible, macOS Finder-like)
+  - Right pane: file list for selected folder (icon + name + type + date)
+  - Toolbar: breadcrumb path, back/forward buttons
+  - Double-click file: triggers action (open PDF, open app, open URL)
+  - Single-click: select / highlight
+- **Data**: Define the virtual file system as a typed tree structure in
+  `data/filesystem.ts`.
+- **No real filesystem access**: Everything is a static data tree that maps
+  to actions (download, open window, open URL).
+
+#### 24.5.6 App Registry Updates
+
+Update `AppId` type and `APP_DEFINITIONS` to include all new apps:
+
+```ts
+export type AppId =
+  | "profile"
+  | "experience"
+  | "skills"
+  | "contact"
+  | "terminal"
+  | "projects"
+  | "notepad"
+  | "settings"
+  | "finder";
+```
+
+Update `ALL_APP_IDS` in `WindowProvider.tsx` accordingly.
+
+Each new app gets a dock icon. The dock will have 9 icons. Consider grouping
+or adjusting dock layout:
+
+- Primary apps (left): Profile, Experience, Skills, Projects, Contact
+- Utility apps (right, separated by a subtle divider): Terminal, Finder,
+  Notepad, Settings
+
+### 24.6 TopBar Enhancements
+
+#### 24.6.1 Apple Logo / Branding Menu
+
+Replace the owner name text on the left with a dropdown menu:
+
+- **Trigger**: Small logo/avatar or stylized "J" monogram. Clicking opens a
+  dropdown.
+- **Dropdown items**:
+  - "About Jihad Al-Khurfan" → opens Profile window
+  - Separator
+  - "Restart..." → replays boot sequence (clear sessionStorage "booted")
+  - "Shut Down..." → fun animation (screen fades to black, then returns)
+  - Separator
+  - "View Source" → opens GitHub repo in new tab
+- **Implementation**: Dropdown component rendered in the TopBar. Click-away
+  to dismiss.
+
+#### 24.6.2 App Menu (File, Edit, View)
+
+Dynamic menu bar that changes based on the focused window:
+
+- **Always visible**: `File` menu with generic actions (Close Window,
+  Close All Windows)
+- **Per-app menus**:
+  - **Experience**: View → Expand All / Collapse All, Filter by Company
+  - **Skills**: View → Group by Category (default) / Show All
+  - **Contact**: File → Export vCard (stretch goal)
+  - **Terminal**: Edit → Clear Terminal, View → Font Size
+  - **Finder**: File → Open, Go → folder shortcuts
+  - **Settings**: (no extra menus)
+- **Implementation**: Each app can export a `menuItems` config. The TopBar
+  reads the focused window's app definition and renders the appropriate menus.
+- **Note**: Menus are optional per app. Apps without menu config get only the
+  default File menu.
+
+#### 24.6.3 Spotlight / Search (Cmd+K)
+
+A command-palette / search overlay:
+
+- **Trigger**: Cmd+K (or Ctrl+K on Windows), or clicking a search icon in
+  the TopBar.
+- **UI**: Centered modal overlay with search input + results list. Glass
+  background. Similar to macOS Spotlight or VS Code command palette.
+- **Searchable items**:
+  - App names ("Profile", "Terminal", etc.) → opens the app
+  - Skills ("React", "TypeScript") → opens Skills app with that skill
+    highlighted
+  - Actions ("Toggle Theme", "Switch Language", "Download Resume")
+  - Experience companies ("CME", "areeba") → opens Experience with that
+    company filtered
+- **Implementation**: Create a `<Spotlight>` component. Index all searchable
+  items in a flat array. Filter on input change. Enter selects first result.
+  Arrow keys navigate. Escape closes.
+
+#### 24.6.4 Status Icons Tray
+
+Decorative status icons on the right side of the TopBar (before the existing
+theme/language toggles):
+
+- **WiFi icon**: Always "connected" (decorative). Tooltip: "Connected to the
+  internet"
+- **Battery icon**: Shows a random charge level or always full (decorative).
+  Tooltip: "Battery: 100%"
+- **Notification bell**: Optional. Could show a dot indicator. Clicking could
+  show a small panel with "Notifications" like "New guestbook entry!" or
+  "Portfolio updated" -- mostly decorative.
+- **Purpose**: Strengthens the OS metaphor. These are decorative only.
+
+### 24.7 Keyboard Shortcuts
+
+Implement a comprehensive keyboard shortcut system:
+
+| Shortcut          | Action                             |
+| ----------------- | ---------------------------------- |
+| `Cmd+1` - `Cmd+9` | Open/focus app by dock position    |
+| `Cmd+W`           | Close focused window               |
+| `Cmd+M`           | Minimize focused window            |
+| `Cmd+K`           | Open Spotlight search              |
+| `Cmd+\``          | Cycle focus to next open window    |
+| `Escape`          | Close focused window (existing)    |
+| Arrow keys        | Navigate dock when dock is focused |
+| `Enter`/`Space`   | Activate focused dock icon         |
+
+#### Implementation
+
+- Create a `useKeyboardShortcuts` hook in `hooks/`.
+- Register all shortcuts in `Desktop.tsx` (or a dedicated
+  `<KeyboardShortcutHandler>` component).
+- Use `e.metaKey` (Mac) / `e.ctrlKey` (Windows) detection. Since this is a
+  portfolio, optimize for Mac but support both.
+- **Prevent default** for shortcuts that conflict with browser defaults
+  (e.g., Cmd+W normally closes the browser tab -- consider using
+  `Ctrl+W` only or showing a hint instead of overriding).
+- **Visual hint**: Show available shortcuts in the Settings app or via a
+  `?` keyboard shortcut that opens a shortcuts cheat sheet overlay.
+
+### 24.8 App-Level UI Polish
+
+#### 24.8.1 Profile App
+
+- Add subtle staggered entrance animation for each section (stats, education,
+  certs slide in one after another).
+- Profile photo: add a subtle floating/breathing animation (slow scale
+  oscillation).
+- Stats row: animate numbers counting up from 0 on first view.
+- Download resume button: add a subtle download icon animation on hover.
+
+#### 24.8.2 Experience App
+
+- Add color-coded company indicators (each company gets a subtle color).
+- Transition between expanded/collapsed states should feel smoother -- add
+  `overflow-hidden` during animation to prevent content flash.
+- Add "Current" badge to the active role that pulses subtly.
+- Tags in expanded cards: stagger entrance.
+
+#### 24.8.3 Skills App
+
+- Add staggered entrance for skill badges (wave effect per category).
+- Consider grouping by proficiency level visually (e.g., primary skills
+  slightly larger or with accent border, secondary skills normal).
+- Add a total skill count or a visual summary (pie chart, bar, or just text
+  like "46 technologies across 6 categories").
+
+#### 24.8.4 Contact App
+
+- Add entrance animations for each contact link (staggered slide-in).
+- The "Let's Connect" heading could have a subtle gradient text effect.
+- Copy success state: flash the card border green briefly.
+- Add a "timezone" indicator: "Currently X:XX PM in Beirut" (live).
+
+#### 24.8.5 General Polish (All Apps)
+
+- Add subtle section dividers between content blocks (thin gradient lines).
+- Ensure consistent padding/margins across all apps (audit spacing).
+- Add micro-interactions: buttons should have satisfying press feedback
+  (scale down + back).
+- Window content scroll: add a subtle top shadow when scrolled down to
+  indicate more content above.
+- Loading states: ensure skeleton loaders match the actual content layout.
+
+### 24.9 Updated Type Definitions
+
+The following types need updating to support new features:
+
+```ts
+// types/window.ts updates
+export type AppId =
+  | "profile"
+  | "experience"
+  | "skills"
+  | "contact"
+  | "terminal"
+  | "projects"
+  | "notepad"
+  | "settings"
+  | "finder";
+
+export interface WindowState {
+  id: AppId;
+  isOpen: boolean;
+  isMinimized: boolean;
+  isMaximized: boolean; // NEW
+  isFocused: boolean;
+  zIndex: number;
+  position?: { x: number; y: number };
+  size?: { width: number; height: number }; // NEW
+}
+
+export type WindowAction =
+  | { type: "OPEN"; id: AppId }
+  | { type: "OPEN_EXCLUSIVE"; id: AppId }
+  | { type: "CLOSE"; id: AppId }
+  | { type: "MINIMIZE"; id: AppId }
+  | { type: "RESTORE"; id: AppId }
+  | { type: "MAXIMIZE"; id: AppId } // NEW
+  | { type: "UNMAXIMIZE"; id: AppId } // NEW
+  | { type: "FOCUS"; id: AppId }
+  | { type: "UPDATE_POSITION"; id: AppId; position: { x: number; y: number } }
+  | { type: "UPDATE_SIZE"; id: AppId; size: { width: number; height: number } } // NEW
+  | { type: "CLOSE_ALL" };
+
+// New convenience methods on WindowManagerContextValue
+export interface WindowManagerContextValue {
+  // ... existing ...
+  maximizeWindow: (id: AppId) => void; // NEW
+  unmaximizeWindow: (id: AppId) => void; // NEW
+  toggleMaximize: (id: AppId) => void; // NEW
+}
+```
+
+```ts
+// NEW: types/preferences.ts
+export interface AccentColor {
+  name: string;
+  value: string; // CSS color value
+  glow: string; // Glow variant
+}
+
+export type WallpaperOption = "3d" | "gradient" | "solid" | "pattern";
+export type DockPosition = "bottom"; // Expandable later
+export type AnimationSpeed = "normal" | "fast" | "off";
+export type FontSize = "small" | "normal" | "large";
+
+export interface Preferences {
+  accentColor: string;
+  wallpaper: WallpaperOption;
+  dockMagnification: boolean;
+  dockIconSize: "small" | "medium" | "large";
+  animationSpeed: AnimationSpeed;
+  autoCascade: boolean;
+  fontSize: FontSize;
+  reduceMotionOverride: boolean | null; // null = follow system
+}
+```
+
+### 24.10 New Data Files
+
+#### `data/projects.ts`
+
+Project entries for the Projects app. Owner to provide actual data; use
+placeholder entries initially.
+
+#### `data/filesystem.ts`
+
+Virtual file system tree for the Finder app. Maps folder/file nodes to
+actions (download, open-app, open-url).
+
+#### `data/terminal-commands.ts`
+
+Command registry for the Terminal app. Maps command names to handler
+functions that return output strings.
+
+### 24.11 New Hooks
+
+| Hook                   | Purpose                                      |
+| ---------------------- | -------------------------------------------- |
+| `useWindowResize`      | Handles edge/corner resize drag for windows  |
+| `useLongPress`         | Detects long press (500ms) for context menus |
+| `useContextMenu`       | Manages right-click context menu state       |
+| `useKeyboardShortcuts` | Registers global keyboard shortcuts          |
+| `usePreferences`       | Reads/writes to PreferencesContext           |
+
+### 24.12 New Components
+
+| Component       | Location                    | Purpose                       |
+| --------------- | --------------------------- | ----------------------------- |
+| `ContextMenu`   | `components/ui/`            | Positioned dropdown menu      |
+| `WindowToolbar` | `components/window/`        | Toolbar below title bar       |
+| `ResizeHandle`  | `components/window/`        | Edge/corner resize grip       |
+| `Spotlight`     | `components/desktop/`       | Cmd+K search overlay          |
+| `BrandingMenu`  | `components/desktop/`       | Apple logo dropdown in TopBar |
+| `AppMenu`       | `components/desktop/`       | Dynamic File/Edit/View menus  |
+| `StatusTray`    | `components/desktop/`       | WiFi/battery/bell icons       |
+| `TerminalApp`   | `components/apps/terminal/` | Terminal emulator             |
+| `ProjectsApp`   | `components/apps/projects/` | Project showcase grid         |
+| `NotepadApp`    | `components/apps/notepad/`  | Guestbook / notes             |
+| `SettingsApp`   | `components/apps/settings/` | Preferences UI                |
+| `FinderApp`     | `components/apps/finder/`   | Virtual file browser          |
+
+---
+
+## 25. Implementation Sessions (Post-Session 5)
+
+These sessions replace the original Session 6 (Deploy). Deployment moves to
+after all enhancements are complete.
+
+### Session 6a: Window System Overhaul
+
+- Fix drag constraints (top bar ceiling, partial off-screen)
+- Green button maximize/fullscreen toggle
+- Window resize from edges/corners
+- Cascade offset for new windows
+- Update types, reducer, and WindowProvider
+
+### Session 6b: Interactions + Polish
+
+- Click target expansion (accordion, contact links)
+- Cursor management audit
+- Hover state enhancements (traffic light icons, card lifts)
+- Right-click context menus (desktop + window)
+- Long press on dock icons
+- Toolbars for Experience, Skills apps
+- App-level UI polish (animations, micro-interactions, spacing)
+
+### Session 6c: TopBar + Keyboard + Spotlight
+
+- Branding menu (Apple logo dropdown)
+- App menu system (File, Edit, View)
+- Status tray icons
+- Spotlight search (Cmd+K)
+- Full keyboard shortcuts system
+- Keyboard shortcut cheat sheet
+
+### Session 6d: New Apps (Part 1)
+
+- Terminal app (commands, Easter eggs, history)
+- Projects app (cards, grid, placeholders)
+- Settings app (preferences context, accent colors, wallpaper, dock config,
+  animation speed, font size)
+- Preferences context + persistence
+
+### Session 6e: New Apps (Part 2) + Visual Enhancement
+
+- Finder app (virtual filesystem, sidebar, breadcrumbs)
+- Notepad/Guestbook app (with Formspree or localStorage fallback)
+- Enhanced glass aesthetic (gradients, noise, glow)
+- Technology logos in skills
+- Company logos in experience
+- Wallpaper system integration
+- Update dock layout (grouping with divider)
+
+### Session 7: Deploy + Final QA
+
+(Replaces original Session 6)
+
+- All original Session 6 tasks (pre-deploy checks, GitHub Pages, meta tags,
+  cleanup, deploy)
+- Full regression test across all 9 apps
+- Mobile/tablet testing for new apps
+- RTL testing for new apps
+- Accessibility audit for new components
+- Performance profiling with expanded app count
 
 ---
 
