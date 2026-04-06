@@ -73,11 +73,13 @@ export function Dock() {
         const el = document.querySelector(`[data-dock-icon="${appId}"]`);
         if (el) {
           const rect = el.getBoundingClientRect();
+          // Estimate menu height (~3 items * 30px + 8px padding)
+          const estimatedMenuHeight = 100;
           setLongPressMenu({
             isOpen: true,
             appId,
             x: rect.left + rect.width / 2 - 90,
-            y: rect.top - 8,
+            y: rect.top - estimatedMenuHeight - 8,
           });
         }
       }, 500);

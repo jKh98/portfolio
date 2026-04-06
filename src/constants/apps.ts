@@ -13,6 +13,21 @@ export const APP_DEFINITIONS: AppDefinition[] = [
     titleKey: "apps.experience.title",
     icon: "Briefcase",
     component: lazy(() => import("@/components/apps/experience/ExperienceApp")),
+    menuConfig: [
+      {
+        titleKey: "topbar.menu.view",
+        items: [
+          {
+            labelKey: "topbar.menu.expandAll",
+            action: "expand-all",
+          },
+          {
+            labelKey: "topbar.menu.collapseAll",
+            action: "collapse-all",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "skills",

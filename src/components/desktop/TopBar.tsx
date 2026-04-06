@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Sun, Moon, Languages } from "lucide-react";
+import { Sun, Moon, Languages, Search } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/context";
 import { useIsMobile } from "@/hooks";
 import { IconButton } from "@/components/ui";
+import { BrandingMenu } from "./BrandingMenu";
+import { AppMenu } from "./AppMenu";
+import { StatusTray } from "./StatusTray";
+import type { AppMenuAction } from "./AppMenu";
 
-export function TopBar() {
+export interface TopBarProps {
+  onSpotlightOpen?: () => void;
+  onAppMenuAction?: (action: AppMenuAction) => void;
+}
+
+export function TopBar({ onSpotlightOpen, onAppMenuAction }: TopBarProps) {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
@@ -33,17 +42,13 @@ export function TopBar() {
         isMobile ? "px-2" : "px-4",
       )}
     >
-      {/* Start: Owner name */}
-      <span
-        className={cn(
-          "font-semibold text-[var(--text-primary)] truncate",
-          isMobile && "text-[10px] max-w-[120px]",
-        )}
-      >
-        {t("topbar.name")}
-      </span>
+      {/* Start: Branding + App menus */}
+      <div className="flex items-center gap-2 min-w-0">
+        <BrandingMenu />
+        {!isMobile && <AppMenu onAction={onAppMenuAction} />}
+      </div>
 
-      {/* Center: Clock (hidden on very small screens) */}
+      {/* Center: Clock */}
       <span
         className={cn(
           "absolute left-1/2 -translate-x-1/2",
@@ -54,8 +59,19 @@ export function TopBar() {
         {time}
       </span>
 
-      {/* End: Theme + Language toggles */}
+      {/* End: Status tray + Spotlight + Theme + Language toggles */}
       <div className="flex items-center gap-1">
+        <StatusTray />
+        <div className="w-px h-3 bg-[var(--border)] mx-0.5" />
+        {onSpotlightOpen && (
+          <IconButton
+            label={t("topbar.spotlight.placeholder")}
+            size="sm"
+            onClick={onSpotlightOpen}
+          >
+            <Search size={14} />
+          </IconButton>
+        )}
         <IconButton
           label={t("topbar.switchTheme")}
           size="sm"

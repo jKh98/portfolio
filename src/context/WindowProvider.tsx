@@ -207,11 +207,15 @@ function windowReducer(
       const { id } = action;
       const newOrder = [...state.windowOrder.filter((wId) => wId !== id), id];
       const windows = unfocusAll(state.windows);
+      const current = state.windows[id];
       windows[id] = {
         ...windows[id],
         isMaximized: true,
         isFocused: true,
         zIndex: state.nextZIndex,
+        // Save pre-maximize state for restore
+        preMaximizePosition: current.position,
+        preMaximizeSize: current.size,
       };
       return {
         windows,
@@ -222,10 +226,15 @@ function windowReducer(
 
     case "UNMAXIMIZE": {
       const { id } = action;
+      const current = state.windows[id];
       const windows = { ...state.windows };
       windows[id] = {
         ...windows[id],
         isMaximized: false,
+        position: current.preMaximizePosition,
+        size: current.preMaximizeSize,
+        preMaximizePosition: undefined,
+        preMaximizeSize: undefined,
       };
       return { ...state, windows };
     }

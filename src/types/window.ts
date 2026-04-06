@@ -22,6 +22,27 @@ export interface WindowState {
   position?: { x: number; y: number };
   /** Size override from resizing (desktop only) */
   size?: { width: number; height: number };
+  /** Saved position before maximize (for restore) */
+  preMaximizePosition?: { x: number; y: number };
+  /** Saved size before maximize (for restore) */
+  preMaximizeSize?: { width: number; height: number };
+}
+
+/** A single menu item in an app's menu bar */
+export interface AppMenuItem {
+  /** i18n key for the label */
+  labelKey: string;
+  /** Action identifier dispatched when clicked */
+  action: string;
+  /** Keyboard shortcut hint (display only) */
+  shortcut?: string;
+}
+
+/** A menu group (e.g. "File", "Edit", "View") */
+export interface AppMenuGroup {
+  /** i18n key for the menu group title */
+  titleKey: string;
+  items: AppMenuItem[];
 }
 
 /** Static definition of an app for the registry */
@@ -33,6 +54,8 @@ export interface AppDefinition {
   icon: string;
   /** Lazy-loaded React component */
   component: React.LazyExoticComponent<React.ComponentType>;
+  /** Optional per-app menu bar config */
+  menuConfig?: AppMenuGroup[];
 }
 
 /** Actions dispatched to the window reducer */

@@ -2,6 +2,8 @@ export type {
   AppId,
   WindowState,
   AppDefinition,
+  AppMenuItem,
+  AppMenuGroup,
   WindowAction,
   WindowManagerContextValue,
 } from "./window";

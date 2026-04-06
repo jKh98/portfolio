@@ -24,7 +24,8 @@ const BODY_CURSOR: Record<ResizeDirection, string> = {
 
 /**
  * Hook that handles pointer-event-based window resizing.
- * Returns a `startResize` function to bind to resize handles.
+ * Applies size directly to the DOM during drag for smooth performance,
+ * then commits the final size to React state on pointer up.
  */
 export function useWindowResize({
   windowRef,
@@ -52,9 +53,10 @@ export function useWindowResize({
       const maxW = maxWidth ?? window.innerWidth - 32;
       const maxH = maxHeight ?? window.innerHeight - 104;
 
-      const onMove = (me: PointerEvent) => {
-        const dx = me.clientX - startPointer.current.x;
-        const dy = me.clientY - startPointer.current.y;
+      /** Compute clamped size from pointer delta */
+      const computeSize = (clientX: number, clientY: number) => {
+        const dx = clientX - startPointer.current.x;
+        const dy = clientY - startPointer.current.y;
         let w = startRect.current.width;
         let h = startRect.current.height;
 
@@ -65,14 +67,26 @@ export function useWindowResize({
 
         w = Math.max(minWidth, Math.min(maxW, w));
         h = Math.max(minHeight, Math.min(maxH, h));
-        onResize({ width: w, height: h });
+        return { width: w, height: h };
       };
 
-      const onUp = () => {
+      const onMove = (me: PointerEvent) => {
+        const { width, height } = computeSize(me.clientX, me.clientY);
+        // Apply directly to DOM — avoids React re-renders during drag
+        el.style.width = `${width}px`;
+        el.style.height = `${height}px`;
+        el.style.maxWidth = "none";
+        el.style.maxHeight = "none";
+      };
+
+      const onUp = (ue: PointerEvent) => {
         document.removeEventListener("pointermove", onMove);
         document.removeEventListener("pointerup", onUp);
         document.body.style.cursor = "";
         document.body.style.userSelect = "";
+        // Commit final size to React state
+        const finalSize = computeSize(ue.clientX, ue.clientY);
+        onResize(finalSize);
       };
 
       document.body.style.cursor = BODY_CURSOR[direction];

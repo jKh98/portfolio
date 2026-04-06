@@ -207,7 +207,7 @@ export function Window({ appId }: WindowProps) {
               focusTrapRef as React.MutableRefObject<HTMLDivElement | null>
             ).current = node;
           }}
-          key={appId}
+          key={`${appId}-${isMaximized ? "max" : "normal"}`}
           role="dialog"
           aria-labelledby={`window-title-${appId}`}
           aria-modal="true"

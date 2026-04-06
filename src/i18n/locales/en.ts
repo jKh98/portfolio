@@ -3,6 +3,39 @@ const en = {
     name: "Jihad Al-Khurfan",
     switchTheme: "Switch theme",
     switchLanguage: "Switch language",
+    branding: {
+      about: "About Jihad Al-Khurfan",
+      restart: "Restart…",
+      shutDown: "Shut Down…",
+      viewSource: "View Source",
+    },
+    menu: {
+      file: "File",
+      edit: "Edit",
+      view: "View",
+      closeWindow: "Close Window",
+      closeAll: "Close All Windows",
+      expandAll: "Expand All",
+      collapseAll: "Collapse All",
+    },
+    status: {
+      wifi: "Connected to the internet",
+      wifiOff: "Disconnected",
+      battery: "Battery: 100%",
+      batteryLevel: "Battery: {{level}}%",
+      notifications: "No new notifications",
+      newNotification: "You have a new notification!",
+    },
+    spotlight: {
+      placeholder: "Search apps, skills, actions…",
+      noResults: "No results found.",
+      categories: {
+        apps: "Apps",
+        skills: "Skills",
+        actions: "Actions",
+        companies: "Companies",
+      },
+    },
   },
   apps: {
     profile: {
@@ -124,6 +157,21 @@ const en = {
     bringToFront: "Bring to Front",
     sendToBack: "Send to Back",
     open: "Open",
+  },
+  shortcuts: {
+    title: "Keyboard Shortcuts",
+    openApp: "Open {{app}}",
+    closeWindow: "Close Window",
+    minimizeWindow: "Minimize Window",
+    openSpotlight: "Open Spotlight",
+    cycleWindows: "Cycle Windows",
+    closeOrDeselect: "Close / Deselect",
+    showShortcuts: "Show Shortcuts",
+  },
+  actions: {
+    toggleTheme: "Toggle Theme",
+    switchLanguage: "Switch Language",
+    downloadResume: "Download Resume",
   },
 };
 

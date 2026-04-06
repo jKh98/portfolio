@@ -3,6 +3,39 @@ const ar = {
     name: "جهاد الخرفان",
     switchTheme: "تبديل المظهر",
     switchLanguage: "تبديل اللغة",
+    branding: {
+      about: "عن جهاد الخرفان",
+      restart: "إعادة تشغيل…",
+      shutDown: "إيقاف التشغيل…",
+      viewSource: "عرض المصدر",
+    },
+    menu: {
+      file: "ملف",
+      edit: "تحرير",
+      view: "عرض",
+      closeWindow: "إغلاق النافذة",
+      closeAll: "إغلاق جميع النوافذ",
+      expandAll: "توسيع الكل",
+      collapseAll: "طي الكل",
+    },
+    status: {
+      wifi: "متصل بالإنترنت",
+      wifiOff: "غير متصل",
+      battery: "البطارية: 100%",
+      batteryLevel: "البطارية: {{level}}%",
+      notifications: "لا توجد إشعارات جديدة",
+      newNotification: "لديك إشعار جديد!",
+    },
+    spotlight: {
+      placeholder: "ابحث عن تطبيقات، مهارات، إجراءات…",
+      noResults: "لم يتم العثور على نتائج.",
+      categories: {
+        apps: "التطبيقات",
+        skills: "المهارات",
+        actions: "الإجراءات",
+        companies: "الشركات",
+      },
+    },
   },
   apps: {
     profile: {
@@ -123,6 +156,21 @@ const ar = {
     bringToFront: "إحضار للأمام",
     sendToBack: "إرسال للخلف",
     open: "فتح",
+  },
+  shortcuts: {
+    title: "اختصارات لوحة المفاتيح",
+    openApp: "فتح {{app}}",
+    closeWindow: "إغلاق النافذة",
+    minimizeWindow: "تصغير النافذة",
+    openSpotlight: "فتح البحث",
+    cycleWindows: "التبديل بين النوافذ",
+    closeOrDeselect: "إغلاق / إلغاء التحديد",
+    showShortcuts: "عرض الاختصارات",
+  },
+  actions: {
+    toggleTheme: "تبديل المظهر",
+    switchLanguage: "تبديل اللغة",
+    downloadResume: "تحميل السيرة الذاتية",
   },
 };
 
