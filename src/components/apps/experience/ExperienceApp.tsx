@@ -50,25 +50,38 @@ export function ExperienceApp() {
   return (
     <>
       <WindowToolbar>
-        <div className="flex items-center gap-1.5 flex-1 min-w-0">
-          {COMPANIES.map((company) => (
-            <button
-              key={company}
-              type="button"
-              onClick={() => setActiveCompany(company)}
-              className={cn(
-                "shrink-0 px-2.5 py-1 rounded-md text-xs font-medium",
-                "transition-all duration-200 cursor-pointer",
-                "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--accent)]",
-                activeCompany === company
-                  ? "bg-[var(--accent)] text-white"
-                  : "text-[var(--text-secondary)] hover:bg-[var(--bg-glass-hover)] hover:text-[var(--text-primary)]",
-              )}
-            >
-              {company === "All" ? t("common.all") : company}
-            </button>
-          ))}
+        {/* macOS-style segmented control — scrolls horizontally on narrow windows */}
+        <div className="min-w-0 overflow-x-auto scrollbar-none">
+          <div
+            className={cn(
+              "inline-flex items-center",
+              "rounded-md border border-[var(--border)]",
+              "bg-[var(--bg-glass)]",
+            )}
+          >
+            {COMPANIES.map((company, i) => (
+              <button
+                key={company}
+                type="button"
+                onClick={() => setActiveCompany(company)}
+                className={cn(
+                  "whitespace-nowrap px-2 py-0.5 text-[11px] font-medium",
+                  "transition-colors duration-150 cursor-pointer",
+                  "focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]",
+                  i > 0 && "border-s border-[var(--border)]",
+                  activeCompany === company
+                    ? "bg-[var(--accent)] text-white"
+                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-glass-hover)]",
+                )}
+              >
+                {company === "All" ? t("common.all") : company}
+              </button>
+            ))}
+          </div>
         </div>
+
+        <div className="flex-1" />
+
         <button
           type="button"
           onClick={toggleAll}
@@ -76,10 +89,10 @@ export function ExperienceApp() {
             allExpanded ? t("common.collapseAll") : t("common.expandAll")
           }
           className={cn(
-            "shrink-0 flex items-center gap-1 px-2 py-1 rounded-md",
-            "text-xs text-[var(--text-secondary)]",
+            "shrink-0 p-1 rounded-md",
+            "text-[var(--text-secondary)]",
             "hover:bg-[var(--bg-glass-hover)] hover:text-[var(--text-primary)]",
-            "transition-all duration-200 cursor-pointer",
+            "transition-colors duration-150 cursor-pointer",
           )}
         >
           <ChevronsUpDown size={14} />

@@ -16,7 +16,6 @@ export function WindowToolbar({ children, className }: WindowToolbarProps) {
         "flex items-center gap-2 h-9 px-3 shrink-0",
         "bg-[var(--bg-glass)] backdrop-blur-sm",
         "border-b border-[var(--border)]",
-        "overflow-x-auto scrollbar-none",
         className,
       )}
     >
