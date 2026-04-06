@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 import { useReducedMotion } from "@/hooks";
 import { Tooltip } from "@/components/ui";
 import { ANIMATION } from "@/constants";
-import type { AppId } from "@/types";
+import type { AppId, DockIconSize } from "@/types";
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> = {
   User,
@@ -27,6 +27,8 @@ export interface DockIconProps {
   index: number;
   /** Compact mode for mobile - smaller icons */
   compact?: boolean;
+  /** User-preferred icon size */
+  iconSize?: DockIconSize;
   /** Disable magnification on hover (mobile/tablet) */
   disableMagnification?: boolean;
   /** Long press pointer event handlers (desktop only) */
@@ -35,9 +37,14 @@ export interface DockIconProps {
   onPointerLeave?: () => void;
 }
 
-const BASE_SIZE = 48;
+/** Base sizes per DockIconSize preference */
+const SIZE_MAP: Record<DockIconSize, { base: number; max: number; icon: number }> = {
+  small:  { base: 36, max: 52, icon: 16 },
+  medium: { base: 48, max: 68, icon: 22 },
+  large:  { base: 60, max: 80, icon: 26 },
+};
+
 const COMPACT_SIZE = 36;
-const MAX_SIZE = 68;
 
 export function DockIcon({
   appId,
@@ -48,6 +55,7 @@ export function DockIcon({
   mouseX,
   index,
   compact = false,
+  iconSize = "medium",
   disableMagnification = false,
   onPointerDown,
   onPointerUp,
@@ -55,7 +63,9 @@ export function DockIcon({
 }: DockIconProps) {
   const reducedMotion = useReducedMotion();
   const IconComponent = ICON_MAP[icon];
-  const currentBase = compact ? COMPACT_SIZE : BASE_SIZE;
+  const sizeConfig = SIZE_MAP[iconSize];
+  const currentBase = compact ? COMPACT_SIZE : sizeConfig.base;
+  const currentMax = compact ? COMPACT_SIZE : sizeConfig.max;
 
   const ref = useCallback(
     (node: HTMLButtonElement | null) => {
@@ -82,14 +92,14 @@ export function DockIcon({
       disableMagnification ? [0, 200] : [0, 100, 200],
       disableMagnification
         ? [currentBase, currentBase]
-        : [MAX_SIZE, currentBase + 4, currentBase],
+        : [currentMax, currentBase + 4, currentBase],
     ),
     { stiffness: 300, damping: 25 },
   );
 
   if (!IconComponent) return null;
 
-  const iconSize = compact ? 18 : 22;
+  const lucideSize = compact ? 18 : sizeConfig.icon;
 
   return (
     <Tooltip content={label}>
@@ -119,7 +129,7 @@ export function DockIcon({
           "cursor-pointer",
         )}
       >
-        <IconComponent size={iconSize} />
+        <IconComponent size={lucideSize} />
         {/* Active indicator dot */}
         {isActive && (
           <motion.span

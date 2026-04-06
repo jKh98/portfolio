@@ -6,6 +6,7 @@ import {
   useRef,
   useEffect,
 } from "react";
+import { usePreferences } from "@/hooks";
 import type {
   AppId,
   WindowAction,
@@ -99,14 +100,16 @@ function windowReducer(
 ): WindowManagerState {
   switch (action.type) {
     case "OPEN": {
-      const { id } = action;
+      const { id, autoCascade = true } = action;
       // If already open, just focus it
       if (state.windows[id].isOpen) {
         return windowReducer(state, { type: "FOCUS", id });
       }
       const newOrder = [...state.windowOrder.filter((wId) => wId !== id), id];
       const windows = unfocusAll(state.windows);
-      const cascadePos = calculateCascadePosition(state.windowOrder.length);
+      const cascadePos = autoCascade
+        ? calculateCascadePosition(state.windowOrder.length)
+        : undefined;
       windows[id] = {
         ...windows[id],
         isOpen: true,
@@ -309,11 +312,18 @@ export function WindowProvider({ children }: WindowProviderProps) {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
+  // Read autoCascade preference via ref to avoid re-creating callbacks
+  const { preferences } = usePreferences();
+  const autoCascadeRef = useRef(preferences.autoCascade);
+  useEffect(() => {
+    autoCascadeRef.current = preferences.autoCascade;
+  }, [preferences.autoCascade]);
+
   const openWindow = useCallback((id: AppId) => {
     if (isMobileRef.current) {
       dispatch({ type: "OPEN_EXCLUSIVE", id });
     } else {
-      dispatch({ type: "OPEN", id });
+      dispatch({ type: "OPEN", id, autoCascade: autoCascadeRef.current });
     }
   }, []);
   const closeWindow = useCallback(

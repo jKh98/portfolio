@@ -16,6 +16,7 @@ import {
   useIsTablet,
   useFocusTrap,
   useContextMenu,
+  usePreferences,
 } from "@/hooks";
 import { ANIMATION, APP_DEFINITIONS } from "@/constants";
 import { WindowHeader } from "./WindowHeader";
@@ -46,6 +47,7 @@ export function Window({ appId }: WindowProps) {
     dispatch,
   } = useWindowManager();
   const reducedMotion = useReducedMotion();
+  const { preferences } = usePreferences();
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
   const dragControls = useDragControls();
@@ -162,13 +164,18 @@ export function Window({ appId }: WindowProps) {
   const AppComponent = appDef.component;
   const title = t(appDef.titleKey);
 
-  const motionProps = reducedMotion
+  const skipAnimation = reducedMotion || preferences.animationSpeed === "off";
+
+  const motionProps = skipAnimation
     ? {}
     : {
         initial: { scale: 0.9, opacity: 0 },
         animate: { scale: 1, opacity: 1 },
         exit: { scale: 0.95, opacity: 0 },
-        transition: ANIMATION.spring.snappy,
+        transition:
+          preferences.animationSpeed === "fast"
+            ? ANIMATION.spring.bouncy
+            : ANIMATION.spring.snappy,
       };
 
   // Inline styles for dynamic size and position when maximized
@@ -218,7 +225,7 @@ export function Window({ appId }: WindowProps) {
           dragConstraints={dragConstraints}
           dragElastic={0}
           onPointerDown={handleFocus}
-          layout={!reducedMotion}
+          layout={!skipAnimation}
           style={maximizedStyle}
           className={cn(
             "flex flex-col",

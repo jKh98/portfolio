@@ -3,7 +3,7 @@ import { useMotionValue } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
 import { useWindowManager } from "@/context";
-import { useIsMobile, useIsTablet } from "@/hooks";
+import { useIsMobile, useIsTablet, usePreferences } from "@/hooks";
 import { APP_DEFINITIONS } from "@/constants";
 import { ContextMenu } from "@/components/ui";
 import type { ContextMenuItem } from "@/components/ui";
@@ -22,6 +22,7 @@ export function Dock() {
   } = useWindowManager();
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
+  const { preferences } = usePreferences();
   const mouseX = useMotionValue(-1);
   const isDesktop = !isMobile && !isTablet;
 
@@ -36,8 +37,9 @@ export function Dock() {
   const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPressedRef = useRef(false);
 
-  // Disable magnification on mobile and tablet
-  const enableMagnification = !isMobile && !isTablet;
+  // Combine device check with user preference for magnification
+  const enableMagnification =
+    !isMobile && !isTablet && preferences.dockMagnification;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!enableMagnification) return;
@@ -161,6 +163,7 @@ export function Dock() {
             mouseX={mouseX}
             index={index}
             compact={isMobile}
+            iconSize={preferences.dockIconSize}
             disableMagnification={!enableMagnification}
             onPointerDown={
               isDesktop
