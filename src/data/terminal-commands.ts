@@ -117,16 +117,16 @@ const VIRTUAL_FS: FsNode = {
             "",
             "## Frontend",
             "- React 19, TypeScript, Next.js, Tailwind CSS",
-            "- Three.js, Framer Motion, Storybook",
+            "- Framer Motion, Vite, Storybook",
             "",
             "## Backend",
-            "- Node.js, NestJS, Spring Boot, GraphQL",
+            "- Node.js, NestJS, Express.js, Spring Boot, GraphQL",
             "",
             "## DevOps",
-            "- Docker, GitHub Actions, Azure, AWS",
+            "- Docker, GitHub Actions, GitLab CI, Azure, Firebase",
             "",
             "## Databases",
-            "- PostgreSQL, MongoDB, Redis, SQL Server",
+            "- PostgreSQL, MongoDB, SQL Server",
           ],
         },
       },
@@ -166,66 +166,100 @@ const VIRTUAL_FS: FsNode = {
             node_modules: { type: "dir", children: {} },
           },
         },
-        "dga-platform": {
+        "denworld-travel": {
           type: "dir",
           children: {
             "README.md": {
               type: "file",
               content: [
-                "# DGA Vendor Platform",
+                "# Denworld Travel",
                 "",
-                "Strategic platform for ICT vendor classification",
-                "and RFP management for Saudi DGA.",
+                "Travel booking platform with flight search,",
+                "curated travel packages, and service add-ons",
+                "for a Danish travel agency.",
                 "",
-                "Stack: React, TypeScript, Redux Toolkit, Node.js",
+                "Stack: Next.js, TypeScript, Prisma, Framer Motion",
+                "URL: https://denworldtravel.com",
               ],
             },
           },
         },
-        "fintech-app": {
+        "wa-automator": {
           type: "dir",
           children: {
             "README.md": {
               type: "file",
               content: [
-                "# Fintech Mobile App",
+                "# WhatsApp Automator",
                 "",
-                "Mobile banking app with KYC/KYB, payment gateway",
-                "integration, and real-time transfers.",
+                "Desktop automation tool for scheduling messages,",
+                "validating contacts, and processing media.",
                 "",
-                "Stack: React Native, TypeScript, Node.js, PostgreSQL",
+                "Stack: Electron, React, Redux Toolkit, Firebase",
               ],
             },
           },
         },
-        "testing-platform": {
+        "lead-crm": {
           type: "dir",
           children: {
             "README.md": {
               type: "file",
               content: [
-                "# E2E Testing Platform",
+                "# Lead Management CRM",
                 "",
-                "Comprehensive end-to-end testing framework",
-                "with WebDriverIO and Cucumber BDD.",
+                "Role-based CRM with lead tracking, KPI dashboards,",
+                "CSV import, and Excel export for an NGO.",
                 "",
-                "Stack: WebDriverIO, Cucumber, TypeScript, Docker",
+                "Stack: React, TypeScript, Firebase, Ant Design",
               ],
             },
           },
         },
-        "investment-calculator": {
+        "ngo-website": {
           type: "dir",
           children: {
             "README.md": {
               type: "file",
               content: [
-                "# Investment Calculator",
+                "# NGO Website",
                 "",
-                "Interactive investment cost calculator POC",
-                "with data visualization for Saudi SBC.",
+                "Bilingual website with a back-office admin panel,",
+                "news management, and event publishing.",
                 "",
-                "Stack: React, TypeScript, D3.js, Azure",
+                "Stack: React, TypeScript, Firebase, Tailwind CSS",
+              ],
+            },
+          },
+        },
+        "campaign-tracker": {
+          type: "dir",
+          children: {
+            "README.md": {
+              type: "file",
+              content: [
+                "# Campaign Tracker",
+                "",
+                "Global campaign platform with real-time progress",
+                "tracking and interactive map visualization.",
+                "",
+                "Stack: React, Firebase, D3.js, Maps",
+              ],
+            },
+          },
+        },
+        dukkani: {
+          type: "dir",
+          children: {
+            "README.md": {
+              type: "file",
+              content: [
+                "# Dukkani",
+                "",
+                "Mobile inventory management app with barcode",
+                "scanning, product forms, and currency support.",
+                "",
+                "Stack: React Native, Expo, TypeScript",
               ],
             },
           },
@@ -297,12 +331,13 @@ export function getPathCompletions(partial: string): string[] {
 // ASCII banner
 // ---------------------------------------------------------------------------
 
+// prettier-ignore
 const ASCII_BANNER = [
-  "       _ _   _                _      _    _  _    _                 __",
-  "      | (_) | |_    __ _   __| |    / \\  | || |  | | ___   _  _ _ _/ _|__ _ _ _",
-  "   _  | | | | ' \\ / _` | / _` |   / _ \\ | || |_ | |/ / | | | | '_|  _/ _` | ' \\",
-  "  | |_| | | | | | | (_| || (_| |  / ___ \\| |__  _|   <| |_| | |_| | | (_| | | | |",
-  "   \\__/|_| |_| |_|\\_,_| \\_,_| /_/   \\_\\_|  |_||_|\\_\\\\__,_|_| |_|  \\__,_|_| |_|",
+  "      _ _ _               _      _    _ _  ___                 __",
+  "     | (_) |__   __ _  __| |    / \\  | | |/ / |__  _   _ _ __ / _| __ _ _ __",
+  "  _  | | | '_ \\ / _` |/ _` |   / _ \\ | | ' /| '_ \\| | | | '__|  _/ _` | '_ \\",
+  " | |_| | | | | | (_| | (_| |  / ___ \\| | . \\| | | | |_| | |  |  _| (_| | | | |",
+  "  \\___/|_|_| |_|\\__,_|\\__,_| /_/   \\_\\_|_|\\_\\_| |_|\\__,_|_|  |_|  \\__,_|_| |_|",
   "",
   "  Senior Fullstack Engineer | React, TypeScript, Node.js",
   "  Type 'help' to get started.",
@@ -398,9 +433,7 @@ function helpCommand(): CommandResult {
       "  rm -rf /         Try it",
       "  ping <host>      Ping a host",
       "  curl <url>       Fetch a URL",
-      "  matrix           Enter the matrix",
       "  cowsay <text>    Moo",
-      "  fortune          Random wisdom",
       "  exit             Nice try",
     ],
   };
@@ -427,11 +460,11 @@ function skillsCommand(): CommandResult {
       "Skill Categories:",
       "",
       "  Frontend   React, TypeScript, Next.js, Tailwind CSS, ...",
-      "  Backend    Node.js, Spring Boot, NestJS, GraphQL, ...",
-      "  DevOps     Docker, GitHub Actions, Azure, AWS, ...",
-      "  Databases  PostgreSQL, MongoDB, Redis, SQL Server, ...",
-      "  Testing    Jest, Playwright, Cypress, WebDriverIO, ...",
-      "  Languages  TypeScript, JavaScript, Java, Kotlin, ...",
+      "  Backend    Node.js, NestJS, Express.js, Spring Boot, ...",
+      "  DevOps     Docker, GitHub Actions, Azure, Firebase, ...",
+      "  Databases  PostgreSQL, MongoDB, SQL Server, ...",
+      "  Testing    Jest, Cypress, Playwright, Cucumber, ...",
+      "  Languages  JavaScript, TypeScript, Java, Python, ...",
       "",
       "  Run 'open skills' for the full interactive view.",
     ],
@@ -873,20 +906,6 @@ function curlCommand(args: string[]): CommandResult {
   };
 }
 
-function matrixCommand(): CommandResult {
-  const chars = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:."=*+-<>';
-  const lines: string[] = [];
-  for (let i = 0; i < 8; i++) {
-    let line = "";
-    for (let j = 0; j < 50; j++) {
-      line += chars[Math.floor(Math.random() * chars.length)];
-    }
-    lines.push(line);
-  }
-  lines.push("", "Wake up, Neo...", "The Matrix has you.");
-  return { output: lines };
-}
-
 function cowsayCommand(args: string[]): CommandResult {
   const text = args.length > 0 ? args.join(" ") : "Moo!";
   const border = "-".repeat(text.length + 2);
@@ -902,26 +921,6 @@ function cowsayCommand(args: string[]): CommandResult {
       "                ||     ||",
     ],
   };
-}
-
-const FORTUNES = [
-  "The best code is no code at all.",
-  "There are only two hard things in CS: cache invalidation and naming things.",
-  "It works on my machine. -- Every developer ever",
-  "// TODO: refactor this later (written 3 years ago)",
-  "A good programmer is someone who always looks both ways before crossing a one-way street.",
-  "Debugging is like being the detective in a crime movie where you are also the murderer.",
-  "First, solve the problem. Then, write the code. -- John Johnson",
-  "Any sufficiently advanced technology is indistinguishable from magic. -- Arthur C. Clarke",
-  "Talk is cheap. Show me the code. -- Linus Torvalds",
-  "Simplicity is prerequisite for reliability. -- Edsger W. Dijkstra",
-  "Weeks of coding can save you hours of planning.",
-  "There is no cloud. It's just someone else's computer.",
-];
-
-function fortuneCommand(): CommandResult {
-  const fortune = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
-  return { output: [fortune] };
 }
 
 function exitCommand(): CommandResult {
@@ -1164,9 +1163,7 @@ const COMMAND_REGISTRY: Record<string, CommandHandler> = {
   man: (args) => manCommand(args),
 
   // Fun
-  matrix: () => matrixCommand(),
   cowsay: (args) => cowsayCommand(args),
-  fortune: () => fortuneCommand(),
   exit: () => exitCommand(),
 };
 

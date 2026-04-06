@@ -142,7 +142,7 @@ export function WindowHeader({
       <span
         className={cn(
           "flex-1 text-center text-sm font-medium truncate",
-          "text-[var(--text-secondary)]",
+          "text-[var(--text-secondary)] glass-text-shadow",
         )}
       >
         {title}

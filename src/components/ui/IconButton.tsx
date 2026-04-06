@@ -23,7 +23,7 @@ export function IconButton({
         "inline-flex items-center justify-center rounded-lg",
         "text-[var(--text-secondary)]",
         "transition-all duration-200",
-        "hover:bg-[var(--bg-glass-hover)] hover:text-[var(--text-primary)]",
+        "hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)]",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
         "active:scale-95",
         "cursor-pointer",

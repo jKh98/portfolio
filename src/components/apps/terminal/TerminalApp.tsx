@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/utils/cn";
 import { useWindowManager, useTheme } from "@/context";
 import { executeCommand, ASCII_BANNER } from "@/data/terminal-commands";
+import { trackEvent } from "@/lib/analytics";
 import type { CommandResult } from "@/data/terminal-commands";
 import { TerminalOutput } from "./TerminalOutput";
 import { TerminalInput } from "./TerminalInput";
@@ -85,6 +86,7 @@ export function TerminalApp() {
       if (input.trim()) {
         setHistory((prev) => [...prev, input]);
         setHistoryIndex(-1);
+        trackEvent("terminal_command", { command: input.trim().split(/\s+/)[0] });
       }
     },
     [handleAction, history],
@@ -102,13 +104,16 @@ export function TerminalApp() {
     <div
       className={cn(
         "flex flex-col flex-1 min-h-0 overflow-hidden",
-        "bg-[#0d1117] text-[#c9d1d9]",
+        "bg-[var(--terminal-bg)] text-[var(--terminal-text)]",
         "font-mono",
         fontSize === "sm" ? "text-xs" : "text-sm",
       )}
     >
       <TerminalToolbar onClear={handleClear} onToggleFontSize={toggleFontSize} />
-      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto p-3 scroll-shadow">
+      <div
+        ref={scrollRef}
+        className="flex-1 min-h-0 overflow-y-auto p-3 scroll-shadow [--scroll-bg:var(--terminal-bg)]"
+      >
         <TerminalOutput lines={lines} />
       </div>
       <TerminalInput

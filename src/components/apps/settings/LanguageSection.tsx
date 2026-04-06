@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
+import { trackEvent, setUserProps } from "@/lib/analytics";
 
 export function LanguageSection() {
   const { t, i18n } = useTranslation();
@@ -9,6 +10,8 @@ export function LanguageSection() {
     i18n.changeLanguage(lang);
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = lang;
+    trackEvent("language_switch", { language: lang });
+    setUserProps({ language: lang });
   };
 
   return (

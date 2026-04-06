@@ -1,51 +1,50 @@
 import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
+import { WindowToolbar } from "@/components/window";
+import type { ProjectCategory } from "@/data/projects";
 
 export interface ProjectToolbarProps {
-  tags: string[];
-  activeTag: string | null;
-  onTagSelect: (tag: string | null) => void;
+  categories: ProjectCategory[];
+  activeCategory: ProjectCategory | null;
+  onCategorySelect: (category: ProjectCategory | null) => void;
 }
 
 export function ProjectToolbar({
-  tags,
-  activeTag,
-  onTagSelect,
+  categories,
+  activeCategory,
+  onCategorySelect,
 }: ProjectToolbarProps) {
   const { t } = useTranslation();
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-1.5 px-4 py-2 overflow-x-auto",
-        "border-b border-[var(--border)]",
-      )}
-    >
+    <WindowToolbar className="gap-1.5 overflow-x-auto">
       <button
-        onClick={() => onTagSelect(null)}
+        onClick={() => onCategorySelect(null)}
         className={cn(
-          "shrink-0 px-2.5 py-1 rounded-full text-xs transition-colors",
-          !activeTag
+          "shrink-0 px-2.5 py-1 rounded-full text-xs transition-colors cursor-pointer",
+          !activeCategory
             ? "bg-[var(--accent)] text-white"
             : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
         )}
       >
         {t("common.all")}
       </button>
-      {tags.map((tag) => (
+      {categories.map((cat) => (
         <button
-          key={tag}
-          onClick={() => onTagSelect(tag === activeTag ? null : tag)}
+          key={cat}
+          onClick={() =>
+            onCategorySelect(cat === activeCategory ? null : cat)
+          }
           className={cn(
-            "shrink-0 px-2.5 py-1 rounded-full text-xs transition-colors",
-            tag === activeTag
+            "shrink-0 px-2.5 py-1 rounded-full text-xs transition-colors cursor-pointer",
+            cat === activeCategory
               ? "bg-[var(--accent)] text-white"
               : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
           )}
         >
-          {tag}
+          {t(`apps.projects.categories.${cat}`)}
         </button>
       ))}
-    </div>
+    </WindowToolbar>
   );
 }

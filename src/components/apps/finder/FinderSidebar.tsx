@@ -51,7 +51,8 @@ function SidebarFolder({
   currentPath,
   onNavigate,
 }: SidebarFolderProps) {
-  const fullPath = parentPath === "~" ? `~/${node.name}` : `${parentPath}/${node.name}`;
+  const fullPath =
+    parentPath === "~" ? `~/${node.name}` : `${parentPath}/${node.name}`;
   const isActive = currentPath === fullPath;
   const isParent = currentPath.startsWith(fullPath + "/");
   const [expanded, setExpanded] = useState(isActive || isParent);
@@ -59,11 +60,19 @@ function SidebarFolder({
 
   return (
     <div>
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => {
           onNavigate(fullPath);
           if (subfolders.length > 0) setExpanded(true);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onNavigate(fullPath);
+            if (subfolders.length > 0) setExpanded(true);
+          }
         }}
         className={cn(
           "w-full flex items-center gap-1.5 px-2 py-1 rounded-md text-xs transition-colors cursor-pointer",
@@ -73,11 +82,19 @@ function SidebarFolder({
         )}
       >
         {subfolders.length > 0 && (
-          <button
-            type="button"
+          <span
+            role="button"
+            tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
               setExpanded(!expanded);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.stopPropagation();
+                e.preventDefault();
+                setExpanded(!expanded);
+              }
             }}
             className="p-0 shrink-0 cursor-pointer"
           >
@@ -88,7 +105,7 @@ function SidebarFolder({
                 expanded && "rotate-90",
               )}
             />
-          </button>
+          </span>
         )}
         {subfolders.length === 0 && <span className="w-[10px]" />}
         {isActive || expanded ? (
@@ -97,7 +114,7 @@ function SidebarFolder({
           <Folder size={14} className="shrink-0" />
         )}
         <span className="truncate">{node.name}</span>
-      </button>
+      </div>
       {expanded &&
         subfolders.map((sub) => (
           <div key={sub.name} className="ps-3">

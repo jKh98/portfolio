@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { usePreferences } from "@/hooks";
 import { cn } from "@/utils/cn";
+import { ToggleSwitch } from "@/components/ui";
 import type { FontSize } from "@/types";
 
 const FONT_SIZES: FontSize[] = ["small", "normal", "large"];
@@ -29,26 +30,13 @@ export function AccessibilitySection() {
             {t("apps.settings.accessibility.reduceMotionDesc")}
           </p>
         </div>
-        <button
-          role="switch"
-          aria-checked={motionEnabled}
-          onClick={() =>
+        <ToggleSwitch
+          checked={motionEnabled}
+          onChange={() =>
             setReduceMotion(preferences.reduceMotion === true ? null : true)
           }
-          className={cn(
-            "relative w-10 h-6 rounded-full transition-colors shrink-0 ms-4",
-            motionEnabled
-              ? "bg-[var(--accent)]"
-              : "bg-[var(--text-tertiary)]",
-          )}
-        >
-          <span
-            className={cn(
-              "absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform",
-              motionEnabled && "translate-x-4",
-            )}
-          />
-        </button>
+          className="ms-4"
+        />
       </div>
 
       {/* Font size */}
@@ -62,7 +50,7 @@ export function AccessibilitySection() {
               key={size}
               onClick={() => setFontSize(size)}
               className={cn(
-                "flex-1 rounded-lg px-3 py-2 text-sm border transition-colors",
+                "flex-1 rounded-lg px-3 py-2 text-sm border transition-colors cursor-pointer",
                 preferences.fontSize === size
                   ? "border-[var(--accent)] bg-[var(--accent-glow)] text-[var(--text-primary)]"
                   : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)]",

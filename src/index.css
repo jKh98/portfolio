@@ -11,21 +11,35 @@
 :root {
   --bg-primary: #f8fafc;
   --bg-surface: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.75);
-  --bg-glass-hover: rgba(255, 255, 255, 0.88);
+  --bg-glass: rgba(255, 255, 255, 0.72);
+  --bg-glass-hover: rgba(255, 255, 255, 0.82);
+  --bg-glass-inner: rgba(255, 255, 255, 0.55);
   --accent: #06b6d4;
   --accent-hover: #22d3ee;
-  --accent-glow: rgba(6, 182, 212, 0.25);
+  --accent-glow: rgba(6, 182, 212, 0.2);
+  --accent-subtle: rgba(6, 182, 212, 0.08);
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-tertiary: #94a3b8;
-  --border: rgba(51, 65, 85, 0.1);
-  --border-accent: rgba(6, 182, 212, 0.3);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 30px rgba(0, 0, 0, 0.08);
+  --border: rgba(0, 0, 0, 0.12);
+  --border-accent: rgba(6, 182, 212, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md:
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.08);
   --shadow-lg:
-    0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 30px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(0, 0, 0, 0.03) inset;
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.12);
+  --shadow-topbar:
+    0 1px 0 rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+  --glass-text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+
+  /* Terminal (always dark) */
+  --terminal-bg: #0d1117;
+  --terminal-text: #c9d1d9;
+  --terminal-muted: #8b949e;
+  --terminal-border: #21262d;
 
   color-scheme: light;
 }
@@ -34,21 +48,35 @@
 :root.dark {
   --bg-primary: #0a0e1a;
   --bg-surface: #111827;
-  --bg-glass: rgba(17, 24, 39, 0.75);
-  --bg-glass-hover: rgba(17, 24, 39, 0.88);
+  --bg-glass: rgba(15, 20, 35, 0.72);
+  --bg-glass-hover: rgba(20, 28, 50, 0.82);
+  --bg-glass-inner: rgba(15, 20, 35, 0.5);
   --accent: #06b6d4;
   --accent-hover: #22d3ee;
-  --accent-glow: rgba(6, 182, 212, 0.25);
+  --accent-glow: rgba(6, 182, 212, 0.2);
+  --accent-subtle: rgba(6, 182, 212, 0.1);
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-tertiary: #64748b;
-  --border: rgba(148, 163, 184, 0.1);
-  --border-accent: rgba(6, 182, 212, 0.3);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 30px rgba(0, 0, 0, 0.2);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-accent: rgba(6, 182, 212, 0.35);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md:
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 12px 40px rgba(0, 0, 0, 0.3);
   --shadow-lg:
-    0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 30px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    0 8px 16px rgba(0, 0, 0, 0.25),
+    0 20px 60px rgba(0, 0, 0, 0.35);
+  --shadow-topbar:
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  --glass-text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+
+  /* Terminal (always dark) */
+  --terminal-bg: #0d1117;
+  --terminal-text: #c9d1d9;
+  --terminal-muted: #8b949e;
+  --terminal-border: #21262d;
 
   color-scheme: dark;
 }
@@ -117,12 +145,15 @@ body {
 }
 
 /* ===== Scroll Shadow ===== */
+/* Uses --scroll-bg which defaults to --bg-surface (opaque) and can be overridden locally.
+   Semi-transparent backgrounds like --bg-glass cause visible artifacts in scroll fades. */
 .scroll-shadow {
+  --scroll-bg: var(--bg-surface);
   background:
-    /* Shadow at top */
-    linear-gradient(var(--bg-glass) 33%, transparent) center top,
-    /* Shadow cover at bottom */
-    linear-gradient(transparent, var(--bg-glass) 66%) center bottom,
+    /* Cover at top */
+    linear-gradient(var(--scroll-bg) 33%, transparent) center top,
+    /* Cover at bottom */
+    linear-gradient(transparent, var(--scroll-bg) 66%) center bottom,
     /* Top shadow */
     radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), transparent)
       center top,
@@ -150,84 +181,128 @@ body {
   }
 }
 
-/* ===== Enhanced Glass Aesthetic ===== */
+/* ===== Liquid Glass Aesthetic ===== */
 
-/* Noise texture overlay via SVG data URI */
+/* Fine noise texture overlay for glass materiality */
 .glass-noise::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 128px 128px;
   border-radius: inherit;
   z-index: 0;
+  mix-blend-mode: overlay;
 }
 
-/* Gradient overlay simulating top-left light source */
+/* Multi-stop gradient overlay simulating light refraction through glass */
 .glass-gradient::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    transparent 50%
-  );
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.06) 25%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.03) 100%
+    );
   border-radius: inherit;
   z-index: 0;
 }
 
 :root.dark .glass-gradient::after {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    transparent 50%
-  );
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 25%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.06) 100%
+    );
 }
 
-/* Animated accent glow on focused windows */
-@keyframes accent-glow-pulse {
-  0%,
-  100% {
-    box-shadow:
-      var(--shadow-lg),
-      0 0 20px var(--accent-glow),
-      0 1px 0 rgba(255, 255, 255, 0.05) inset;
-  }
-  50% {
-    box-shadow:
-      var(--shadow-lg),
-      0 0 30px var(--accent-glow),
-      0 1px 0 rgba(255, 255, 255, 0.05) inset;
-  }
-}
-
+/* Focused window: elevated with subtle accent ring + soft glow */
 .glass-focused {
-  animation: accent-glow-pulse 3s ease-in-out infinite;
+  box-shadow:
+    var(--shadow-lg),
+    0 0 24px -4px var(--accent-glow),
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.05) inset;
   border-color: var(--border-accent);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .glass-focused {
-    animation: none;
-    box-shadow:
-      var(--shadow-lg),
-      0 0 20px var(--accent-glow),
-      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+:root.dark .glass-focused {
+  box-shadow:
+    var(--shadow-lg),
+    0 0 24px -4px var(--accent-glow),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+  border-color: var(--border-accent);
+}
+
+/* Unfocused window: recessed, desaturated
+   Note: opacity is controlled by framer-motion animate prop in Window.tsx
+   to avoid inline style conflicts. */
+.glass-unfocused {
+  backdrop-filter: blur(20px) saturate(1.2);
+}
+
+/* Top-edge inner highlight (bevel/refraction) */
+.glass-inner-highlight {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.15) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.04) inset;
+}
+
+:root.dark .glass-inner-highlight {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.07) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.12) inset;
+}
+
+/* Subtle text shadow to lift text off busy glass backgrounds */
+.glass-text-shadow {
+  text-shadow: var(--glass-text-shadow);
+}
+
+/* ===== Context Menu Animation ===== */
+@keyframes context-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-/* Enhanced inner highlight (bevel effect) */
-.glass-inner-highlight {
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+.context-menu-enter {
+  animation: context-menu-in 100ms ease-out forwards;
 }
 
-/* Deeper unfocused window treatment */
-.glass-unfocused {
-  backdrop-filter: blur(24px);
-  opacity: 0.8;
+/* ===== Marquee Animation ===== */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 18s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }

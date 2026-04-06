@@ -14,7 +14,7 @@ export function SkeletonLoader({ className, lines = 3 }: SkeletonLoaderProps) {
           key={i}
           className={cn(
             "h-4 rounded-md animate-pulse",
-            "bg-[var(--bg-glass)]",
+            "bg-[var(--bg-glass-inner)]",
             i === lines - 1 && "w-2/3",
           )}
         />

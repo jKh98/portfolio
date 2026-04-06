@@ -85,10 +85,10 @@ export function AppMenu() {
             className={cn(
               "px-2 py-0.5 rounded text-xs",
               "text-[var(--text-primary)]",
-              "hover:bg-[var(--bg-glass-hover)]",
+              "hover:bg-[var(--accent-subtle)]",
               "transition-colors duration-100",
               "cursor-pointer",
-              openMenuIdx === idx && "bg-[var(--bg-glass-hover)]",
+              openMenuIdx === idx && "bg-[var(--accent-subtle)]",
             )}
           >
             {t(menu.titleKey)}
@@ -105,7 +105,7 @@ export function AppMenu() {
                 className={cn(
                   "absolute top-full start-0 mt-0.5 z-[9999]",
                   "min-w-[180px] py-1 rounded-lg",
-                  "backdrop-blur-xl border",
+                  "backdrop-blur-2xl backdrop-saturate-150 border",
                   "bg-[var(--bg-glass)] border-[var(--border)]",
                   "shadow-[var(--shadow-lg)]",
                 )}
@@ -119,7 +119,7 @@ export function AppMenu() {
                     className={cn(
                       "flex items-center justify-between w-full px-3 py-1.5",
                       "text-xs text-[var(--text-primary)]",
-                      "hover:bg-[var(--accent)] hover:text-white",
+                      "hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)]",
                       "transition-colors duration-100",
                       "cursor-pointer",
                     )}

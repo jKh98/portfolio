@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
 import { useWindowManager, useTheme } from "@/context";
 import { buildSpotlightIndex } from "@/data";
+import { trackEvent } from "@/lib/analytics";
 import type { SpotlightCategory, SpotlightItem } from "@/data";
 import { SpotlightResults } from "./SpotlightResults";
 
@@ -53,6 +54,7 @@ export function Spotlight({ isOpen, onClose }: SpotlightProps) {
       setQuery("");
       setSelectedIdx(0);
       requestAnimationFrame(() => inputRef.current?.focus());
+      trackEvent("spotlight_open");
     }
   }, [isOpen]);
 
@@ -66,6 +68,7 @@ export function Spotlight({ isOpen, onClose }: SpotlightProps) {
   const executeAction = useCallback(
     (item: SpotlightItem & { label: string }) => {
       onClose();
+      trackEvent("spotlight_select", { label: item.label, category: item.category });
       const { action } = item;
       if (action.type === "open-app") openWindow(action.appId);
       else if (action.type === "external")
@@ -124,7 +127,7 @@ export function Spotlight({ isOpen, onClose }: SpotlightProps) {
             transition={{ duration: 0.15 }}
             className={cn(
               "relative w-full max-w-[600px] mx-4 rounded-xl overflow-hidden",
-              "backdrop-blur-xl border bg-[var(--bg-glass)] border-[var(--border)]",
+              "backdrop-blur-2xl backdrop-saturate-150 border bg-[var(--bg-glass)] border-[var(--border)]",
               "shadow-[var(--shadow-lg)]",
             )}
             role="dialog"

@@ -746,6 +746,116 @@ Follow all rules in .opencode/rules/portfolio-v3.md strictly. This is the final 
 
 ---
 
+## Session 6f: Wallpaper Overhaul + Firebase + Profile Redesign + Polish
+
+````
+I'm building a portfolio v3. Read SPEC.md and the rules in .opencode/rules/ before doing anything.
+
+This is Session 6f: Wallpaper Overhaul + Firebase + Profile Redesign + Polish.
+
+Sessions 6a-6e are complete: all 9 apps built, window system overhauled, interactions polished, TopBar enhanced, keyboard shortcuts, Spotlight, and visual enhancements done.
+
+This session is a major overhaul pass: replacing the 3D background with an image-based wallpaper system, adding Firebase backend, redesigning the Profile app, and polishing across the board.
+
+Tasks (in order):
+
+1. **Remove 3D background entirely**:
+   - Delete `src/components/background/` (Scene3D, FloatingShapes, ParticleField, Lighting)
+   - Remove `vendor-three` manual chunk from `vite.config.ts`
+   - Remove Three.js lazy import from `App.tsx`
+   - Three.js, @react-three/fiber, @react-three/drei can be uninstalled from dependencies
+
+2. **Image-based wallpaper system**:
+   - Create `constants/wallpapers.ts` with `WallpaperEntry` type
+   - 24 wallpapers (12 light/dark pairs) across 4 categories: abstract, nature, city, minimal
+   - CSS-only minimal wallpapers (gradient/solid)
+   - Pair helpers: `getPairedWallpaper()` for theme-aware auto-swap
+   - Category and theme filtering functions
+   - Replace old `WallpaperType` enum in `types/preferences.ts` with plain string IDs
+   - Store wallpaper images in `public/wallpapers/` as optimized .webp
+   - Update `App.tsx` to render image/CSS wallpapers instead of 3D scene
+
+3. **Theme-wallpaper auto-swap**:
+   - Update `ThemeProvider` to detect theme changes and swap wallpaper to its paired counterpart via `getPairedWallpaper()`
+
+4. **Firebase integration**:
+   - Add `firebase` dependency
+   - Create `src/lib/firebase.ts` (app init + Firestore + Analytics)
+   - Create `src/lib/analytics.ts` (trackEvent/setUserProps helpers)
+   - Create `src/lib/guestbook.ts` (Firestore CRUD + real-time subscription)
+   - Initialize Firebase in `main.tsx`
+
+5. **Analytics tracking**:
+   - Add `trackEvent` calls for: theme toggle, accent color change, wallpaper change, app open, app close
+   - Set user properties for theme and accent color
+
+6. **Upgrade Notepad/Guestbook to Firebase**:
+   - Replace localStorage-only mode with Firebase Firestore real-time backend
+   - Real-time `onSnapshot` subscription for live updates across visitors
+
+7. **Profile app redesign**:
+   - New full-body transparent photo (`profile-nobg.webp`) with accent glow on desktop
+   - Circular headshot crop on mobile
+   - Social links (Email, LinkedIn, GitHub) in header
+   - Two resume download buttons (standard + detailed)
+   - Section reorder: TrustedBy above Education/Certificates
+   - Remove standalone download button at bottom
+   - Set `minWidth: 600` on Profile AppDefinition
+
+8. **New UI components**:
+   - `ImageCarousel.tsx`: multi-image carousel with navigation dots, arrow buttons, framer-motion transitions
+   - `ToggleSwitch.tsx`: styled on/off switch for Settings
+
+9. **Accent color system update**:
+   - Add `subtle` variant to all 11 color presets
+   - New `--accent-subtle` CSS variable for hover backgrounds
+
+10. **Projects app updates**:
+    - Add real project screenshots to `public/assets/images/projects/`
+    - Integrate ImageCarousel in project cards
+
+11. **Settings AppearanceSection**:
+    - Update wallpaper picker to show categorized image thumbnails with theme-filtered display
+
+12. **Window provider fix**:
+    - UNMAXIMIZE action computes fallback size when no pre-maximize size was stored
+
+13. **Company logos + Skill icons**:
+    - Expand inline SVG logos in `constants/company-logos.ts`
+    - Refine skill-to-icon mappings in `constants/skill-icons.ts`
+
+14. **E2E testing infrastructure**:
+    - Add Playwright with `playwright.config.ts`
+    - Create `e2e/dock-magnification.spec.ts`
+
+15. **Component polish pass**:
+    - Refinements across all apps and shell components
+    - RTL improvements, animation tweaks, hover state enhancements
+    - Spacing/layout consistency
+
+16. **i18n updates**: New locale keys for wallpaper categories, Firebase guestbook states, updated profile section strings
+
+17. **CSS updates**: New variables (`--accent-subtle`), updated wallpaper z-indexing, refined glass effects
+
+18. **Update SPEC.md and rules files** to reflect all changes (remove 3D references, document new systems)
+
+19. **Verify**:
+    - `yarn build` passes clean
+    - Wallpaper system works with all 24 wallpapers
+    - Theme toggle auto-swaps paired wallpapers
+    - Firebase guestbook works with real-time updates
+    - Profile redesign looks correct at all breakpoints
+    - Analytics events fire correctly
+    - All 9 apps work in both themes, both languages, RTL
+    - New UI components render correctly
+
+20. **Commit** to v3 branch.
+
+Follow all rules in .opencode/rules/portfolio-v3.md strictly.
+````
+
+---
+
 ## Session 7: Deploy + Final QA
 
 ```
@@ -753,7 +863,7 @@ I'm building a portfolio v3. Read SPEC.md and the rules in .opencode/rules/ befo
 
 This is Session 7: Deploy + Final QA.
 
-Sessions 1-5 (core build) and 6a-6e (enhancements) are complete on the `v3` branch: fully built, enhanced portfolio with 9 app windows, overhauled window system, rich interactions, and visual polish.
+Sessions 1-5 (core build) and 6a-6f (enhancements) are complete on the `v3` branch: fully built, enhanced portfolio with 9 app windows, image-based wallpaper system, Firebase backend, overhauled window system, rich interactions, and visual polish.
 
 Tasks:
 
@@ -797,7 +907,7 @@ Tasks:
 5. **Performance audit**:
    - Check bundle sizes: initial load should be reasonable (lazy loading keeps it manageable)
    - Verify all 9 apps are code-split (separate chunks)
-   - Verify Three.js only loads when 3D wallpaper is selected
+   - Verify wallpaper images load efficiently (lazy, .webp optimized)
    - Run Lighthouse and address any critical issues
    - Check for memory leaks (open/close windows rapidly)
 

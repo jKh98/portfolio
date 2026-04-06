@@ -30,9 +30,8 @@ export function Dock() {
   const [longPressMenu, setLongPressMenu] = useState<{
     isOpen: boolean;
     appId: AppId | null;
-    x: number;
-    y: number;
-  }>({ isOpen: false, appId: null, x: 0, y: 0 });
+    anchorEl: HTMLElement | null;
+  }>({ isOpen: false, appId: null, anchorEl: null });
 
   const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPressedRef = useRef(false);
@@ -65,6 +64,15 @@ export function Dock() {
     }
   };
 
+  const openContextMenuForIcon = useCallback((appId: AppId) => {
+    const el = document.querySelector(
+      `[data-dock-icon="${appId}"]`,
+    ) as HTMLElement | null;
+    if (el) {
+      setLongPressMenu({ isOpen: true, appId, anchorEl: el });
+    }
+  }, []);
+
   const handleLongPressStart = useCallback(
     (appId: AppId, e: React.PointerEvent) => {
       if (!isDesktop || e.button !== 0) return;
@@ -72,21 +80,19 @@ export function Dock() {
 
       longPressTimerRef.current = setTimeout(() => {
         isLongPressedRef.current = true;
-        const el = document.querySelector(`[data-dock-icon="${appId}"]`);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          // Estimate menu height (~3 items * 30px + 8px padding)
-          const estimatedMenuHeight = 100;
-          setLongPressMenu({
-            isOpen: true,
-            appId,
-            x: rect.left + rect.width / 2 - 90,
-            y: rect.top - estimatedMenuHeight - 8,
-          });
-        }
+        openContextMenuForIcon(appId);
       }, 500);
     },
-    [isDesktop],
+    [isDesktop, openContextMenuForIcon],
+  );
+
+  const handleRightClick = useCallback(
+    (appId: AppId, e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openContextMenuForIcon(appId);
+    },
+    [openContextMenuForIcon],
   );
 
   const handleLongPressEnd = useCallback(() => {
@@ -97,7 +103,7 @@ export function Dock() {
   }, []);
 
   const closeLongPressMenu = useCallback(() => {
-    setLongPressMenu((prev) => ({ ...prev, isOpen: false }));
+    setLongPressMenu((prev) => ({ ...prev, isOpen: false, anchorEl: null }));
   }, []);
 
   const longPressMenuItems: ContextMenuItem[] = useMemo(() => {
@@ -150,8 +156,8 @@ export function Dock() {
         onMouseLeave={handleMouseLeave}
         className={cn(
           "fixed bottom-3 left-1/2 -translate-x-1/2 z-50",
-          "flex items-center px-3 py-2",
-          "rounded-2xl backdrop-blur-md border",
+          "flex items-end px-3 py-2",
+          "rounded-2xl backdrop-blur-2xl backdrop-saturate-150 border",
           "bg-[var(--bg-glass)] border-[var(--border)]",
           "shadow-[var(--shadow-lg)]",
           isMobile ? "gap-3 bottom-2 px-4" : "gap-2",
@@ -172,11 +178,15 @@ export function Dock() {
               label={t(app.titleKey)}
               isActive={windows[app.id].isOpen}
               onClick={() => handleIconClick(app.id)}
+              onContextMenu={(e: React.MouseEvent) => handleRightClick(app.id, e)}
               mouseX={mouseX}
               index={index}
               compact={isMobile}
               iconSize={preferences.dockIconSize}
               disableMagnification={!enableMagnification}
+              tooltipDisabled={
+                longPressMenu.isOpen && longPressMenu.appId === app.id
+              }
               onPointerDown={
                 isDesktop
                   ? (e: React.PointerEvent) => handleLongPressStart(app.id, e)
@@ -193,8 +203,7 @@ export function Dock() {
       {longPressMenu.isOpen && (
         <ContextMenu
           items={longPressMenuItems}
-          x={longPressMenu.x}
-          y={longPressMenu.y}
+          anchorEl={longPressMenu.anchorEl}
           onClose={closeLongPressMenu}
         />
       )}

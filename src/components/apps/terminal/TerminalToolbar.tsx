@@ -14,12 +14,12 @@ export function TerminalToolbar({
     <div
       className={cn(
         "flex items-center gap-1 px-3 py-1.5",
-        "border-b border-[#21262d]",
+        "border-b border-[var(--terminal-border)]",
       )}
     >
       <button
         onClick={onClear}
-        className="p-1 rounded hover:bg-[#21262d] text-[#8b949e] transition-colors"
+        className="p-1 rounded hover:bg-[var(--terminal-border)] text-[var(--terminal-muted)] transition-colors cursor-pointer"
         aria-label="Clear terminal"
         title="Clear"
       >
@@ -27,7 +27,7 @@ export function TerminalToolbar({
       </button>
       <button
         onClick={onToggleFontSize}
-        className="p-1 rounded hover:bg-[#21262d] text-[#8b949e] transition-colors"
+        className="p-1 rounded hover:bg-[var(--terminal-border)] text-[var(--terminal-muted)] transition-colors cursor-pointer"
         aria-label="Toggle font size"
         title="Font size"
       >

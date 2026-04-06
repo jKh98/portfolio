@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Sun, Moon, Languages, Info } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -8,6 +8,7 @@ import { APP_DEFINITIONS } from "@/constants";
 import { TopBar } from "./TopBar";
 import { Dock } from "./Dock";
 import { BootSequence } from "./BootSequence";
+import type { BootSequenceHandle } from "./BootSequence";
 import { Spotlight } from "./Spotlight";
 import { ShortcutCheatSheet } from "./ShortcutCheatSheet";
 import { Window } from "@/components/window";
@@ -20,6 +21,12 @@ export function Desktop() {
   const { theme, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
   const desktopMenu = useContextMenu();
+  const bootRef = useRef<BootSequenceHandle>(null);
+
+  // Restart handler: triggers the boot sequence to replay
+  const handleRestart = useCallback(() => {
+    bootRef.current?.reboot();
+  }, []);
 
   // Spotlight state
   const [spotlightOpen, setSpotlightOpen] = useState(false);
@@ -66,7 +73,10 @@ export function Desktop() {
 
   const handleDesktopContextMenu = useCallback(
     (e: React.MouseEvent) => {
-      // Only show context menu if clicking on the desktop background (main area)
+      // Always suppress the native browser context menu
+      e.preventDefault();
+
+      // Only show our custom desktop menu on the background (not on nav/dialogs/header)
       const target = e.target as HTMLElement;
       if (
         target.closest("[role='dialog']") ||
@@ -83,11 +93,12 @@ export function Desktop() {
   return (
     <div
       className={cn("relative h-full w-full overflow-hidden cursor-default")}
-      onContextMenu={!isMobile ? handleDesktopContextMenu : undefined}
+      onContextMenu={handleDesktopContextMenu}
     >
-      <BootSequence />
+      <BootSequence ref={bootRef} />
       <TopBar
         onSpotlightOpen={openSpotlight}
+        onRestart={handleRestart}
       />
 
       {/* Skip link for accessibility */}

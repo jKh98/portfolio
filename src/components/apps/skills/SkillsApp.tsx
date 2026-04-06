@@ -52,9 +52,9 @@ export function SkillsApp() {
         <div className="min-w-0 overflow-x-auto scrollbar-none">
           <div
             className={cn(
-              "inline-flex items-center",
+              "inline-flex items-center overflow-hidden",
               "rounded-md border border-[var(--border)]",
-              "bg-[var(--bg-glass)]",
+              "bg-[var(--bg-glass-inner)]",
             )}
           >
             {CATEGORY_KEYS.map((key, i) => (
@@ -99,7 +99,7 @@ export function SkillsApp() {
               aria-label={t("apps.skills.searchPlaceholder")}
               className={cn(
                 "w-36 ps-7 pe-7 py-0.5 rounded-md text-[11px]",
-                "bg-[var(--bg-glass)] border border-[var(--border)]",
+                "bg-[var(--bg-glass-inner)] border border-[var(--border)]",
                 "text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
                 "focus:outline-none focus:border-[var(--accent)]",
                 "transition-colors duration-150",
@@ -141,8 +141,8 @@ export function SkillsApp() {
         )}
       >
         {filtered.length > 0 ? (
-          filtered.map((category) => (
-            <SkillCategory key={category.nameKey} category={category} />
+          filtered.map((category, i) => (
+            <SkillCategory key={category.nameKey} category={category} index={i} />
           ))
         ) : (
           <p className="text-sm text-[var(--text-tertiary)] text-center py-8">

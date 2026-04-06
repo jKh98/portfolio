@@ -19,8 +19,8 @@ export function TerminalOutput({ lines }: TerminalOutputProps) {
           className={cn(
             "whitespace-pre-wrap break-all leading-relaxed",
             line.isCommand
-              ? "text-[#58a6ff]"
-              : "text-[#c9d1d9]",
+              ? "text-[var(--accent)]"
+              : "text-[var(--terminal-text)]",
           )}
         >
           {line.text || "\u00A0"}

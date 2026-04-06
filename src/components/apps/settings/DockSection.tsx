@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { usePreferences } from "@/hooks";
 import { cn } from "@/utils/cn";
+import { ToggleSwitch } from "@/components/ui";
 import type { DockIconSize } from "@/types";
 
 const ICON_SIZES: DockIconSize[] = ["small", "medium", "large"];
@@ -21,24 +22,10 @@ export function DockSection() {
         <label className="text-sm text-[var(--text-secondary)]">
           {t("apps.settings.dock.magnification")}
         </label>
-        <button
-          role="switch"
-          aria-checked={preferences.dockMagnification}
-          onClick={() => setDockMagnification(!preferences.dockMagnification)}
-          className={cn(
-            "relative w-10 h-6 rounded-full transition-colors",
-            preferences.dockMagnification
-              ? "bg-[var(--accent)]"
-              : "bg-[var(--text-tertiary)]",
-          )}
-        >
-          <span
-            className={cn(
-              "absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform",
-              preferences.dockMagnification && "translate-x-4",
-            )}
-          />
-        </button>
+        <ToggleSwitch
+          checked={preferences.dockMagnification}
+          onChange={(v) => setDockMagnification(v)}
+        />
       </div>
 
       {/* Icon size */}
@@ -52,7 +39,7 @@ export function DockSection() {
               key={size}
               onClick={() => setDockIconSize(size)}
               className={cn(
-                "flex-1 rounded-lg px-3 py-2 text-sm border transition-colors",
+                "flex-1 rounded-lg px-3 py-2 text-sm border transition-colors cursor-pointer",
                 preferences.dockIconSize === size
                   ? "border-[var(--accent)] bg-[var(--accent-glow)] text-[var(--text-primary)]"
                   : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)]",

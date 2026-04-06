@@ -16,7 +16,7 @@ technical specification. These rules are the non-negotiable guardrails.
 - Vite 6 + React 19 + TypeScript 5.7+
 - Tailwind CSS v4 (CSS-first config)
 - Framer Motion for all UI animations
-- React Three Fiber + Drei for 3D background only
+- Firebase (Analytics + Firestore for guestbook)
 - i18next + react-i18next for i18n
 - Lucide React for icons (tree-shakeable, one import per icon)
 - clsx + tailwind-merge via `cn()` utility
@@ -95,7 +95,6 @@ import { GlassCard } from "../../ui/GlassCard";
 ## Animation Rules
 
 - All UI animations use Framer Motion
-- 3D animations use R3F `useFrame`
 - Simple hover/transitions use CSS transitions (no JS)
 - Use shared animation tokens from constants (spring configs, durations)
 - Every animated component must check `useReducedMotion()` and provide
@@ -118,17 +117,13 @@ import { GlassCard } from "../../ui/GlassCard";
 - All interactive elements must be keyboard accessible
 - Dock icons: `role="button"`, `aria-label`, `aria-pressed`
 - Windows: `role="dialog"`, `aria-labelledby`, `aria-modal`
-- 3D canvas: `aria-hidden="true"`
 - Never rely on color alone for information
 - Minimum WCAG AA contrast ratio (4.5:1)
 
 ## Performance Rules
 
 - Lazy load all app components (`React.lazy`)
-- Lazy load 3D scene
-- Hide 3D scene on mobile (< 768px)
-- Keep Three.js triangle count < 2000
-- `dpr` capped at `[1, 1.5]` for R3F canvas
+- Wallpaper images served as optimized .webp from `public/wallpapers/`
 - No unnecessary re-renders: avoid inline object/array literals in props
 - Use `useMemo`/`useCallback` only when there's a measured need
 

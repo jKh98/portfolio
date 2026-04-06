@@ -89,8 +89,8 @@ export function TerminalInput({
   );
 
   return (
-    <div className="flex items-center px-3 py-2 border-t border-[#21262d]">
-      <span className="text-[#58a6ff] shrink-0 me-2">
+    <div className="flex items-center px-3 py-2 border-t border-[var(--terminal-border)]">
+      <span className="text-[var(--accent)] shrink-0 me-2">
         visitor@jalkhurfan ~ $
       </span>
       <input
@@ -99,7 +99,7 @@ export function TerminalInput({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="flex-1 bg-transparent outline-none text-[#c9d1d9] caret-[#58a6ff]"
+        className="flex-1 bg-transparent outline-none text-[var(--terminal-text)] caret-[var(--accent)]"
         autoFocus
         spellCheck={false}
         aria-label="Terminal input"

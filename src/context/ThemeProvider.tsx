@@ -3,9 +3,13 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import type { ThemeContextValue, ThemeMode } from "@/types";
+import { usePreferences } from "@/hooks";
+import { getPairedWallpaper } from "@/constants";
+import { trackEvent, setUserProps } from "@/lib/analytics";
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
@@ -24,7 +28,11 @@ export interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<ThemeMode>(getInitialTheme);
+  const { preferences, setWallpaper } = usePreferences();
+  /** Track the previous theme so we only swap on actual changes. */
+  const prevThemeRef = useRef(theme);
 
+  // Apply .dark class and persist theme
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") {
@@ -35,11 +43,29 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // Auto-swap wallpaper when theme *changes* (not on mount).
+  useEffect(() => {
+    if (prevThemeRef.current === theme) return;
+    prevThemeRef.current = theme;
+
+    const paired = getPairedWallpaper(preferences.wallpaper, theme);
+    if (paired) {
+      setWallpaper(paired.id);
+    }
+  }, [theme]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const toggleTheme = useCallback(() => {
-    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+    setThemeState((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      trackEvent("theme_toggle", { theme: next });
+      setUserProps({ theme: next });
+      return next;
+    });
   }, []);
 
   const setTheme = useCallback((mode: ThemeMode) => {
+    trackEvent("theme_set", { theme: mode });
+    setUserProps({ theme: mode });
     setThemeState(mode);
   }, []);
 

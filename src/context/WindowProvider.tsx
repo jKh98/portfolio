@@ -7,6 +7,7 @@ import {
   useEffect,
 } from "react";
 import { usePreferences } from "@/hooks";
+import { trackEvent } from "@/lib/analytics";
 import type {
   AppId,
   WindowAction,
@@ -231,11 +232,28 @@ function windowReducer(
       const { id } = action;
       const current = state.windows[id];
       const windows = { ...state.windows };
+      // If there was no pre-maximize size (window was never manually resized),
+      // compute a sensible default so the window gets an explicit size
+      // that enables resize handles and proper overflow scrolling.
+      const fallbackSize = !current.preMaximizeSize
+        ? {
+            width: Math.min(
+              900,
+              typeof window !== "undefined" ? window.innerWidth - 64 : 900,
+            ),
+            height: Math.min(
+              typeof window !== "undefined"
+                ? window.innerHeight * 0.8
+                : 600,
+              typeof window !== "undefined" ? window.innerHeight - 104 : 600,
+            ),
+          }
+        : undefined;
       windows[id] = {
         ...windows[id],
         isMaximized: false,
         position: current.preMaximizePosition,
-        size: current.preMaximizeSize,
+        size: current.preMaximizeSize ?? fallbackSize,
         preMaximizePosition: undefined,
         preMaximizeSize: undefined,
       };
@@ -320,6 +338,7 @@ export function WindowProvider({ children }: WindowProviderProps) {
   }, [preferences.autoCascade]);
 
   const openWindow = useCallback((id: AppId) => {
+    trackEvent("app_open", { app_id: id });
     if (isMobileRef.current) {
       dispatch({ type: "OPEN_EXCLUSIVE", id });
     } else {
@@ -327,7 +346,10 @@ export function WindowProvider({ children }: WindowProviderProps) {
     }
   }, []);
   const closeWindow = useCallback(
-    (id: AppId) => dispatch({ type: "CLOSE", id }),
+    (id: AppId) => {
+      trackEvent("app_close", { app_id: id });
+      dispatch({ type: "CLOSE", id });
+    },
     [],
   );
   const minimizeWindow = useCallback(

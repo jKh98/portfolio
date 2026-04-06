@@ -170,7 +170,10 @@ export function Window({ appId }: WindowProps) {
     ? {}
     : {
         initial: { scale: 0.9, opacity: 0 },
-        animate: { scale: 1, opacity: 1 },
+        animate: {
+          scale: 1,
+          opacity: windowState.isFocused ? 1 : 0.85,
+        },
         exit: { scale: 0.95, opacity: 0 },
         transition:
           preferences.animationSpeed === "fast"
@@ -193,12 +196,18 @@ export function Window({ appId }: WindowProps) {
       }
     : {
         zIndex: windowState.zIndex,
-        ...(windowState.size && {
-          width: windowState.size.width,
-          height: windowState.size.height,
-          maxWidth: "none",
-          maxHeight: "none",
-        }),
+        ...(windowState.size
+          ? {
+              width: windowState.size.width,
+              height: windowState.size.height,
+              maxWidth: "none",
+              maxHeight: "none",
+            }
+          : {
+              // When no explicit size is set, use max-h as the actual height
+              // so overflow-y-auto works inside app content on initial open
+              height: isMobile ? "100%" : isTablet ? "80vh" : "80vh",
+            }),
       };
 
   return (
@@ -214,7 +223,7 @@ export function Window({ appId }: WindowProps) {
               focusTrapRef as React.MutableRefObject<HTMLDivElement | null>
             ).current = node;
           }}
-          key={`${appId}-${isMaximized ? "max" : "normal"}`}
+          key={appId}
           role="dialog"
           aria-labelledby={`window-title-${appId}`}
           aria-modal="true"
@@ -230,25 +239,35 @@ export function Window({ appId }: WindowProps) {
           className={cn(
             "flex flex-col",
             "overflow-hidden",
-            "backdrop-blur-xl border",
+            "backdrop-blur-2xl backdrop-saturate-150 border",
             "bg-[var(--bg-glass)] border-[var(--border)]",
             "glass-noise glass-gradient",
-            "transition-shadow duration-300",
+            "transition-[box-shadow,border-color,opacity] duration-300",
             windowState.isFocused
-              ? "glass-focused shadow-[var(--shadow-lg)]"
+              ? "glass-focused"
               : "glass-unfocused shadow-[var(--shadow-md)]",
             // Maximized: no rounded corners, fixed positioning handled by style
             isMaximized && "rounded-none",
-            // Mobile: full-screen, no rounded corners
-            !isMaximized && isMobile && "absolute inset-0 rounded-none",
+            // Mobile: full-screen but leave room for the dock at the bottom
+            !isMaximized &&
+              isMobile &&
+              "absolute inset-x-0 top-0 bottom-16 rounded-none",
             // Tablet: 90% width, centered, no drag, rounded
             !isMaximized &&
               isTablet &&
-              "absolute w-[90%] max-h-[80vh] top-[10%] left-1/2 -translate-x-1/2 rounded-xl",
-            // Desktop normal: max-width 900px, centered, draggable, rounded
+              "absolute w-[90%] top-[10%] left-1/2 -translate-x-1/2 rounded-xl",
+            !isMaximized && isTablet && !windowState.size && "max-h-[80vh]",
+            // Desktop normal: centered, draggable, rounded
+            // Only apply max-w/max-h when no explicit size is set;
+            // once the window has been resized or restored from fullscreen,
+            // inline styles control dimensions so CSS constraints must not interfere.
             !isMaximized &&
               isDesktop &&
-              "absolute w-full max-w-[900px] max-h-[80vh] top-[10%] left-1/2 -translate-x-1/2 rounded-xl",
+              "absolute w-full top-[10%] left-1/2 -translate-x-1/2 rounded-xl",
+            !isMaximized &&
+              isDesktop &&
+              !windowState.size &&
+              "max-w-[900px] max-h-[80vh]",
           )}
           {...motionProps}
         >
@@ -274,7 +293,7 @@ export function Window({ appId }: WindowProps) {
             <ResizeHandle
               windowRef={windowRef}
               onResize={handleResize}
-              minWidth={400}
+              minWidth={appDef?.minWidth ?? 400}
               minHeight={300}
             />
           )}

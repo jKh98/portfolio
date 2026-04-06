@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
-import { PROJECTS, getProjectTags } from "@/data/projects";
+import { PROJECTS, PROJECT_CATEGORIES } from "@/data/projects";
+import type { ProjectCategory } from "@/data/projects";
 import { useReducedMotion } from "@/hooks";
 import { useIsMobile } from "@/hooks";
 import { ProjectCard } from "./ProjectCard";
@@ -11,19 +12,20 @@ export function ProjectsApp() {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const reduced = useReducedMotion();
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<ProjectCategory | null>(
+    null,
+  );
 
-  const tags = getProjectTags();
-  const filtered = activeTag
-    ? PROJECTS.filter((p) => p.tags.includes(activeTag))
+  const filtered = activeCategory
+    ? PROJECTS.filter((p) => p.category === activeCategory)
     : PROJECTS;
 
   return (
     <div className="flex flex-col h-full">
       <ProjectToolbar
-        tags={tags}
-        activeTag={activeTag}
-        onTagSelect={setActiveTag}
+        categories={PROJECT_CATEGORIES}
+        activeCategory={activeCategory}
+        onCategorySelect={setActiveCategory}
       />
       <div
         className={cn(

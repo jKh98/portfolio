@@ -131,11 +131,12 @@ becomes `rgba(255, 255, 255, 0.70)`. 3D scene dims significantly.
 | Framework   | React                                          | ^19     |
 | Language    | TypeScript                                     | ^5.7    |
 | Styling     | Tailwind CSS                                   | ^4      |
-| 3D          | @react-three/fiber + @react-three/drei + three | latest  |
 | Animation   | framer-motion                                  | ^11     |
 | i18n        | i18next + react-i18next                        | latest  |
-| Icons       | lucide-react                                   | latest  |
+| Icons       | lucide-react + simple-icons                    | latest  |
 | Utilities   | clsx + tailwind-merge                          | latest  |
+| Backend     | Firebase (Firestore + Analytics)               | ^12     |
+| Testing     | Playwright                                     | latest  |
 | Linting     | ESLint (flat config)                           | ^9      |
 | Package Mgr | Yarn                                           | ^1      |
 | Deploy      | gh-pages                                       | latest  |
@@ -144,15 +145,17 @@ becomes `rgba(255, 255, 255, 0.70)`. 3D scene dims significantly.
 
 Every dependency must earn its place:
 
-- **@react-three/fiber + drei**: 3D background scene. No lighter alternative
-  provides the same declarative React integration.
 - **framer-motion**: Window open/close/drag animations, dock hover effects,
   boot sequence. The most ergonomic animation library for React.
+- **firebase**: Firestore for real-time guestbook, Analytics (GA4) for
+  event tracking and user property segmentation.
 - **i18next**: Proven i18n solution, supports RTL detection, interpolation,
   namespaces.
 - **lucide-react**: Tree-shakeable, consistent icon set. One import per icon.
+- **simple-icons**: SVG technology logos for skill badges.
 - **clsx + tailwind-merge**: Conditional class composition without conflicts.
   `cn()` utility pattern.
+- **playwright**: E2E browser tests for visual/interaction regressions.
 - **gh-pages**: One-command deploy to GitHub Pages. Already proven in this repo.
 
 ### 3.2 What We Are NOT Using
@@ -163,11 +166,12 @@ Every dependency must earn its place:
 | Radix UI         | No complex form/modal primitives needed.       |
 | Redux            | Overkill. React Context + useReducer suffices. |
 | react-router     | Single "page" with window-based navigation.    |
-| Formspree        | No contact form. Links-only contact.           |
+| Formspree        | Replaced by Firebase Firestore for guestbook.  |
 | reCAPTCHA        | No form, no need.                              |
 | LESS/SASS        | Tailwind handles all styling.                  |
 | Gulp             | No CSS preprocessing needed.                   |
-| Google Analytics | Can be added later if needed. Not core.        |
+| ~~Google Analytics~~ | Now using Firebase Analytics (GA4 under the hood). |
+| Firebase Hosting | GitHub Pages suffices for static SPA.          |
 
 ---
 
@@ -291,13 +295,21 @@ portfolio/
 │       │   ├── jihad_alkhurfan_resume_2025.pdf
 │       │   └── jihad_alkhurfan_resume_2025_detailed.pdf
 │       └── images/
-│           └── profile.jpeg
+│           ├── profile-nobg.webp
+│           └── projects/
+│               ├── denworld-*.webp
+│               └── portfolio-*.webp
 │
 └── src/
     ├── main.tsx                         # React root mount + providers
-    ├── App.tsx                          # Root layout: 3D bg + Desktop shell
+    ├── App.tsx                          # Root layout: wallpaper bg + Desktop shell
     ├── index.css                        # Tailwind directives + CSS vars + fonts
     ├── vite-env.d.ts                    # Vite type reference
+    │
+    ├── lib/                             # Firebase & external service wrappers
+    │   ├── firebase.ts                  # Firebase app init + Firestore + Analytics
+    │   ├── analytics.ts                 # trackEvent / setUserProps helpers
+    │   └── guestbook.ts                 # Firestore guestbook CRUD + real-time sub
     │
     ├── types/                           # Shared type definitions
     │   ├── index.ts                     # Barrel export
@@ -308,6 +320,10 @@ portfolio/
     ├── constants/                       # App-wide constants
     │   ├── index.ts                     # Barrel export
     │   ├── apps.ts                      # App registry: id, icon, label, component
+    │   ├── colors.ts                    # Accent color presets + applicator
+    │   ├── company-logos.ts             # Inline SVG company logos
+    │   ├── skill-icons.ts              # Skill → simple-icons SVG mapping
+    │   ├── wallpapers.ts               # Wallpaper catalog + pair helpers
     │   └── social.ts                    # Social links data
     │
     ├── data/                            # Static content data (resume, etc.)
@@ -348,14 +364,11 @@ portfolio/
         │   ├── Badge.tsx                # Tag/badge component
         │   ├── IconButton.tsx           # Icon-only button with tooltip
         │   ├── Tooltip.tsx              # Hover tooltip
+        │   ├── ContextMenu.tsx          # Right-click context menu
+        │   ├── ImageCarousel.tsx        # Multi-image carousel with nav
+        │   ├── ToggleSwitch.tsx         # Styled on/off toggle
         │   ├── CopyButton.tsx           # Copy-to-clipboard button
         │   └── SkeletonLoader.tsx       # Loading placeholder
-        │
-        ├── background/                  # 3D background system
-        │   ├── Scene3D.tsx              # R3F Canvas wrapper
-        │   ├── FloatingShapes.tsx       # Animated polyhedra
-        │   ├── ParticleField.tsx        # Subtle particle effect
-        │   └── Lighting.tsx             # Scene lighting setup
         │
         ├── desktop/                     # Desktop OS shell
         │   ├── Desktop.tsx              # Main desktop layout
@@ -660,63 +673,69 @@ i18next is initialized as a side effect in `i18n/index.ts` and accessed via
 
 ---
 
-## 9. 3D Background System
+## 9. Wallpaper System (Replaced 3D Background)
+
+The original 3D background system (R3F Canvas with FloatingShapes,
+ParticleField, Lighting) was **removed** in favor of a lightweight
+image-based wallpaper system. This dramatically reduces bundle size
+(Three.js no longer bundled) and improves performance on all devices.
 
 ### 9.1 Architecture
 
-The 3D background is a **fixed, full-viewport R3F Canvas** rendered behind the
-desktop UI. It is purely decorative and does not affect interactivity.
+Wallpapers are static `.webp` images served from `public/wallpapers/`.
+The system supports CSS-only wallpapers (gradients, solid colors) as
+a fallback for the "minimal" category.
 
 ```
-<div className="fixed inset-0 -z-10">
-  <Canvas>
-    <Lighting />
-    <FloatingShapes />
-    <ParticleField />
-  </Canvas>
-</div>
+public/wallpapers/
+├── abstract-dark-1.webp ... abstract-light-3.webp  (6 files)
+├── nature-dark-1.webp   ... nature-light-3.webp    (6 files)
+├── city-dark-1.webp     ... city-light-3.webp      (6 files)
+└── thumbnails/           (smaller previews for Settings picker)
 ```
 
-### 9.2 Components
+### 9.2 Wallpaper Pairs (Light/Dark)
 
-#### `Scene3D.tsx`
+Every wallpaper has a strict 1:1 light/dark pair. When the user
+toggles the theme, the wallpaper automatically swaps to its paired
+counterpart via `getPairedWallpaper()` in `ThemeProvider`.
 
-- Wraps `<Canvas>` with responsive settings
-- Sets `camera`, `dpr`, `frameloop` props
-- Handles Suspense fallback (empty/null)
-- Conditionally renders nothing if `prefers-reduced-motion` is active
+| #  | Category | Light ID                | Dark ID               |
+| -- | -------- | ----------------------- | --------------------- |
+| 1  | abstract | `abstract-light-1`      | `abstract-dark-2`     |
+| 2  | abstract | `abstract-light-2`      | `abstract-dark-1`     |
+| 3  | abstract | `abstract-light-3`      | `abstract-dark-3`     |
+| 4  | nature   | `nature-light-1`        | `nature-dark-1`       |
+| 5  | nature   | `nature-light-2`        | `nature-dark-2`       |
+| 6  | nature   | `nature-light-3`        | `nature-dark-3`       |
+| 7  | city     | `city-light-1`          | `city-dark-1`         |
+| 8  | city     | `city-light-2`          | `city-dark-2`         |
+| 9  | city     | `city-light-3`          | `city-dark-3`         |
+| 10 | minimal  | `minimal-solid-light`   | `minimal-solid-dark`  |
+| 11 | minimal  | `minimal-gradient-light`| `minimal-gradient-dark`|
+| 12 | minimal  | `minimal-accent-light`  | `minimal-accent-dark` |
 
-#### `FloatingShapes.tsx`
+Total: 24 wallpapers (12 pairs). Minimal wallpapers are CSS-only
+(no image files required).
 
-- 5-8 semi-transparent polyhedra (icosahedrons, octahedrons, dodecahedrons)
-- Randomized positions in 3D space (spread across viewport)
-- Slow rotation animation via `useFrame`
-- Subtle drift/float using sine wave oscillation
-- Material: `MeshStandardMaterial` with low opacity (0.08-0.15), wireframe
-  option, accent color tint
-- Each shape is its own `<mesh>` - no instancing needed for this count
+### 9.3 Types & Constants
 
-#### `ParticleField.tsx`
+- `WallpaperEntry` interface in `constants/wallpapers.ts` (id, category,
+  src, thumbnail, css, theme, pairId)
+- `WallpaperCategory`: `"abstract" | "nature" | "city" | "minimal"`
+- `WallpaperTheme`: `"light" | "dark"`
+- The old `WallpaperType` enum was removed from `types/preferences.ts`
+  and replaced with a plain `string` wallpaper ID.
 
-- 50-100 small dots scattered in space
-- Very slow drift animation
-- Near-invisible (`opacity: 0.1-0.2`) to add subtle depth
-- Uses `<Points>` from drei for efficiency
+### 9.4 Rendering
 
-#### `Lighting.tsx`
+`App.tsx` reads the wallpaper ID from preferences, resolves it via
+`getWallpaper()`, and renders either:
+- A CSS `background` div (for minimal wallpapers with `css` field), or
+- A `background-image: url(...)` div (for image wallpapers with `src`)
 
-- Ambient light (low intensity: 0.3-0.5)
-- One point light (accent color, subtle)
-- Adapts intensity based on theme (dimmer in light mode)
-
-### 9.3 Performance Constraints
-
-- Total triangle count: < 2000
-- Frame rate target: 30fps (not 60 - it's ambient, not interactive)
-- `frameloop="demand"` when no animations are active
-- `dpr` capped at `[1, 1.5]` to avoid retina overhead
-- Canvas is hidden entirely on mobile (< 768px) to save battery/GPU
-- Wrapped in `React.lazy` + `Suspense` so it doesn't block initial paint
+No lazy loading or dynamic imports needed. The wallpaper layer sits
+at `z-0` behind the Desktop shell at `z-10`.
 
 ---
 
@@ -896,11 +915,16 @@ need modification.
 
 ```
 ┌──────────────────────────────────────┐
-│ [Photo]  Name                        │
-│          Title                       │
-│          Summary paragraph           │
+│ [Full-body Photo]  Name              │
+│                    Title             │
+│                    Location          │
+│                    Social icons row  │
+│                    Download Resume   │
 ├──────────────────────────────────────┤
 │ [6+ Years] [30+ Projects] [20+ Tech]│
+├──────────────────────────────────────┤
+│ Trusted By                           │
+│ [Deloitte] [Revinate] [Klareo] [DGA]│
 ├──────────────────────────────────────┤
 │ Education                            │
 │  - ASU: MSE Software Engineering     │
@@ -908,27 +932,27 @@ need modification.
 ├──────────────────────────────────────┤
 │ Certifications                       │
 │  - Azure Fundamentals               │
-├──────────────────────────────────────┤
-│ Trusted By                           │
-│ [Deloitte] [Revinate] [Klareo] [DGA]│
-├──────────────────────────────────────┤
-│ [Download Resume]                    │
 └──────────────────────────────────────┘
 ```
 
 **Sub-components**:
 
-- `ProfileHeader`: Photo (rounded-full, accent ring, subtle glow) + name +
-  title + summary. Photo is `profile.jpeg` from public/assets.
+- `ProfileHeader`: Full-body transparent photo (`profile-nobg.webp`) on
+  desktop with accent glow; circular headshot crop on mobile. Name, title,
+  location with MapPin icon. Social icon row (Email, LinkedIn, GitHub).
+  Two download buttons (Resume, Detailed Resume). The `minWidth: 600` on
+  the Profile AppDefinition ensures the side-by-side layout works.
 - `StatsRow`: Three stat cards in a row. Each has a number + label.
-- `EducationList`: Maps `education` data to styled entries.
+  Numbers animate counting up from 0 on entrance.
+- `TrustedBy`: Row of company names/logos in styled glass pills. Moved
+  above Education for better visual flow.
+- `EducationList`: Maps `education` data to styled entries with institution
+  link, degree, field, dates. Each entry is a clickable GlassCard.
 - `CertificateList`: Maps `certificates` data to badge-style entries with
-  external link.
-- `TrustedBy`: Row of company names/logos. Since we likely don't have logo
-  files, use styled text with subtle glass card backgrounds.
+  external link icon. Each entry is a clickable GlassCard.
 
 **Data source**: `data/education.ts`, `data/certificates.ts`, plus i18n for
-text strings.
+text strings. Section order: Header → Stats → TrustedBy → Education → Certs.
 
 ### 12.3 Experience App
 
@@ -1082,12 +1106,12 @@ Tailwind classes reference these variables via the theme config.
 // 3. Persists to localStorage
 ```
 
-### 13.3 3D Scene Adaptation
+### 13.3 Wallpaper Auto-Swap on Theme Change
 
-The `Scene3D` component reads theme from context and adjusts:
-
-- Dark: Ambient intensity 0.3, point light intensity 0.5, shape opacity 0.1
-- Light: Ambient intensity 0.1, point light intensity 0.2, shape opacity 0.05
+The `ThemeProvider` detects theme changes and automatically swaps the
+active wallpaper to its light/dark pair using `getPairedWallpaper()`.
+This ensures the wallpaper always matches the current theme without
+manual intervention. See Section 9.2 for the pair table.
 
 ---
 
@@ -1186,7 +1210,6 @@ export default {
 | Dock hover magnification   | Framer Motion  | `useSpring`, `useMotionValue`       |
 | Boot sequence              | Framer Motion  | Orchestrated timeline               |
 | Experience expand/collapse | Framer Motion  | `AnimatePresence` for smooth height |
-| 3D shapes rotation         | R3F `useFrame` | Per-frame 3D transform              |
 | Tooltip fade               | CSS transition | Simple, no JS overhead              |
 | Theme transition           | CSS transition | `transition: background 300ms`      |
 
@@ -1218,7 +1241,6 @@ export const ANIMATION = {
 All animated components check `useReducedMotion()`:
 
 - If true: `animate` props are bypassed (instant transitions)
-- 3D scene is not rendered
 - Boot sequence is skipped (just auto-open profile)
 - Dock icons don't magnify
 
@@ -1242,8 +1264,6 @@ All animated components check `useReducedMotion()`:
   (tap only).
 - **TopBar**: Simplified - name + hamburger with theme/lang in dropdown. Or
   keep minimal with smaller text.
-- **3D Background**: Hidden. Pure CSS gradient background instead. Saves GPU
-  and battery.
 - **Boot sequence**: Shortened (skip typing effect, just fade in).
 
 ### 16.3 Touch Interactions
@@ -1263,9 +1283,6 @@ All animated components check `useReducedMotion()`:
 const ProfileApp = lazy(() => import("./apps/profile/ProfileApp"));
 const ExperienceApp = lazy(() => import("./apps/experience/ExperienceApp"));
 // etc.
-
-// 3D scene is lazy-loaded
-const Scene3D = lazy(() => import("./background/Scene3D"));
 ```
 
 ### 17.2 Bundle Strategy
@@ -1275,30 +1292,33 @@ Vite manual chunks in `vite.config.ts`:
 ```ts
 manualChunks: {
   "vendor-react": ["react", "react-dom"],
-  "vendor-three": ["three", "@react-three/fiber", "@react-three/drei"],
   "vendor-motion": ["framer-motion"],
   "vendor-i18n": ["i18next", "react-i18next"],
 }
 ```
 
-This ensures the large Three.js bundle is only loaded when the 3D scene renders
-(lazy), and doesn't block initial paint.
+Note: The `vendor-three` chunk was removed when the 3D background system
+was replaced with the image-based wallpaper system. This significantly
+reduces the initial download size.
 
 ### 17.3 Asset Optimization
 
-- Profile image: Serve as WebP with JPEG fallback. Compress to < 100KB.
+- Profile image: Served as WebP with transparent background (`profile-nobg.webp`).
+  Full-body cutout on desktop, circular headshot crop on mobile.
+- Wallpaper images: All `.webp` format. Thumbnails provided for Settings picker.
 - Fonts: Load via `@font-face` with `font-display: swap`. Subset if possible.
 - Resume PDFs: Served from `public/assets/` (no bundling).
+- Project screenshots: `.webp` in `public/assets/images/projects/`.
 
 ### 17.4 Targets
 
-| Metric                   | Target                           |
-| ------------------------ | -------------------------------- |
-| First Contentful Paint   | < 1.5s                           |
-| Largest Contentful Paint | < 2.5s                           |
-| Time to Interactive      | < 3s                             |
-| Bundle (initial)         | < 150KB gzipped (excl. Three.js) |
-| Lighthouse Score         | 90+ all categories               |
+| Metric                   | Target                                   |
+| ------------------------ | ---------------------------------------- |
+| First Contentful Paint   | < 1.5s                                   |
+| Largest Contentful Paint | < 2.5s                                   |
+| Time to Interactive      | < 3s                                     |
+| Bundle (initial)         | < 150KB gzipped (Three.js no longer used)|
+| Lighthouse Score         | 90+ all categories                       |
 
 ---
 
@@ -1422,7 +1442,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           "vendor-react": ["react", "react-dom"],
-          "vendor-three": ["three", "@react-three/fiber", "@react-three/drei"],
           "vendor-motion": ["framer-motion"],
           "vendor-i18n": ["i18next", "react-i18next"],
         },
@@ -1490,7 +1509,8 @@ plugins.
 
 - `public/assets/documents/jihad_alkhurfan_resume_2025.pdf`
 - `public/assets/documents/jihad_alkhurfan_resume_2025_detailed.pdf`
-- `public/assets/images/profile.jpeg` (renamed from `profile_full.jpeg`)
+- `public/assets/images/profile-nobg.webp` (transparent background cutout,
+  replaces old `profile.jpeg`)
 - `public/CNAME`
 - `public/favicon.ico` (reuse or regenerate)
 
@@ -1592,14 +1612,15 @@ Files and directories to **remove** when scaffolding v3:
 6. Focus/z-index management
 7. Keyboard shortcuts (Escape to close)
 
-### Phase 5: 3D Background
+### Phase 5: Wallpaper System (Replaced 3D Background)
 
-1. `Scene3D` canvas setup
-2. `Lighting` component
-3. `FloatingShapes` with rotation animation
-4. `ParticleField`
-5. Theme adaptation
-6. Reduced motion / mobile disabling
+1. ~~`Scene3D` canvas setup~~ → Removed
+2. ~~`Lighting` component~~ → Removed
+3. ~~`FloatingShapes` with rotation animation~~ → Removed
+4. ~~`ParticleField`~~ → Removed
+5. Image-based wallpaper system with light/dark pairs
+6. CSS-only minimal wallpapers (gradients, solids, accent)
+7. Wallpaper auto-swap on theme change
 
 ### Phase 6: App Content
 
@@ -1815,20 +1836,25 @@ Add company logos to experience cards:
 
 #### 24.2.4 Wallpaper System
 
-Offer 3-5 selectable backgrounds managed through the Settings app:
+Offer 24 selectable wallpapers (12 light/dark pairs across 4 categories)
+managed through the Settings app:
 
-| Wallpaper      | Description                                    |
-| -------------- | ---------------------------------------------- |
-| 3D Shapes      | Current R3F scene (default)                    |
-| Gradient       | Animated CSS gradient (no 3D overhead)         |
-| Solid Dark     | Pure dark color matching `--bg-primary`        |
-| Solid Light    | Pure light color matching `--bg-primary`       |
-| Subtle Pattern | SVG pattern (dots, grid, or topographic lines) |
+| Category | Count | Description                              |
+| -------- | ----- | ---------------------------------------- |
+| Abstract | 6     | Gradients, nebula, watercolor, mesh      |
+| Nature   | 6     | Mountains, meadows, forests, coasts      |
+| City     | 6     | New York, Tokyo, London (day/night)      |
+| Minimal  | 6     | CSS-only: solid, gradient, accent-tinted |
 
-- **State**: Add `wallpaper` to a new `PreferencesContext` (or extend
-  `ThemeContext`). Persist to `localStorage`.
-- **Implementation**: `App.tsx` renders the selected background component
-  conditionally. The 3D scene is only loaded when selected.
+- **Pairs**: Every wallpaper has a strict 1:1 light/dark counterpart.
+  Theme changes auto-swap the wallpaper via `ThemeProvider`.
+- **State**: `wallpaper` in `PreferencesContext` stores the wallpaper ID
+  (plain string). Persist to `localStorage`.
+- **Implementation**: `App.tsx` renders the selected background as either
+  a CSS `background` div or a `background-image: url(...)` div.
+  The old 3D scene is no longer an option (Three.js removed).
+- **Assets**: Full wallpapers in `public/wallpapers/*.webp`, thumbnails
+  in `public/wallpapers/thumbnails/*.webp`.
 
 ### 24.3 Interaction Improvements
 
@@ -2025,20 +2051,25 @@ Visitors can leave a note:
 
 - **App ID**: `"notepad"`
 - **Icon**: `StickyNote` (lucide)
-- **Minimal backend**: Use Formspree (free tier) or a serverless function
-  (Cloudflare Workers, Vercel Edge) for submissions. Store submitted notes
-  in a simple JSON-serving endpoint or static file. Keep infrastructure
-  near-zero.
+- **Backend**: Firebase Firestore (`guestbook` collection). Real-time
+  subscription via `onSnapshot` -- new entries appear instantly for all
+  connected visitors. No server infrastructure; client SDK connects directly.
+- **Analytics**: `guestbook_submit` event tracked via Firebase Analytics.
+- **Security rules**: Firestore rules enforce:
+  - Anyone can read entries
+  - Anyone can create entries with exactly `name` (string, 1-50 chars),
+    `message` (string, 1-500 chars), and `createdAt` (server timestamp)
+  - No client-side updates or deletes
 - **UI**:
   - Text area for writing a message (max 500 chars)
-  - Name field (optional)
+  - Name field (optional, defaults to "Anonymous")
   - Submit button
-  - Below: scrollable list of previous notes (fetched on mount)
-  - If backend isn't ready, fallback to localStorage-only mode with a note
-    saying "Guestbook coming soon - notes saved locally"
+  - Below: scrollable real-time list of previous notes
+  - Loading spinner while fetching initial entries
+  - Error banner on Firestore connection failure
 - **Rate limiting**: One submission per session (sessionStorage check).
-
-#### 24.5.4 Settings / System Preferences App
+- **Files**: `src/lib/firebase.ts`, `src/lib/guestbook.ts`,
+  `src/lib/analytics.ts`, `src/components/apps/notepad/`.
 
 Control visual and behavioral preferences:
 
@@ -2345,8 +2376,9 @@ export interface Preferences {
 
 #### `data/projects.ts`
 
-Project entries for the Projects app. Owner to provide actual data; use
-placeholder entries initially.
+Project entries for the Projects app. Includes real project data with
+screenshots (stored in `public/assets/images/projects/`), tech tags,
+demo/GitHub URLs, and image carousel support.
 
 #### `data/filesystem.ts`
 
@@ -2370,20 +2402,22 @@ functions that return output strings.
 
 ### 24.12 New Components
 
-| Component       | Location                    | Purpose                       |
-| --------------- | --------------------------- | ----------------------------- |
-| `ContextMenu`   | `components/ui/`            | Positioned dropdown menu      |
-| `WindowToolbar` | `components/window/`        | Toolbar below title bar       |
-| `ResizeHandle`  | `components/window/`        | Edge/corner resize grip       |
-| `Spotlight`     | `components/desktop/`       | Cmd+K search overlay          |
-| `BrandingMenu`  | `components/desktop/`       | Apple logo dropdown in TopBar |
-| `AppMenu`       | `components/desktop/`       | Dynamic File/Edit/View menus  |
-| `StatusTray`    | `components/desktop/`       | WiFi/battery/bell icons       |
-| `TerminalApp`   | `components/apps/terminal/` | Terminal emulator             |
-| `ProjectsApp`   | `components/apps/projects/` | Project showcase grid         |
-| `NotepadApp`    | `components/apps/notepad/`  | Guestbook / notes             |
-| `SettingsApp`   | `components/apps/settings/` | Preferences UI                |
-| `FinderApp`     | `components/apps/finder/`   | Virtual file browser          |
+| Component        | Location                    | Purpose                           |
+| ---------------- | --------------------------- | --------------------------------- |
+| `ContextMenu`    | `components/ui/`            | Positioned dropdown menu          |
+| `ImageCarousel`  | `components/ui/`            | Multi-image carousel with nav     |
+| `ToggleSwitch`   | `components/ui/`            | Styled on/off toggle switch       |
+| `WindowToolbar`  | `components/window/`        | Toolbar below title bar           |
+| `ResizeHandle`   | `components/window/`        | Edge/corner resize grip           |
+| `Spotlight`      | `components/desktop/`       | Cmd+K search overlay              |
+| `BrandingMenu`   | `components/desktop/`       | Apple logo dropdown in TopBar     |
+| `AppMenu`        | `components/desktop/`       | Dynamic File/Edit/View menus      |
+| `StatusTray`     | `components/desktop/`       | WiFi/battery/bell icons           |
+| `TerminalApp`    | `components/apps/terminal/` | Terminal emulator                 |
+| `ProjectsApp`    | `components/apps/projects/` | Project showcase grid             |
+| `NotepadApp`     | `components/apps/notepad/`  | Guestbook / notes (Firebase)      |
+| `SettingsApp`    | `components/apps/settings/` | Preferences UI                    |
+| `FinderApp`      | `components/apps/finder/`   | Virtual file browser              |
 
 ---
 
@@ -2430,11 +2464,11 @@ after all enhancements are complete.
 ### Session 6e: New Apps (Part 2) + Visual Enhancement
 
 - Finder app (virtual filesystem, sidebar, breadcrumbs)
-- Notepad/Guestbook app (with Formspree or localStorage fallback)
+- Notepad/Guestbook app (with Firebase Firestore real-time backend)
 - Enhanced glass aesthetic (gradients, noise, glow)
-- Technology logos in skills
-- Company logos in experience
-- Wallpaper system integration
+- Technology logos in skills (simple-icons)
+- Company logos in experience (inline SVGs)
+- Wallpaper system integration (image-based, light/dark pairs)
 - Update dock layout (grouping with divider)
 
 ### Session 7: Deploy + Final QA
@@ -2448,6 +2482,65 @@ after all enhancements are complete.
 - RTL testing for new apps
 - Accessibility audit for new components
 - Performance profiling with expanded app count
+
+### Session 6f: Wallpaper Overhaul + Firebase + Profile Redesign + Polish
+
+(Post-6e incremental work, before deploy)
+
+- **3D background fully removed**: Deleted `components/background/` (Scene3D,
+  FloatingShapes, ParticleField, Lighting), removed `vendor-three` manual
+  chunk from vite config, removed Three.js lazy import from App.tsx
+- **Image-based wallpaper system**: 24 wallpapers (12 light/dark pairs) across
+  4 categories (abstract, nature, city, minimal). CSS-only minimal wallpapers.
+  New `constants/wallpapers.ts` with `WallpaperEntry` type, pair helpers,
+  category/theme filtering. Old `WallpaperType` enum replaced with string ID.
+- **Theme-wallpaper auto-swap**: ThemeProvider now detects theme changes and
+  swaps wallpaper to its paired counterpart via `getPairedWallpaper()`.
+- **Firebase integration**: Added `firebase` dependency. Created `src/lib/`
+  with `firebase.ts` (app init + Firestore + Analytics), `analytics.ts`
+  (trackEvent/setUserProps helpers), `guestbook.ts` (Firestore CRUD +
+  real-time subscription). Firebase initialized in `main.tsx`.
+- **Analytics tracking**: Added `trackEvent` calls for: theme toggle, accent
+  color change, wallpaper change, app open, app close. User properties set
+  for theme and accent color.
+- **Notepad/Guestbook upgraded**: Now uses Firebase Firestore real-time
+  backend instead of localStorage-only mode. Real-time `onSnapshot`
+  subscription for live updates across all visitors.
+- **Profile app redesign**: Full-body transparent photo (`profile-nobg.webp`)
+  with accent glow on desktop; circular headshot crop on mobile. Social links
+  (Email, LinkedIn, GitHub) moved into header. Two resume download buttons
+  (standard + detailed). Section order changed: TrustedBy moved above
+  Education/Certificates. Removed standalone download button at bottom.
+- **New UI components**: `ImageCarousel.tsx` (multi-image carousel with
+  navigation dots, arrow buttons, framer-motion transitions) and
+  `ToggleSwitch.tsx` (styled on/off switch for Settings).
+- **Accent color system update**: Added `subtle` variant to all 11 color
+  presets (`--accent-subtle` CSS variable). Used for hover backgrounds.
+- **AppDefinition extended**: Added optional `minWidth` property. Profile app
+  uses `minWidth: 600` to ensure side-by-side layout.
+- **Window provider fix**: UNMAXIMIZE action now computes fallback size when
+  no pre-maximize size was stored (window was never manually resized).
+- **Projects app updates**: Real project screenshots added to
+  `public/assets/images/projects/`. Image carousel support in project cards.
+- **Settings AppearanceSection**: Updated wallpaper picker to show categorized
+  image thumbnails with theme-filtered display.
+- **Company logos expanded**: Significantly expanded inline SVG logos in
+  `constants/company-logos.ts`.
+- **Skill icons updated**: Refined skill-to-icon mappings in
+  `constants/skill-icons.ts`.
+- **E2E testing infrastructure**: Added Playwright with `playwright.config.ts`
+  and `e2e/dock-magnification.spec.ts`.
+- **Screenshot scripts**: Added `scripts/` directory with automated
+  screenshot generation for project images.
+- **Various component polish**: Refinements across all apps (BootSequence,
+  BrandingMenu, Dock, DockIcon, TopBar, GlassCard, ContextMenu, Tooltip,
+  Window, terminal components, finder components, notepad components, skills
+  components, settings sections). RTL improvements, animation tweaks,
+  hover state enhancements, spacing/layout consistency.
+- **i18n updates**: New locale keys for wallpaper categories, Firebase
+  guestbook states, updated profile section strings.
+- **CSS updates**: New CSS variables (`--accent-subtle`), updated wallpaper
+  layer z-indexing, refined glass effects and scrollbar styles.
 
 ---
 

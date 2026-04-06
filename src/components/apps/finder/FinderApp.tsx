@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useWindowManager } from "@/context";
+import { useIsMobile } from "@/hooks";
 import { FILE_TREE, resolveNode, pathSegments } from "@/data";
 import type { FileNode, FileAction } from "@/data";
 import { WindowToolbar } from "@/components/window";
@@ -12,6 +13,7 @@ import { FinderFileList } from "./FinderFileList";
 export function FinderApp() {
   const { t } = useTranslation();
   const { openWindow } = useWindowManager();
+  const isMobile = useIsMobile();
   const [currentPath, setCurrentPath] = useState("~");
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>(["~"]);
@@ -162,15 +164,18 @@ export function FinderApp() {
 
       {/* Main content */}
       <div className="flex flex-1 min-h-0">
-        <FinderSidebar
-          currentPath={currentPath}
-          onNavigate={navigateTo}
-        />
+        {!isMobile && (
+          <FinderSidebar
+            currentPath={currentPath}
+            onNavigate={navigateTo}
+          />
+        )}
         <FinderFileList
           node={currentNode}
           selectedFile={selectedFile}
           onSelect={setSelectedFile}
           onDoubleClick={handleDoubleClick}
+          isMobile={isMobile}
         />
       </div>
     </div>

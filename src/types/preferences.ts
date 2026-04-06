@@ -21,14 +21,6 @@ export type FontSize = "small" | "normal" | "large";
 /** Dock icon size setting */
 export type DockIconSize = "small" | "medium" | "large";
 
-/** Desktop wallpaper / background type */
-export type WallpaperType =
-  | "3d-shapes"
-  | "gradient"
-  | "solid-dark"
-  | "solid-light"
-  | "pattern";
-
 /** All user-configurable preferences */
 export interface Preferences {
   /** Active accent color */
@@ -45,8 +37,8 @@ export interface Preferences {
   reduceMotion: boolean | null;
   /** Font size setting */
   fontSize: FontSize;
-  /** Desktop wallpaper */
-  wallpaper: WallpaperType;
+  /** Desktop wallpaper ID (references a WallpaperEntry.id) */
+  wallpaper: string;
 }
 
 /** Actions dispatched to the preferences reducer */
@@ -58,7 +50,7 @@ export type PreferencesAction =
   | { type: "SET_AUTO_CASCADE"; enabled: boolean }
   | { type: "SET_REDUCE_MOTION"; value: boolean | null }
   | { type: "SET_FONT_SIZE"; size: FontSize }
-  | { type: "SET_WALLPAPER"; wallpaper: WallpaperType }
+  | { type: "SET_WALLPAPER"; wallpaper: string }
   | { type: "RESET" };
 
 /** The preferences context value */
@@ -73,6 +65,6 @@ export interface PreferencesContextValue {
   setAutoCascade: (enabled: boolean) => void;
   setReduceMotion: (value: boolean | null) => void;
   setFontSize: (size: FontSize) => void;
-  setWallpaper: (wallpaper: WallpaperType) => void;
+  setWallpaper: (wallpaper: string) => void;
   resetPreferences: () => void;
 }

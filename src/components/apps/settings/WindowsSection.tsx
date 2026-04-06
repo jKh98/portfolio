@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { usePreferences } from "@/hooks";
 import { cn } from "@/utils/cn";
+import { ToggleSwitch } from "@/components/ui";
 import type { AnimationSpeed } from "@/types";
 
 const SPEEDS: AnimationSpeed[] = ["normal", "fast", "off"];
@@ -26,7 +27,7 @@ export function WindowsSection() {
               key={speed}
               onClick={() => setAnimationSpeed(speed)}
               className={cn(
-                "flex-1 rounded-lg px-3 py-2 text-sm border transition-colors",
+                "flex-1 rounded-lg px-3 py-2 text-sm border transition-colors cursor-pointer",
                 preferences.animationSpeed === speed
                   ? "border-[var(--accent)] bg-[var(--accent-glow)] text-[var(--text-primary)]"
                   : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)]",
@@ -43,24 +44,10 @@ export function WindowsSection() {
         <label className="text-sm text-[var(--text-secondary)]">
           {t("apps.settings.windows.autoCascade")}
         </label>
-        <button
-          role="switch"
-          aria-checked={preferences.autoCascade}
-          onClick={() => setAutoCascade(!preferences.autoCascade)}
-          className={cn(
-            "relative w-10 h-6 rounded-full transition-colors",
-            preferences.autoCascade
-              ? "bg-[var(--accent)]"
-              : "bg-[var(--text-tertiary)]",
-          )}
-        >
-          <span
-            className={cn(
-              "absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform",
-              preferences.autoCascade && "translate-x-4",
-            )}
-          />
-        </button>
+        <ToggleSwitch
+          checked={preferences.autoCascade}
+          onChange={(v) => setAutoCascade(v)}
+        />
       </div>
     </div>
   );

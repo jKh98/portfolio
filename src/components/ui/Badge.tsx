@@ -18,7 +18,7 @@ export function Badge({
         "text-xs font-medium leading-tight",
         "transition-colors duration-200",
         variant === "default" && [
-          "bg-[var(--bg-glass)] text-[var(--text-secondary)]",
+          "bg-[var(--bg-glass-inner)] text-[var(--text-secondary)]",
           "border border-[var(--border)]",
         ],
         variant === "accent" && [

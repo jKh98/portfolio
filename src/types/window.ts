@@ -56,6 +56,8 @@ export interface AppDefinition {
   component: React.LazyExoticComponent<React.ComponentType>;
   /** Optional per-app menu bar config */
   menuConfig?: AppMenuGroup[];
+  /** Optional minimum window width in pixels (default: 400) */
+  minWidth?: number;
 }
 
 /** Actions dispatched to the window reducer */

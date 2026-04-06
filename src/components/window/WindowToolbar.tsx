@@ -14,7 +14,7 @@ export function WindowToolbar({ children, className }: WindowToolbarProps) {
     <div
       className={cn(
         "flex items-center gap-2 h-9 px-3 shrink-0",
-        "bg-[var(--bg-glass)] backdrop-blur-sm",
+        "bg-[var(--bg-glass-inner)] backdrop-blur-sm",
         "border-b border-[var(--border)]",
         className,
       )}

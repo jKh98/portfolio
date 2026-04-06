@@ -12,9 +12,9 @@ import type {
   AnimationSpeed,
   FontSize,
   DockIconSize,
-  WallpaperType,
 } from "@/types";
-import { applyAccentColor } from "@/constants";
+import { applyAccentColor, DEFAULT_WALLPAPER_ID } from "@/constants";
+import { trackEvent, setUserProps } from "@/lib/analytics";
 
 const STORAGE_KEY = "portfolio-preferences";
 
@@ -26,7 +26,7 @@ const DEFAULT_PREFERENCES: Preferences = {
   autoCascade: true,
   reduceMotion: null,
   fontSize: "normal",
-  wallpaper: "3d-shapes",
+  wallpaper: DEFAULT_WALLPAPER_ID,
 };
 
 function loadPreferences(): Preferences {
@@ -112,7 +112,11 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
   }, [preferences.fontSize]);
 
   const setAccentColor = useCallback(
-    (color: AccentColor) => dispatch({ type: "SET_ACCENT_COLOR", color }),
+    (color: AccentColor) => {
+      trackEvent("preference_change", { setting: "accent_color", value: color });
+      setUserProps({ accent_color: color });
+      dispatch({ type: "SET_ACCENT_COLOR", color });
+    },
     [],
   );
   const setDockMagnification = useCallback(
@@ -143,8 +147,10 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
     [],
   );
   const setWallpaper = useCallback(
-    (wallpaper: WallpaperType) =>
-      dispatch({ type: "SET_WALLPAPER", wallpaper }),
+    (wallpaper: string) => {
+      trackEvent("preference_change", { setting: "wallpaper", value: wallpaper });
+      dispatch({ type: "SET_WALLPAPER", wallpaper });
+    },
     [],
   );
   const resetPreferences = useCallback(

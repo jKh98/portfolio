@@ -11,6 +11,7 @@ const PRIMARY_APPS: AppDefinition[] = [
     titleKey: "apps.profile.title",
     icon: "User",
     component: lazy(() => import("@/components/apps/profile/ProfileApp")),
+    minWidth: 600,
   },
   {
     id: "experience",

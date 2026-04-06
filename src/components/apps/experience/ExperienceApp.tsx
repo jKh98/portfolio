@@ -72,9 +72,9 @@ export function ExperienceApp() {
         <div className="min-w-0 overflow-x-auto scrollbar-none">
           <div
             className={cn(
-              "inline-flex items-center",
+              "inline-flex items-center overflow-hidden",
               "rounded-md border border-[var(--border)]",
-              "bg-[var(--bg-glass)]",
+              "bg-[var(--bg-glass-inner)]",
             )}
           >
             {COMPANIES.map((company, i) => (

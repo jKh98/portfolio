@@ -34,6 +34,8 @@ const ar = {
     profile: {
       title: "الملف الشخصي",
       role: "مهندس برمجيات متكامل أول",
+      location: "بيروت، لبنان",
+      availableStatus: "متاح للعمل",
       summary:
         "مهندس برمجيات متكامل أول بخبرة 6+ سنوات في بناء حلول ويب وتطبيقات قابلة للتطوير. متخصص في React و TypeScript و Node.js والبنية التحتية السحابية عبر مشاريع التقنيات المالية واللوجستية والتحول الرقمي الحكومي في الشرق الأوسط وأوروبا والولايات المتحدة.",
       stats: {
@@ -114,6 +116,7 @@ const ar = {
         databases: "قواعد البيانات والتخزين",
         testing: "الاختبارات",
         languages: "اللغات",
+        ai: "الذكاء الاصطناعي والأدوات",
       },
     },
     contact: {
@@ -152,43 +155,60 @@ const ar = {
     },
     notepad: {
       title: "المفكرة",
-      localNotice: "يتم تخزين الرسائل محلياً على هذا الجهاز.",
       namePlaceholder: "اسمك (اختياري)",
       messagePlaceholder: "اكتب رسالة…",
       alreadySubmitted: "لقد أرسلت رسالة بالفعل في هذه الجلسة.",
       submit: "إرسال",
       noMessages: "لا توجد رسائل بعد. كن أول من يكتب!",
       anonymous: "مجهول",
+      loading: "جار تحميل الرسائل…",
+      loadError: "تعذر تحميل الرسائل. يرجى المحاولة لاحقاً.",
+      submitError: "فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.",
     },
     projects: {
       title: "المشاريع",
       noResults: "لا توجد مشاريع تطابق هذا الفلتر.",
       demo: "عرض",
+      categories: {
+        personal: "شخصي",
+        freelance: "عمل حر",
+        volunteer: "تطوعي",
+      },
       items: {
         portfolioV3: {
           name: "الملف الشخصي v3",
           description:
             "ملف شخصي بأسلوب macOS مع خلفية ثلاثية الأبعاد ونوافذ قابلة للسحب ومحاكي طرفية.",
         },
-        dgaPlatform: {
-          name: "منصة هيئة الحكومة الرقمية",
+        denworldTravel: {
+          name: "Denworld Travel",
           description:
-            "منصة استراتيجية لتصنيف موردي تكنولوجيا المعلومات وإدارة طلبات الشراء.",
+            "منصة حجز سفر مع البحث عن رحلات وباقات سياحية وخدمات إضافية لوكالة سفر دنماركية.",
         },
-        fintechApp: {
-          name: "تطبيق تقنيات مالية",
+        waAutomator: {
+          name: "أتمتة واتساب",
           description:
-            "تطبيق بنكي متنقل مع KYC/KYB ودمج بوابات الدفع والتحويلات الفورية.",
+            "أداة سطح مكتب لجدولة الرسائل والتحقق من جهات الاتصال ومعالجة الوسائط.",
         },
-        testingPlatform: {
-          name: "منصة اختبار شاملة",
+        leadCrm: {
+          name: "نظام إدارة العملاء المحتملين",
           description:
-            "إطار اختبار شامل من البداية إلى النهاية باستخدام WebDriverIO و Cucumber BDD.",
+            "نظام CRM مع تتبع العملاء المحتملين ولوحات مؤشرات الأداء واستيراد CSV وتصدير Excel لمنظمة غير ربحية.",
         },
-        investmentCalc: {
-          name: "حاسبة الاستثمار",
+        ngoWebsite: {
+          name: "موقع منظمة",
           description:
-            "نموذج أولي تفاعلي لحاسبة تكلفة الاستثمار مع تصور البيانات لـ SBC السعودية.",
+            "موقع ثنائي اللغة مع لوحة إدارة وإدارة الأخبار ونشر الفعاليات.",
+        },
+        campaignTracker: {
+          name: "متتبع الحملات",
+          description:
+            "منصة حملات عالمية مع تتبع التقدم المباشر وخريطة تفاعلية.",
+        },
+        dukkani: {
+          name: "دكاني",
+          description:
+            "تطبيق إدارة المخزون للهاتف مع مسح الباركود ونماذج المنتجات ودعم العملات.",
         },
       },
     },
@@ -207,12 +227,38 @@ const ar = {
         light: "فاتح",
         accentColor: "لون التمييز",
         wallpaper: "خلفية سطح المكتب",
+        wallpaperCategories: {
+          abstract: "تجريدي",
+          nature: "طبيعة",
+          city: "مدينة",
+          minimal: "بسيط",
+
+        },
         wallpapers: {
-          "3d-shapes": "أشكال ثلاثية الأبعاد",
-          gradient: "تدرج لوني",
-          "solid-dark": "لون داكن",
-          "solid-light": "لون فاتح",
-          pattern: "نقش",
+          "abstract-light-1": "تدرج باستيل",
+          "abstract-dark-2": "سديم عميق",
+          "abstract-light-2": "ألوان مائية",
+          "abstract-dark-1": "أمواج داكنة",
+          "abstract-light-3": "تدفق ناعم",
+          "abstract-dark-3": "شبكة داكنة",
+          "nature-light-1": "قمم ثلجية",
+          "nature-dark-1": "جبال الشفق",
+          "nature-light-2": "مرج مشمس",
+          "nature-dark-2": "سلسلة الغروب",
+          "nature-light-3": "نسيم ساحلي",
+          "nature-dark-3": "غابة داكنة",
+          "city-light-1": "أفق ذهبي",
+          "city-dark-1": "هونغ كونغ ليلاً",
+          "city-light-2": "أفق ضبابي",
+          "city-dark-2": "أضواء المدينة",
+          "city-light-3": "سان فرانسيسكو",
+          "city-dark-3": "أفق داكن",
+          "minimal-solid-light": "لون فاتح",
+          "minimal-solid-dark": "لون داكن",
+          "minimal-gradient-light": "تدرج فاتح",
+          "minimal-gradient-dark": "تدرج داكن",
+          "minimal-accent-light": "توهج مميز",
+          "minimal-accent-dark": "مميز داكن",
         },
         colors: {
           blue: "أزرق",

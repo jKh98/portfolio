@@ -3,6 +3,7 @@ export { TopBar } from "./TopBar";
 export { Dock } from "./Dock";
 export { DockIcon } from "./DockIcon";
 export { BootSequence } from "./BootSequence";
+export type { BootSequenceHandle } from "./BootSequence";
 export { BrandingMenu } from "./BrandingMenu";
 export { AppMenu } from "./AppMenu";
 export { Spotlight } from "./Spotlight";

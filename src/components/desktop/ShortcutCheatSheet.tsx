@@ -60,7 +60,7 @@ export function ShortcutCheatSheet({ isOpen, onClose }: ShortcutCheatSheetProps)
           className={cn(
             "relative w-full max-w-[420px] mx-4",
             "rounded-xl overflow-hidden",
-            "backdrop-blur-xl border",
+            "backdrop-blur-2xl backdrop-saturate-150 border",
             "bg-[var(--bg-glass)] border-[var(--border)]",
             "shadow-[var(--shadow-lg)]",
             "p-5",

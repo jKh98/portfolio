@@ -34,6 +34,8 @@ const en = {
     profile: {
       title: "Profile",
       role: "Senior Fullstack Engineer",
+      location: "Beirut, Lebanon",
+      availableStatus: "Available for work",
       summary:
         "Senior Fullstack Engineer with 6+ years of experience building scalable web and mobile solutions. Specializing in React, TypeScript, Node.js, and cloud infrastructure across fintech, logistics, and government digital transformation projects in MENA, Europe, and the US.",
       stats: {
@@ -114,6 +116,7 @@ const en = {
         databases: "Databases & Storage",
         testing: "Testing",
         languages: "Languages",
+        ai: "AI & Tooling",
       },
     },
     contact: {
@@ -153,43 +156,60 @@ const en = {
     },
     notepad: {
       title: "Notepad",
-      localNotice: "Messages are stored locally on this device.",
       namePlaceholder: "Your name (optional)",
       messagePlaceholder: "Write a message…",
       alreadySubmitted: "You have already submitted a message this session.",
       submit: "Submit",
       noMessages: "No messages yet. Be the first to write one!",
       anonymous: "Anonymous",
+      loading: "Loading messages…",
+      loadError: "Could not load messages. Please try again later.",
+      submitError: "Failed to send message. Please try again.",
     },
     projects: {
       title: "Projects",
       noResults: "No projects match that filter.",
       demo: "Demo",
+      categories: {
+        personal: "Personal",
+        freelance: "Freelance",
+        volunteer: "Volunteer",
+      },
       items: {
         portfolioV3: {
           name: "Portfolio v3",
           description:
             "macOS-inspired portfolio with 3D background, draggable windows, and a terminal emulator.",
         },
-        dgaPlatform: {
-          name: "DGA Vendor Platform",
+        denworldTravel: {
+          name: "Denworld Travel",
           description:
-            "Strategic platform for ICT vendor classification and RFP management for Saudi DGA.",
+            "Travel booking platform with flight search, curated travel packages, and service add-ons for a Danish travel agency.",
         },
-        fintechApp: {
-          name: "Fintech Mobile App",
+        waAutomator: {
+          name: "WhatsApp Automator",
           description:
-            "Mobile banking app with KYC/KYB, payment gateway integration, and real-time transfers.",
+            "Desktop automation tool for scheduling messages, validating contacts, and processing media.",
         },
-        testingPlatform: {
-          name: "E2E Testing Platform",
+        leadCrm: {
+          name: "Lead Management CRM",
           description:
-            "Comprehensive end-to-end testing framework with WebDriverIO and Cucumber BDD.",
+            "Role-based CRM with lead tracking, KPI dashboards, CSV import, and Excel export for an NGO.",
         },
-        investmentCalc: {
-          name: "Investment Calculator",
+        ngoWebsite: {
+          name: "NGO Website",
           description:
-            "Interactive investment cost calculator POC with data visualization for Saudi SBC.",
+            "Bilingual website with a back-office admin panel, news management, and event publishing.",
+        },
+        campaignTracker: {
+          name: "Campaign Tracker",
+          description:
+            "Global campaign platform with real-time progress tracking and interactive map visualization.",
+        },
+        dukkani: {
+          name: "Dukkani",
+          description:
+            "Mobile inventory management app with barcode scanning, product forms, and currency support.",
         },
       },
     },
@@ -208,12 +228,38 @@ const en = {
         light: "Light",
         accentColor: "Accent Color",
         wallpaper: "Wallpaper",
+        wallpaperCategories: {
+          abstract: "Abstract",
+          nature: "Nature",
+          city: "City",
+          minimal: "Minimal",
+
+        },
         wallpapers: {
-          "3d-shapes": "3D Shapes",
-          gradient: "Gradient",
-          "solid-dark": "Solid Dark",
-          "solid-light": "Solid Light",
-          pattern: "Pattern",
+          "abstract-light-1": "Pastel Gradient",
+          "abstract-dark-2": "Deep Nebula",
+          "abstract-light-2": "Watercolor Bloom",
+          "abstract-dark-1": "Dark Waves",
+          "abstract-light-3": "Soft Flow",
+          "abstract-dark-3": "Dark Mesh",
+          "nature-light-1": "Snowy Peaks",
+          "nature-dark-1": "Aurora Mountains",
+          "nature-light-2": "Sunlit Meadow",
+          "nature-dark-2": "Sunset Range",
+          "nature-light-3": "Coastal Breeze",
+          "nature-dark-3": "Dark Forest",
+          "city-light-1": "Golden Horizon",
+          "city-dark-1": "Hong Kong Night",
+          "city-light-2": "Misty Skyline",
+          "city-dark-2": "City Lights",
+          "city-light-3": "San Francisco",
+          "city-dark-3": "Dark Horizon",
+          "minimal-solid-light": "Solid Light",
+          "minimal-solid-dark": "Solid Dark",
+          "minimal-gradient-light": "Light Gradient",
+          "minimal-gradient-dark": "Dark Gradient",
+          "minimal-accent-light": "Accent Glow",
+          "minimal-accent-dark": "Accent Dark",
         },
         colors: {
           blue: "Blue",

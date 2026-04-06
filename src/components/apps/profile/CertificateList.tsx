@@ -1,8 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { GlassCard } from "@/components/ui";
+import { motion } from "framer-motion";
 import { CERTIFICATES } from "@/data";
 import { cn } from "@/utils/cn";
-import { Award, ExternalLink } from "lucide-react";
+import { useReducedMotion } from "@/hooks";
+import { ANIMATION } from "@/constants";
+import { GlassCard } from "@/components/ui";
+import { ShieldCheck, ExternalLink } from "lucide-react";
 
 export interface CertificateListProps {
   className?: string;
@@ -10,40 +13,67 @@ export interface CertificateListProps {
 
 export function CertificateList({ className }: CertificateListProps) {
   const { t } = useTranslation();
+  const reduced = useReducedMotion();
 
   return (
     <div className={cn("space-y-3", className)}>
-      <h3 className="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">
+      <h3
+        className={cn(
+          "text-sm font-semibold uppercase tracking-wide",
+          "text-[var(--text-primary)]",
+        )}
+      >
         {t("apps.profile.certificates")}
       </h3>
-      <div className="space-y-2">
-        {CERTIFICATES.map((cert) => (
-          <GlassCard key={cert.name} className="p-3">
-            <div className="flex items-start gap-3">
-              <div className="mt-0.5 text-[var(--accent)]">
-                <Award size={16} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[var(--text-primary)]">
-                    {cert.name}
-                  </span>
-                  <a
-                    href={cert.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={t("common.openLink")}
-                    className="text-[var(--text-tertiary)] hover:text-[var(--accent)] transition-colors shrink-0"
-                  >
-                    <ExternalLink size={12} />
-                  </a>
+
+      <div className="space-y-2.5">
+        {CERTIFICATES.map((cert, i) => (
+          <motion.div
+            key={cert.name}
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: reduced ? 0 : ANIMATION.duration.normal,
+              delay: reduced ? 0 : i * 0.08,
+            }}
+          >
+            <GlassCard hoverable>
+              <a
+                href={cert.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-4 p-4"
+              >
+                <div
+                  className={cn(
+                    "shrink-0 flex items-center justify-center",
+                    "w-10 h-10 rounded-xl",
+                    "bg-[var(--accent-glow)]",
+                    "text-[var(--accent)]",
+                  )}
+                >
+                  <ShieldCheck size={18} />
                 </div>
-                <p className="text-xs text-[var(--text-secondary)]">
-                  {cert.issuer} - {cert.date}
-                </p>
-              </div>
-            </div>
-          </GlassCard>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
+                    {cert.name}
+                  </p>
+                  <p className="text-xs text-[var(--text-tertiary)] mt-1">
+                    {cert.issuer} &middot; {cert.date}
+                  </p>
+                </div>
+
+                <ExternalLink
+                  size={14}
+                  className={cn(
+                    "shrink-0 text-[var(--text-tertiary)]",
+                    "group-hover:text-[var(--accent)] transition-colors duration-200",
+                  )}
+                />
+              </a>
+            </GlassCard>
+          </motion.div>
         ))}
       </div>
     </div>

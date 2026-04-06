@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { GlassCard, Badge } from "@/components/ui";
 import { useReducedMotion } from "@/hooks";
+import { useTheme } from "@/context/ThemeProvider";
 import { ANIMATION } from "@/constants";
 import { getCompanyLogo } from "@/constants/company-logos";
+import type { CompanyLogo } from "@/constants/company-logos";
 import { formatDateRange } from "@/utils/format";
 import type { Experience } from "@/types";
 
@@ -14,9 +16,23 @@ export interface ExperienceCardProps {
   onToggle: () => void;
 }
 
+/** Resolve the fill colour for a single SVG path, respecting theme overrides. */
+function resolvePathFill(
+  path: CompanyLogo["paths"][number],
+  logo: CompanyLogo,
+  isDark: boolean,
+): string {
+  // If the path has an explicit brand fill (e.g. Deloitte's green dot), keep it.
+  if (path.fill) return path.fill;
+  // Otherwise apply the logo-level theme fill.
+  return isDark ? (logo.darkFill ?? "currentColor") : (logo.lightFill ?? "currentColor");
+}
+
 /** Renders a small company logo SVG or a colored-circle initial fallback. */
 function CompanyLogoIcon({ company }: { company: string }) {
   const logo = getCompanyLogo(company);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   if (!logo) {
     const initial = company.charAt(0).toUpperCase();
@@ -33,11 +49,11 @@ function CompanyLogoIcon({ company }: { company: string }) {
   return (
     <svg
       viewBox={logo.viewBox}
-      className="h-6 w-6 shrink-0 text-[var(--text-secondary)]"
+      className="h-6 w-6 shrink-0"
       aria-hidden="true"
     >
       {logo.paths.map((p, i) => (
-        <path key={i} d={p.d} fill={p.fill ?? "currentColor"} />
+        <path key={i} d={p.d} fill={resolvePathFill(p, logo, isDark)} />
       ))}
     </svg>
   );
