@@ -1,5 +1,16 @@
 /** Accent color identifier */
-export type AccentColor = "cyan" | "purple" | "green" | "amber" | "rose";
+export type AccentColor =
+  | "blue"
+  | "cyan"
+  | "teal"
+  | "green"
+  | "amber"
+  | "orange"
+  | "red"
+  | "rose"
+  | "pink"
+  | "purple"
+  | "indigo";
 
 /** Animation speed setting */
 export type AnimationSpeed = "normal" | "fast" | "off";

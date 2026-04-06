@@ -181,11 +181,17 @@ const en = {
         light: "Light",
         accentColor: "Accent Color",
         colors: {
+          blue: "Blue",
           cyan: "Cyan",
-          purple: "Purple",
+          teal: "Teal",
           green: "Green",
           amber: "Amber",
+          orange: "Orange",
+          red: "Red",
           rose: "Rose",
+          pink: "Pink",
+          purple: "Purple",
+          indigo: "Indigo",
         },
       },
       dock: {

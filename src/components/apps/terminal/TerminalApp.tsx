@@ -64,11 +64,11 @@ export function TerminalApp() {
     (input: string) => {
       const commandLine: OutputLine = {
         id: lineId++,
-        text: `visitor@jalkhurfan.com ~ $ ${input}`,
+        text: `visitor@jalkhurfan ~ $ ${input}`,
         isCommand: true,
       };
 
-      const result = executeCommand(input);
+      const result = executeCommand(input, { history });
 
       if (result.action?.type === "clear") {
         setLines([]);
@@ -87,7 +87,7 @@ export function TerminalApp() {
         setHistoryIndex(-1);
       }
     },
-    [handleAction],
+    [handleAction, history],
   );
 
   const handleClear = useCallback(() => {

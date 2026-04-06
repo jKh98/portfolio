@@ -180,11 +180,17 @@ const ar = {
         light: "فاتح",
         accentColor: "لون التمييز",
         colors: {
+          blue: "أزرق",
           cyan: "سماوي",
-          purple: "بنفسجي",
+          teal: "أخضر مزرق",
           green: "أخضر",
           amber: "كهرماني",
+          orange: "برتقالي",
+          red: "أحمر",
           rose: "وردي",
+          pink: "زهري",
+          purple: "بنفسجي",
+          indigo: "نيلي",
         },
       },
       dock: {

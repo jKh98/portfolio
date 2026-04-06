@@ -24,15 +24,15 @@ const SECTIONS = [
 
 type SettingsSection = (typeof SECTIONS)[number];
 
-const SECTION_CONFIG: Record<
+const SECTION_ICONS: Record<
   SettingsSection,
-  { icon: React.ComponentType<{ size?: number }>; color: string }
+  React.ComponentType<{ size?: number }>
 > = {
-  appearance: { icon: Paintbrush, color: "bg-gradient-to-br from-blue-500 to-purple-500" },
-  dock: { icon: PanelBottom, color: "bg-gradient-to-br from-gray-500 to-gray-600" },
-  windows: { icon: AppWindow, color: "bg-gradient-to-br from-green-500 to-emerald-600" },
-  language: { icon: Globe, color: "bg-gradient-to-br from-sky-500 to-blue-600" },
-  accessibility: { icon: Accessibility, color: "bg-gradient-to-br from-indigo-500 to-blue-600" },
+  appearance: Paintbrush,
+  dock: PanelBottom,
+  windows: AppWindow,
+  language: Globe,
+  accessibility: Accessibility,
 };
 
 export function SettingsApp() {
@@ -50,7 +50,7 @@ export function SettingsApp() {
         )}
       >
         {SECTIONS.map((section) => {
-          const { icon: Icon, color } = SECTION_CONFIG[section];
+          const Icon = SECTION_ICONS[section];
           const isActive = activeSection === section;
           return (
             <button
@@ -63,14 +63,7 @@ export function SettingsApp() {
                   : "text-[var(--text-secondary)] hover:bg-[var(--bg-glass-hover)]",
               )}
             >
-              <span
-                className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-md shrink-0",
-                  color,
-                )}
-              >
-                <Icon size={14} />
-              </span>
+              <Icon size={16} />
               {t(`apps.settings.sections.${section}`)}
             </button>
           );

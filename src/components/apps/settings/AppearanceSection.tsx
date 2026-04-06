@@ -7,7 +7,19 @@ import { ACCENT_COLORS } from "@/constants";
 import { cn } from "@/utils/cn";
 import type { AccentColor } from "@/types";
 
-const ACCENT_IDS: AccentColor[] = ["cyan", "purple", "green", "amber", "rose"];
+const ACCENT_IDS: AccentColor[] = [
+  "blue",
+  "cyan",
+  "teal",
+  "green",
+  "amber",
+  "orange",
+  "red",
+  "rose",
+  "pink",
+  "purple",
+  "indigo",
+];
 
 export function AppearanceSection() {
   const { t } = useTranslation();
@@ -53,7 +65,7 @@ export function AppearanceSection() {
         <label className="text-sm font-medium text-[var(--text-secondary)]">
           {t("apps.settings.appearance.accentColor")}
         </label>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           {ACCENT_IDS.map((id) => {
             const preset = ACCENT_COLORS[id];
             return (
