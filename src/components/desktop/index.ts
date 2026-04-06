@@ -5,7 +5,6 @@ export { DockIcon } from "./DockIcon";
 export { BootSequence } from "./BootSequence";
 export { BrandingMenu } from "./BrandingMenu";
 export { AppMenu } from "./AppMenu";
-export { StatusTray } from "./StatusTray";
 export { Spotlight } from "./Spotlight";
 export { SpotlightResults } from "./SpotlightResults";
 export { ShortcutCheatSheet } from "./ShortcutCheatSheet";

@@ -18,14 +18,7 @@ const ar = {
       expandAll: "توسيع الكل",
       collapseAll: "طي الكل",
     },
-    status: {
-      wifi: "متصل بالإنترنت",
-      wifiOff: "غير متصل",
-      battery: "البطارية: 100%",
-      batteryLevel: "البطارية: {{level}}%",
-      notifications: "لا توجد إشعارات جديدة",
-      newNotification: "لديك إشعار جديد!",
-    },
+
     spotlight: {
       placeholder: "ابحث عن تطبيقات، مهارات، إجراءات…",
       noResults: "لم يتم العثور على نتائج.",

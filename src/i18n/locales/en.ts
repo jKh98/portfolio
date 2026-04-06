@@ -18,14 +18,7 @@ const en = {
       expandAll: "Expand All",
       collapseAll: "Collapse All",
     },
-    status: {
-      wifi: "Connected to the internet",
-      wifiOff: "Disconnected",
-      battery: "Battery: 100%",
-      batteryLevel: "Battery: {{level}}%",
-      notifications: "No new notifications",
-      newNotification: "You have a new notification!",
-    },
+
     spotlight: {
       placeholder: "Search apps, skills, actions…",
       noResults: "No results found.",

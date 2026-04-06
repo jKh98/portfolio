@@ -7,7 +7,6 @@ import { useIsMobile } from "@/hooks";
 import { IconButton } from "@/components/ui";
 import { BrandingMenu } from "./BrandingMenu";
 import { AppMenu } from "./AppMenu";
-import { StatusTray } from "./StatusTray";
 import type { AppMenuAction } from "./AppMenu";
 
 export interface TopBarProps {
@@ -59,10 +58,8 @@ export function TopBar({ onSpotlightOpen, onAppMenuAction }: TopBarProps) {
         {time}
       </span>
 
-      {/* End: Status tray + Spotlight + Theme + Language toggles */}
+      {/* End: Spotlight + Theme + Language toggles */}
       <div className="flex items-center gap-1">
-        <StatusTray />
-        <div className="w-px h-3 bg-[var(--border)] mx-0.5" />
         {onSpotlightOpen && (
           <IconButton
             label={t("topbar.spotlight.placeholder")}
