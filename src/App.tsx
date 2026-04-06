@@ -1,40 +1,22 @@
-import React, { useEffect } from "react";
-import { ConfigProvider } from "antd";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { HashRouter, Route, Switch } from "react-router-dom";
-import ReactGA from "react-ga";
-import "antd/dist/antd.css";
-import "./App.css";
+import { useDirection } from "@/i18n/useDirection";
 
-import { Landing } from "&components/pages/landing/landing.component";
-import { gaKey } from "&config/meta";
-
-ReactGA.initialize(gaKey);
-
-function App() {
+export function App() {
   const { i18n } = useTranslation();
+  const direction = useDirection();
 
   useEffect(() => {
-    if (
-      navigator.userAgent.includes("Instagram") &&
-      !sessionStorage.getItem("didReloadForInAppBrowser")
-    ) {
-      sessionStorage.setItem("didReloadForInAppBrowser", "true");
-      window.location.reload();
-    }
-
-    ReactGA.pageview(window.location.pathname);
-  }, [i18n.language]);
+    document.documentElement.dir = direction;
+    document.documentElement.lang = i18n.language;
+  }, [direction, i18n.language]);
 
   return (
-    <ConfigProvider direction={i18n?.dir()}>
-      <HashRouter>
-        <Switch>
-          <Route exact path={"/"} component={Landing} />
-        </Switch>
-      </HashRouter>
-    </ConfigProvider>
+    <div
+      className="h-full w-full"
+      style={{ backgroundColor: "var(--bg-primary)" }}
+    >
+      {/* Desktop shell will be rendered here in Session 2 */}
+    </div>
   );
 }
-
-export default App;
