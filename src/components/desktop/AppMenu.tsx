@@ -4,20 +4,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/cn";
 import { useWindowManager } from "@/context";
 import { APP_DEFINITIONS } from "@/constants";
+import { dispatchAppMenuAction } from "@/hooks";
 import type { AppId, AppMenuGroup } from "@/types";
 
-/** Actions emitted by the app menu that parent components can handle */
+/** Actions emitted by the app menu */
 export type AppMenuAction = string;
-
-export interface AppMenuProps {
-  onAction?: (action: AppMenuAction) => void;
-}
 
 /**
  * Dynamic menu bar shown in the TopBar. Displays "File" menu always,
  * plus per-app menus based on the currently focused window's menuConfig.
+ * Actions are broadcast via custom DOM events (useAppMenuAction).
  */
-export function AppMenu({ onAction }: AppMenuProps) {
+export function AppMenu() {
   const { t } = useTranslation();
   const { windows, closeWindow, dispatch } = useWindowManager();
   const [openMenuIdx, setOpenMenuIdx] = useState<number | null>(null);
@@ -51,10 +49,10 @@ export function AppMenu({ onAction }: AppMenuProps) {
       } else if (action === "close-all") {
         dispatch({ type: "CLOSE_ALL" });
       } else {
-        onAction?.(action);
+        dispatchAppMenuAction(action);
       }
     },
-    [focusedAppId, closeWindow, dispatch, onAction],
+    [focusedAppId, closeWindow, dispatch],
   );
 
   // Click-away to dismiss

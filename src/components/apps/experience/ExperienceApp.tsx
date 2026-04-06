@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronsUpDown } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { EXPERIENCE } from "@/data";
+import { useAppMenuAction } from "@/hooks";
 import { WindowToolbar } from "@/components/window";
 import { ExperienceTimeline } from "./ExperienceTimeline";
 
@@ -35,17 +36,34 @@ export function ExperienceApp() {
     });
   }, []);
 
-  const toggleAll = useCallback(() => {
-    setAllExpanded((prev) => {
-      const next = !prev;
-      if (next) {
-        setExpandedIds(new Set(filteredExperience.map((exp) => exp.id)));
-      } else {
-        setExpandedIds(new Set());
-      }
-      return next;
-    });
+  const expandAll = useCallback(() => {
+    setAllExpanded(true);
+    setExpandedIds(new Set(filteredExperience.map((exp) => exp.id)));
   }, [filteredExperience]);
+
+  const collapseAll = useCallback(() => {
+    setAllExpanded(false);
+    setExpandedIds(new Set());
+  }, []);
+
+  const toggleAll = useCallback(() => {
+    if (allExpanded) {
+      collapseAll();
+    } else {
+      expandAll();
+    }
+  }, [allExpanded, collapseAll, expandAll]);
+
+  // Listen for View menu actions (Expand All / Collapse All)
+  useAppMenuAction(
+    useCallback(
+      (action: string) => {
+        if (action === "expand-all") expandAll();
+        else if (action === "collapse-all") collapseAll();
+      },
+      [expandAll, collapseAll],
+    ),
+  );
 
   return (
     <>

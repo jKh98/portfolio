@@ -7,14 +7,12 @@ import { useIsMobile } from "@/hooks";
 import { IconButton } from "@/components/ui";
 import { BrandingMenu } from "./BrandingMenu";
 import { AppMenu } from "./AppMenu";
-import type { AppMenuAction } from "./AppMenu";
 
 export interface TopBarProps {
   onSpotlightOpen?: () => void;
-  onAppMenuAction?: (action: AppMenuAction) => void;
 }
 
-export function TopBar({ onSpotlightOpen, onAppMenuAction }: TopBarProps) {
+export function TopBar({ onSpotlightOpen }: TopBarProps) {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
@@ -44,7 +42,7 @@ export function TopBar({ onSpotlightOpen, onAppMenuAction }: TopBarProps) {
       {/* Start: Branding + App menus */}
       <div className="flex items-center gap-2 min-w-0">
         <BrandingMenu />
-        {!isMobile && <AppMenu onAction={onAppMenuAction} />}
+        {!isMobile && <AppMenu />}
       </div>
 
       {/* Center: Clock */}

@@ -7,3 +7,5 @@ export { useWindowResize } from "./useWindowResize";
 export { useContextMenu } from "./useContextMenu";
 export { useLongPress } from "./useLongPress";
 export { useKeyboardShortcuts } from "./useKeyboardShortcuts";
+export { useAppMenuAction, dispatchAppMenuAction } from "./useAppMenuAction";
+export { usePreferences } from "./usePreferences";
