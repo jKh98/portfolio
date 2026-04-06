@@ -4,3 +4,7 @@ export { SKILLS } from "./skills";
 export { CERTIFICATES } from "./certificates";
 export { buildSpotlightIndex } from "./spotlight-index";
 export type { SpotlightItem, SpotlightCategory } from "./spotlight-index";
+export { PROJECTS, getProjectTags } from "./projects";
+export type { Project } from "./projects";
+export { executeCommand, ASCII_BANNER } from "./terminal-commands";
+export type { CommandResult, CommandHandler } from "./terminal-commands";

@@ -131,6 +131,95 @@ const en = {
       copy: "Copy",
       open: "Open",
     },
+    terminal: {
+      title: "Terminal",
+    },
+    projects: {
+      title: "Projects",
+      noResults: "No projects match that filter.",
+      demo: "Demo",
+      items: {
+        portfolioV3: {
+          name: "Portfolio v3",
+          description:
+            "macOS-inspired portfolio with 3D background, draggable windows, and a terminal emulator.",
+        },
+        dgaPlatform: {
+          name: "DGA Vendor Platform",
+          description:
+            "Strategic platform for ICT vendor classification and RFP management for Saudi DGA.",
+        },
+        fintechApp: {
+          name: "Fintech Mobile App",
+          description:
+            "Mobile banking app with KYC/KYB, payment gateway integration, and real-time transfers.",
+        },
+        testingPlatform: {
+          name: "E2E Testing Platform",
+          description:
+            "Comprehensive end-to-end testing framework with WebDriverIO and Cucumber BDD.",
+        },
+        investmentCalc: {
+          name: "Investment Calculator",
+          description:
+            "Interactive investment cost calculator POC with data visualization for Saudi SBC.",
+        },
+      },
+    },
+    settings: {
+      title: "Settings",
+      sections: {
+        appearance: "Appearance",
+        dock: "Dock",
+        windows: "Windows",
+        language: "Language",
+        accessibility: "Accessibility",
+      },
+      appearance: {
+        theme: "Theme",
+        dark: "Dark",
+        light: "Light",
+        accentColor: "Accent Color",
+        colors: {
+          cyan: "Cyan",
+          purple: "Purple",
+          green: "Green",
+          amber: "Amber",
+          rose: "Rose",
+        },
+      },
+      dock: {
+        magnification: "Magnification",
+        iconSize: "Icon Size",
+        sizes: {
+          small: "Small",
+          medium: "Medium",
+          large: "Large",
+        },
+      },
+      windows: {
+        animationSpeed: "Animation Speed",
+        autoCascade: "Auto-Cascade",
+        speeds: {
+          normal: "Normal",
+          fast: "Fast",
+          off: "Off",
+        },
+      },
+      language: {
+        directionNote: "Changing language will also switch the text direction (LTR/RTL).",
+      },
+      accessibility: {
+        reduceMotion: "Reduce Motion",
+        reduceMotionDesc: "Override system preference to reduce animations.",
+        fontSize: "Font Size",
+        fontSizes: {
+          small: "Small",
+          normal: "Normal",
+          large: "Large",
+        },
+      },
+    },
   },
   common: {
     close: "Close",

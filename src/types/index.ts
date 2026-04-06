@@ -15,3 +15,12 @@ export type {
   SocialLink,
 } from "./resume";
 export type { ThemeMode, ThemeContextValue } from "./theme";
+export type {
+  AccentColor,
+  AnimationSpeed,
+  FontSize,
+  DockIconSize,
+  Preferences,
+  PreferencesAction,
+  PreferencesContextValue,
+} from "./preferences";

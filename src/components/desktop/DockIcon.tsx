@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { User, Briefcase, Code, Mail } from "lucide-react";
+import { User, Briefcase, Code, Mail, Terminal, FolderGit2, Settings } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useReducedMotion } from "@/hooks";
 import { Tooltip } from "@/components/ui";
@@ -12,6 +12,9 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> = {
   Briefcase,
   Code,
   Mail,
+  Terminal,
+  FolderGit2,
+  Settings,
 };
 
 export interface DockIconProps {

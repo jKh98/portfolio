@@ -41,4 +41,28 @@ export const APP_DEFINITIONS: AppDefinition[] = [
     icon: "Mail",
     component: lazy(() => import("@/components/apps/contact/ContactApp")),
   },
+  {
+    id: "terminal",
+    titleKey: "apps.terminal.title",
+    icon: "Terminal",
+    component: lazy(
+      () => import("@/components/apps/terminal/TerminalApp"),
+    ),
+  },
+  {
+    id: "projects",
+    titleKey: "apps.projects.title",
+    icon: "FolderGit2",
+    component: lazy(
+      () => import("@/components/apps/projects/ProjectsApp"),
+    ),
+  },
+  {
+    id: "settings",
+    titleKey: "apps.settings.title",
+    icon: "Settings",
+    component: lazy(
+      () => import("@/components/apps/settings/SettingsApp"),
+    ),
+  },
 ];

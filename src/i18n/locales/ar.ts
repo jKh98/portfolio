@@ -130,6 +130,95 @@ const ar = {
       copy: "نسخ",
       open: "فتح",
     },
+    terminal: {
+      title: "الطرفية",
+    },
+    projects: {
+      title: "المشاريع",
+      noResults: "لا توجد مشاريع تطابق هذا الفلتر.",
+      demo: "عرض",
+      items: {
+        portfolioV3: {
+          name: "الملف الشخصي v3",
+          description:
+            "ملف شخصي بأسلوب macOS مع خلفية ثلاثية الأبعاد ونوافذ قابلة للسحب ومحاكي طرفية.",
+        },
+        dgaPlatform: {
+          name: "منصة هيئة الحكومة الرقمية",
+          description:
+            "منصة استراتيجية لتصنيف موردي تكنولوجيا المعلومات وإدارة طلبات الشراء.",
+        },
+        fintechApp: {
+          name: "تطبيق تقنيات مالية",
+          description:
+            "تطبيق بنكي متنقل مع KYC/KYB ودمج بوابات الدفع والتحويلات الفورية.",
+        },
+        testingPlatform: {
+          name: "منصة اختبار شاملة",
+          description:
+            "إطار اختبار شامل من البداية إلى النهاية باستخدام WebDriverIO و Cucumber BDD.",
+        },
+        investmentCalc: {
+          name: "حاسبة الاستثمار",
+          description:
+            "نموذج أولي تفاعلي لحاسبة تكلفة الاستثمار مع تصور البيانات لـ SBC السعودية.",
+        },
+      },
+    },
+    settings: {
+      title: "الإعدادات",
+      sections: {
+        appearance: "المظهر",
+        dock: "شريط التطبيقات",
+        windows: "النوافذ",
+        language: "اللغة",
+        accessibility: "إمكانية الوصول",
+      },
+      appearance: {
+        theme: "المظهر",
+        dark: "داكن",
+        light: "فاتح",
+        accentColor: "لون التمييز",
+        colors: {
+          cyan: "سماوي",
+          purple: "بنفسجي",
+          green: "أخضر",
+          amber: "كهرماني",
+          rose: "وردي",
+        },
+      },
+      dock: {
+        magnification: "التكبير",
+        iconSize: "حجم الأيقونة",
+        sizes: {
+          small: "صغير",
+          medium: "متوسط",
+          large: "كبير",
+        },
+      },
+      windows: {
+        animationSpeed: "سرعة الرسوم المتحركة",
+        autoCascade: "ترتيب تلقائي",
+        speeds: {
+          normal: "عادي",
+          fast: "سريع",
+          off: "إيقاف",
+        },
+      },
+      language: {
+        directionNote: "تغيير اللغة سيغير أيضاً اتجاه النص (يمين لليسار / يسار لليمين).",
+      },
+      accessibility: {
+        reduceMotion: "تقليل الحركة",
+        reduceMotionDesc: "تجاوز تفضيل النظام لتقليل الرسوم المتحركة.",
+        fontSize: "حجم الخط",
+        fontSizes: {
+          small: "صغير",
+          normal: "عادي",
+          large: "كبير",
+        },
+      },
+    },
   },
   common: {
     close: "إغلاق",
