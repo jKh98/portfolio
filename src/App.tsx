@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDirection } from "@/i18n/useDirection";
+import { Desktop } from "@/components/desktop";
 
 export function App() {
   const { i18n } = useTranslation();
@@ -16,7 +17,7 @@ export function App() {
       className="h-full w-full"
       style={{ backgroundColor: "var(--bg-primary)" }}
     >
-      {/* Desktop shell will be rendered here in Session 2 */}
+      <Desktop />
     </div>
   );
 }
