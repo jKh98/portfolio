@@ -14,7 +14,7 @@ function TimezoneIndicator() {
   const [time, setTime] = useState(() => formatBeirutTime());
 
   useEffect(() => {
-    const id = setInterval(() => setTime(formatBeirutTime()), 60_000);
+    const id = setInterval(() => setTime(formatBeirutTime()), 1_000);
     return () => clearInterval(id);
   }, []);
 
@@ -29,6 +29,7 @@ function formatBeirutTime(): string {
   return new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
     minute: "2-digit",
+    second: "2-digit",
     timeZone: "Asia/Beirut",
   }).format(new Date());
 }
