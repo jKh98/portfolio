@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useMemo, useRef, useState } from "react";
 import { useMotionValue } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
@@ -150,7 +150,7 @@ export function Dock() {
         onMouseLeave={handleMouseLeave}
         className={cn(
           "fixed bottom-3 left-1/2 -translate-x-1/2 z-50",
-          "flex items-end px-3 py-2",
+          "flex items-center px-3 py-2",
           "rounded-2xl backdrop-blur-md border",
           "bg-[var(--bg-glass)] border-[var(--border)]",
           "shadow-[var(--shadow-lg)]",
@@ -158,11 +158,11 @@ export function Dock() {
         )}
       >
         {visibleApps.map((app, index) => (
-          <span key={app.id} className="flex items-end">
+          <Fragment key={app.id}>
             {/* Divider between primary and utility apps */}
             {index === DOCK_DIVIDER_INDEX && !isMobile && (
               <span
-                className="mx-1 self-stretch w-px bg-[var(--border)] opacity-60"
+                className="mx-1 my-1.5 w-px self-stretch bg-[var(--border)] opacity-60"
                 aria-hidden="true"
               />
             )}
@@ -185,7 +185,7 @@ export function Dock() {
               onPointerUp={isDesktop ? handleLongPressEnd : undefined}
               onPointerLeave={isDesktop ? handleLongPressEnd : undefined}
             />
-          </span>
+          </Fragment>
         ))}
       </nav>
 
