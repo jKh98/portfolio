@@ -26,6 +26,7 @@ export interface AppDefinition {
 /** Actions dispatched to the window reducer */
 export type WindowAction =
   | { type: "OPEN"; id: AppId }
+  | { type: "OPEN_EXCLUSIVE"; id: AppId }
   | { type: "CLOSE"; id: AppId }
   | { type: "MINIMIZE"; id: AppId }
   | { type: "RESTORE"; id: AppId }

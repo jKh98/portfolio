@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 export interface WindowHeaderProps {
   title: string;
   onClose: () => void;
-  onMinimize: () => void;
+  onMinimize?: () => void;
   dragControls?: DragControls;
   className?: string;
 }
@@ -50,20 +50,22 @@ export function WindowHeader({
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
           )}
         />
-        <button
-          type="button"
-          aria-label={t("common.minimize")}
-          onClick={(e) => {
-            e.stopPropagation();
-            onMinimize();
-          }}
-          className={cn(
-            "w-3 h-3 rounded-full",
-            "bg-[#febc2e] hover:bg-[#f5a623]",
-            "transition-colors duration-150",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
-          )}
-        />
+        {onMinimize && (
+          <button
+            type="button"
+            aria-label={t("common.minimize")}
+            onClick={(e) => {
+              e.stopPropagation();
+              onMinimize();
+            }}
+            className={cn(
+              "w-3 h-3 rounded-full",
+              "bg-[#febc2e] hover:bg-[#f5a623]",
+              "transition-colors duration-150",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
+            )}
+          />
+        )}
         {/* Green button - disabled/decorative */}
         <div
           className="w-3 h-3 rounded-full bg-[#28c840] opacity-50"
@@ -82,7 +84,10 @@ export function WindowHeader({
       </span>
 
       {/* Spacer to balance the traffic lights */}
-      <div className="w-[52px]" aria-hidden="true" />
+      <div
+        className={cn(onMinimize ? "w-[52px]" : "w-[36px]")}
+        aria-hidden="true"
+      />
     </div>
   );
 }

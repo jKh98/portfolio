@@ -11,8 +11,8 @@
 :root {
   --bg-primary: #f8fafc;
   --bg-surface: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.7);
-  --bg-glass-hover: rgba(255, 255, 255, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.75);
+  --bg-glass-hover: rgba(255, 255, 255, 0.88);
   --accent: #06b6d4;
   --accent-hover: #22d3ee;
   --accent-glow: rgba(6, 182, 212, 0.25);
@@ -34,8 +34,8 @@
 :root.dark {
   --bg-primary: #0a0e1a;
   --bg-surface: #111827;
-  --bg-glass: rgba(17, 24, 39, 0.7);
-  --bg-glass-hover: rgba(17, 24, 39, 0.85);
+  --bg-glass: rgba(17, 24, 39, 0.75);
+  --bg-glass-hover: rgba(17, 24, 39, 0.88);
   --accent: #06b6d4;
   --accent-hover: #22d3ee;
   --accent-glow: rgba(6, 182, 212, 0.25);
@@ -73,7 +73,7 @@ body {
   color: var(--text-primary);
   overflow: hidden;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   transition:
     background-color 300ms ease,
     color 300ms ease;
@@ -85,6 +85,14 @@ body {
 }
 
 /* ===== Scrollbar Styling ===== */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-tertiary) transparent;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -106,4 +114,16 @@ body {
 ::selection {
   background-color: var(--accent-glow);
   color: var(--text-primary);
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

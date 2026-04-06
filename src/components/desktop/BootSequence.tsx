@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useReducedMotion } from "@/hooks";
+import { useReducedMotion, useIsMobile } from "@/hooks";
 import { useWindowManager } from "@/context";
 
 const BOOT_TEXT = "> jalkhurfan.com";
@@ -15,9 +15,11 @@ type BootPhase = "black" | "typing" | "dots" | "fadeout" | "done";
  * Full-screen boot overlay with typing animation.
  * Checks sessionStorage to skip on subsequent loads.
  * Respects prefers-reduced-motion.
+ * On mobile: shortened boot (skip typing, just fade in and auto-open profile).
  */
 export function BootSequence() {
   const reducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const { openWindow } = useWindowManager();
   const [phase, setPhase] = useState<BootPhase>(() => {
     if (sessionStorage.getItem("booted")) return "done";
@@ -37,14 +39,31 @@ export function BootSequence() {
     }
   }, [reducedMotion, phase, openWindow]);
 
-  // Phase state machine
+  // Mobile: shortened boot - skip typing, just show text briefly and fade out
+  useEffect(() => {
+    if (phase === "done" || reducedMotion || !isMobile) return;
+    if (phase === "black") return; // Let the black phase timer handle transition
+
+    // On mobile, skip typing effect - go straight to fadeout
+    if (phase === "typing") {
+      setDisplayedText(BOOT_TEXT);
+      const timer = setTimeout(() => setPhase("fadeout"), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, isMobile, reducedMotion]);
+
+  // Phase state machine (desktop full typing flow)
   useEffect(() => {
     if (phase === "done") return;
+    if (isMobile && phase !== "black" && phase !== "fadeout") return;
 
     let timer: ReturnType<typeof setTimeout>;
 
     if (phase === "black") {
-      timer = setTimeout(() => setPhase("typing"), PHASE_DELAY_BLACK);
+      timer = setTimeout(
+        () => setPhase(isMobile ? "typing" : "typing"),
+        PHASE_DELAY_BLACK,
+      );
     } else if (phase === "dots") {
       timer = setTimeout(() => setPhase("fadeout"), PHASE_DELAY_DOTS);
     } else if (phase === "fadeout") {
@@ -56,11 +75,11 @@ export function BootSequence() {
     }
 
     return () => clearTimeout(timer);
-  }, [phase, openWindow]);
+  }, [phase, openWindow, isMobile]);
 
-  // Typing effect
+  // Typing effect (desktop only)
   useEffect(() => {
-    if (phase !== "typing") return;
+    if (phase !== "typing" || isMobile) return;
 
     let charIndex = 0;
     setDisplayedText("");
@@ -75,7 +94,7 @@ export function BootSequence() {
     }, TYPING_CHAR_DELAY);
 
     return () => clearInterval(interval);
-  }, [phase]);
+  }, [phase, isMobile]);
 
   if (phase === "done") return null;
 
@@ -99,12 +118,12 @@ export function BootSequence() {
               {displayedText}
             </motion.span>
 
-            {/* Blinking cursor during typing */}
-            {phase === "typing" && (
+            {/* Blinking cursor during typing (desktop only) */}
+            {phase === "typing" && !isMobile && (
               <span className="animate-pulse text-cyan-400">_</span>
             )}
 
-            {/* Loading dots */}
+            {/* Loading dots (desktop only) */}
             {phase === "dots" && (
               <span className="flex gap-1">
                 {[0, 1, 2].map((i) => (

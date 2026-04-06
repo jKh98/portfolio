@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Sun, Moon, Languages } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/context";
+import { useIsMobile } from "@/hooks";
 import { IconButton } from "@/components/ui";
 
 export function TopBar() {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
+  const isMobile = useIsMobile();
   const [time, setTime] = useState(() => formatTime());
 
   useEffect(() => {
@@ -24,23 +26,35 @@ export function TopBar() {
     <header
       className={cn(
         "fixed top-0 inset-x-0 z-50 h-8",
-        "flex items-center justify-between px-4",
+        "flex items-center justify-between",
         "backdrop-blur-md border-b",
         "bg-[var(--bg-glass)] border-[var(--border)]",
         "text-xs select-none",
+        isMobile ? "px-2" : "px-4",
       )}
     >
-      {/* Left: Owner name */}
-      <span className="font-semibold text-[var(--text-primary)] truncate">
+      {/* Start: Owner name */}
+      <span
+        className={cn(
+          "font-semibold text-[var(--text-primary)] truncate",
+          isMobile && "text-[10px] max-w-[120px]",
+        )}
+      >
         {t("topbar.name")}
       </span>
 
-      {/* Center: Clock */}
-      <span className="absolute left-1/2 -translate-x-1/2 text-[var(--text-secondary)] font-mono">
+      {/* Center: Clock (hidden on very small screens) */}
+      <span
+        className={cn(
+          "absolute left-1/2 -translate-x-1/2",
+          "text-[var(--text-secondary)] font-mono",
+          isMobile && "text-[10px]",
+        )}
+      >
         {time}
       </span>
 
-      {/* Right: Theme + Language toggles */}
+      {/* End: Theme + Language toggles */}
       <div className="flex items-center gap-1">
         <IconButton
           label={t("topbar.switchTheme")}

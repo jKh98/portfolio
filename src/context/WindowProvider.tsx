@@ -1,4 +1,11 @@
-import { createContext, useCallback, useContext, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useReducer,
+  useRef,
+  useEffect,
+} from "react";
 import type {
   AppId,
   WindowAction,
@@ -53,6 +60,27 @@ function windowReducer(
       return {
         windows,
         windowOrder: newOrder,
+        nextZIndex: state.nextZIndex + 1,
+      };
+    }
+
+    case "OPEN_EXCLUSIVE": {
+      // Close all other windows, then open just this one (mobile mode)
+      const { id } = action;
+      const windows = {} as Record<AppId, WindowState>;
+      for (const appId of ALL_APP_IDS) {
+        windows[appId] = {
+          ...state.windows[appId],
+          isOpen: appId === id,
+          isMinimized: false,
+          isFocused: appId === id,
+          zIndex: appId === id ? state.nextZIndex : 0,
+          position: undefined,
+        };
+      }
+      return {
+        windows,
+        windowOrder: [id],
         nextZIndex: state.nextZIndex + 1,
       };
     }
@@ -162,6 +190,8 @@ export interface WindowProviderProps {
   children: React.ReactNode;
 }
 
+const MOBILE_BREAKPOINT = 768;
+
 export function WindowProvider({ children }: WindowProviderProps) {
   const [state, dispatch] = useReducer(
     windowReducer,
@@ -169,10 +199,27 @@ export function WindowProvider({ children }: WindowProviderProps) {
     createInitialState,
   );
 
-  const openWindow = useCallback(
-    (id: AppId) => dispatch({ type: "OPEN", id }),
-    [],
+  // Track mobile state via ref to avoid re-renders
+  const isMobileRef = useRef(
+    typeof window !== "undefined" && window.innerWidth < MOBILE_BREAKPOINT,
   );
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const handler = (e: MediaQueryListEvent) => {
+      isMobileRef.current = e.matches;
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const openWindow = useCallback((id: AppId) => {
+    if (isMobileRef.current) {
+      dispatch({ type: "OPEN_EXCLUSIVE", id });
+    } else {
+      dispatch({ type: "OPEN", id });
+    }
+  }, []);
   const closeWindow = useCallback(
     (id: AppId) => dispatch({ type: "CLOSE", id }),
     [],

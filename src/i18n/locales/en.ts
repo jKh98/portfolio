@@ -7,6 +7,7 @@ const en = {
   apps: {
     profile: {
       title: "Profile",
+      role: "Senior Fullstack Engineer",
       summary:
         "Senior Fullstack Engineer with 6+ years of experience building scalable web and mobile solutions. Specializing in React, TypeScript, Node.js, and cloud infrastructure across fintech, logistics, and government digital transformation projects in MENA, Europe, and the US.",
       stats: {
@@ -107,6 +108,7 @@ const en = {
     present: "Present",
     copied: "Copied!",
     openLink: "Open link",
+    skipToMain: "Skip to main content",
   },
 };
 

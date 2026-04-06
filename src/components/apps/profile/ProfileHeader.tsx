@@ -22,6 +22,9 @@ export function ProfileHeader({ className }: ProfileHeaderProps) {
         <img
           src="/assets/images/profile.jpeg"
           alt={t("topbar.name")}
+          loading="lazy"
+          width={112}
+          height={112}
           className={cn(
             "relative w-28 h-28 rounded-full object-cover",
             "ring-2 ring-[var(--accent)] ring-offset-2",
@@ -34,7 +37,7 @@ export function ProfileHeader({ className }: ProfileHeaderProps) {
           {t("topbar.name")}
         </h2>
         <p className="text-sm text-[var(--accent)] font-medium">
-          Senior Fullstack Engineer
+          {t("apps.profile.role")}
         </p>
         <p className="text-sm text-[var(--text-secondary)] max-w-md leading-relaxed">
           {t("apps.profile.summary")}

@@ -22,9 +22,14 @@ export interface DockIconProps {
   onClick: () => void;
   mouseX: ReturnType<typeof useMotionValue<number>>;
   index: number;
+  /** Compact mode for mobile - smaller icons */
+  compact?: boolean;
+  /** Disable magnification on hover (mobile/tablet) */
+  disableMagnification?: boolean;
 }
 
 const BASE_SIZE = 48;
+const COMPACT_SIZE = 36;
 const MAX_SIZE = 68;
 
 export function DockIcon({
@@ -35,9 +40,12 @@ export function DockIcon({
   onClick,
   mouseX,
   index,
+  compact = false,
+  disableMagnification = false,
 }: DockIconProps) {
   const reducedMotion = useReducedMotion();
   const IconComponent = ICON_MAP[icon];
+  const currentBase = compact ? COMPACT_SIZE : BASE_SIZE;
 
   const ref = useCallback(
     (node: HTMLButtonElement | null) => {
@@ -50,7 +58,7 @@ export function DockIcon({
 
   // Calculate distance-based magnification
   const distance = useTransform(mouseX, (val: number) => {
-    if (val === -1 || reducedMotion) return 200; // far away = no magnification
+    if (val === -1 || reducedMotion || disableMagnification) return 200;
     const rect = document.querySelector(`[data-dock-icon="${appId}"]`);
     if (!rect) return 200;
     const bounds = (rect as HTMLElement).getBoundingClientRect();
@@ -59,11 +67,19 @@ export function DockIcon({
   });
 
   const size = useSpring(
-    useTransform(distance, [0, 100, 200], [MAX_SIZE, BASE_SIZE + 4, BASE_SIZE]),
+    useTransform(
+      distance,
+      disableMagnification ? [0, 200] : [0, 100, 200],
+      disableMagnification
+        ? [currentBase, currentBase]
+        : [MAX_SIZE, currentBase + 4, currentBase],
+    ),
     { stiffness: 300, damping: 25 },
   );
 
   if (!IconComponent) return null;
+
+  const iconSize = compact ? 18 : 22;
 
   return (
     <Tooltip content={label}>
@@ -90,7 +106,7 @@ export function DockIcon({
           "cursor-pointer",
         )}
       >
-        <IconComponent size={22} />
+        <IconComponent size={iconSize} />
         {/* Active indicator dot */}
         {isActive && (
           <motion.span
