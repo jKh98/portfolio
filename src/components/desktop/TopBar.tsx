@@ -19,7 +19,7 @@ export function TopBar({ onSpotlightOpen }: TopBarProps) {
   const [time, setTime] = useState(() => formatTime());
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(formatTime()), 60_000);
+    const interval = setInterval(() => setTime(formatTime()), 1_000);
     return () => clearInterval(interval);
   }, []);
 
@@ -88,5 +88,5 @@ export function TopBar({ onSpotlightOpen }: TopBarProps) {
 
 function formatTime(): string {
   const now = new Date();
-  return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
