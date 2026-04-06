@@ -1,6 +1,13 @@
 import { Suspense, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import {
+  X,
+  Minus,
+  Maximize2,
+  ArrowUpToLine,
+  ArrowDownToLine,
+} from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useWindowManager } from "@/context";
 import {
@@ -8,12 +15,14 @@ import {
   useIsMobile,
   useIsTablet,
   useFocusTrap,
+  useContextMenu,
 } from "@/hooks";
 import { ANIMATION, APP_DEFINITIONS } from "@/constants";
 import { WindowHeader } from "./WindowHeader";
 import { WindowContent } from "./WindowContent";
 import { ResizeHandle } from "./ResizeHandle";
-import { SkeletonLoader } from "@/components/ui";
+import { SkeletonLoader, ContextMenu } from "@/components/ui";
+import type { ContextMenuItem } from "@/components/ui";
 import type { AppId } from "@/types";
 
 /** TopBar height in pixels */
@@ -41,6 +50,7 @@ export function Window({ appId }: WindowProps) {
   const isTablet = useIsTablet();
   const dragControls = useDragControls();
   const windowRef = useRef<HTMLDivElement>(null);
+  const headerContextMenu = useContextMenu();
 
   const windowState = windows[appId];
   const appDef = APP_DEFINITIONS.find((app) => app.id === appId);
@@ -89,6 +99,63 @@ export function Window({ appId }: WindowProps) {
       bottom: vh * 0.6,
     };
   }, [isDesktop, isMaximized, windowState.size]);
+
+  const windowContextMenuItems: ContextMenuItem[] = useMemo(
+    () => [
+      {
+        label: t("common.close"),
+        icon: <X size={14} />,
+        onClick: () => closeWindow(appId),
+      },
+      ...(isMobile
+        ? []
+        : [
+            {
+              label: t("common.minimize"),
+              icon: <Minus size={14} />,
+              onClick: () => minimizeWindow(appId),
+            },
+          ]),
+      ...(isDesktop
+        ? [
+            {
+              label: isMaximized ? t("common.restore") : t("common.maximize"),
+              icon: <Maximize2 size={14} />,
+              onClick: () => toggleMaximize(appId),
+              divider: true,
+            },
+            {
+              label: t("contextMenu.bringToFront"),
+              icon: <ArrowUpToLine size={14} />,
+              onClick: () => focusWindow(appId),
+            },
+            {
+              label: t("contextMenu.sendToBack"),
+              icon: <ArrowDownToLine size={14} />,
+              onClick: () =>
+                dispatch({
+                  type: "UPDATE_POSITION",
+                  id: appId,
+                  position: windowState.position ?? { x: 0, y: 0 },
+                }),
+            },
+          ]
+        : []),
+    ],
+    [
+      t,
+      appId,
+      isMobile,
+      isDesktop,
+      isMaximized,
+      closeWindow,
+      minimizeWindow,
+      toggleMaximize,
+      focusWindow,
+      dispatch,
+      windowState.position,
+    ],
+  );
 
   if (!appDef) return null;
 
@@ -187,6 +254,7 @@ export function Window({ appId }: WindowProps) {
             onMaximize={isDesktop ? handleMaximize : undefined}
             isMaximized={isMaximized}
             dragControls={isDraggable ? dragControls : undefined}
+            onContextMenu={isDesktop ? headerContextMenu.open : undefined}
           />
           <WindowContent>
             <Suspense fallback={<SkeletonLoader lines={5} />}>
@@ -200,6 +268,15 @@ export function Window({ appId }: WindowProps) {
               onResize={handleResize}
               minWidth={400}
               minHeight={300}
+            />
+          )}
+          {/* Window title bar context menu */}
+          {headerContextMenu.isOpen && (
+            <ContextMenu
+              items={windowContextMenuItems}
+              x={headerContextMenu.x}
+              y={headerContextMenu.y}
+              onClose={headerContextMenu.close}
             />
           )}
         </motion.div>

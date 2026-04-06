@@ -1,13 +1,25 @@
+import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
+import { useReducedMotion } from "@/hooks";
+import { ANIMATION } from "@/constants";
 
 export interface SkillBadgeProps {
   name: string;
+  index?: number;
   className?: string;
 }
 
-export function SkillBadge({ name, className }: SkillBadgeProps) {
+export function SkillBadge({ name, index = 0, className }: SkillBadgeProps) {
+  const reduced = useReducedMotion();
+
   return (
-    <span
+    <motion.span
+      initial={reduced ? false : { opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: reduced ? 0 : ANIMATION.duration.fast,
+        delay: reduced ? 0 : index * 0.03,
+      }}
       className={cn(
         "inline-flex items-center rounded-lg px-3 py-1.5",
         "text-xs font-medium",
@@ -21,6 +33,6 @@ export function SkillBadge({ name, className }: SkillBadgeProps) {
       )}
     >
       {name}
-    </span>
+    </motion.span>
   );
 }

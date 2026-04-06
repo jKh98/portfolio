@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import type { DragControls } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Maximize2, Minimize2 } from "lucide-react";
+import { Maximize2, Minimize2, X, Minus } from "lucide-react";
 import { cn } from "@/utils/cn";
 
 export interface WindowHeaderProps {
@@ -11,6 +11,7 @@ export interface WindowHeaderProps {
   onMaximize?: () => void;
   isMaximized?: boolean;
   dragControls?: DragControls;
+  onContextMenu?: (e: React.MouseEvent) => void;
   className?: string;
 }
 
@@ -21,6 +22,7 @@ export function WindowHeader({
   onMaximize,
   isMaximized = false,
   dragControls,
+  onContextMenu,
   className,
 }: WindowHeaderProps) {
   const { t } = useTranslation();
@@ -49,6 +51,10 @@ export function WindowHeader({
         if ((e.target as HTMLElement).closest("button")) return;
         handleDoubleClick();
       }}
+      onContextMenu={(e) => {
+        if ((e.target as HTMLElement).closest("button")) return;
+        onContextMenu?.(e);
+      }}
     >
       {/* Traffic light buttons */}
       <div
@@ -67,9 +73,15 @@ export function WindowHeader({
             "w-3 h-3 rounded-full",
             "bg-[#ff5f57] hover:bg-[#ff3b30]",
             "transition-colors duration-150",
+            "cursor-pointer",
+            "flex items-center justify-center",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
           )}
-        />
+        >
+          {isHoveringTrafficLights && (
+            <X className="w-2 h-2 text-black/80" strokeWidth={3} />
+          )}
+        </button>
         {onMinimize && (
           <button
             type="button"
@@ -82,9 +94,15 @@ export function WindowHeader({
               "w-3 h-3 rounded-full",
               "bg-[#febc2e] hover:bg-[#f5a623]",
               "transition-colors duration-150",
+              "cursor-pointer",
+              "flex items-center justify-center",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
             )}
-          />
+          >
+            {isHoveringTrafficLights && (
+              <Minus className="w-2 h-2 text-black/80" strokeWidth={3} />
+            )}
+          </button>
         )}
         {onMaximize ? (
           <button
@@ -100,6 +118,7 @@ export function WindowHeader({
               "w-3 h-3 rounded-full",
               "bg-[#28c840] hover:bg-[#1aab29]",
               "transition-colors duration-150",
+              "cursor-pointer",
               "flex items-center justify-center",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
             )}

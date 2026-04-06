@@ -1,5 +1,8 @@
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
+import { useReducedMotion } from "@/hooks";
+import { ANIMATION } from "@/constants";
 
 export interface ProfileHeaderProps {
   className?: string;
@@ -7,9 +10,13 @@ export interface ProfileHeaderProps {
 
 export function ProfileHeader({ className }: ProfileHeaderProps) {
   const { t } = useTranslation();
+  const reduced = useReducedMotion();
 
   return (
-    <div
+    <motion.div
+      initial={reduced ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduced ? 0 : ANIMATION.duration.normal }}
       className={cn("flex flex-col items-center text-center gap-4", className)}
     >
       <div className="relative">
@@ -19,12 +26,16 @@ export function ProfileHeader({ className }: ProfileHeaderProps) {
             "bg-[var(--accent)] opacity-20 blur-md",
           )}
         />
-        <img
+        <motion.img
           src="/assets/images/profile.jpeg"
           alt={t("topbar.name")}
           loading="lazy"
           width={112}
           height={112}
+          animate={reduced ? {} : { scale: [1, 1.03, 1] }}
+          transition={
+            reduced ? {} : { duration: 4, repeat: Infinity, ease: "easeInOut" }
+          }
           className={cn(
             "relative w-28 h-28 rounded-full object-cover",
             "ring-2 ring-[var(--accent)] ring-offset-2",
@@ -43,6 +54,6 @@ export function ProfileHeader({ className }: ProfileHeaderProps) {
           {t("apps.profile.summary")}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }

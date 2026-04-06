@@ -78,6 +78,9 @@ const en = {
     },
     skills: {
       title: "Skills",
+      searchPlaceholder: "Search skills…",
+      noResults: "No skills match your search.",
+      skillCount: "{{count}} technologies",
       categories: {
         frontend: "Frontend Development",
         backend: "Backend Development",
@@ -94,6 +97,7 @@ const en = {
         "Available for new opportunities and interesting projects. Based in Beirut, Lebanon.",
       copyFeedback: "Copied!",
       location: "Beirut, Lebanon",
+      timezone: "Currently {{time}} in Beirut",
       email: "Email",
       phone: "Phone",
       linkedin: "LinkedIn",
@@ -111,6 +115,15 @@ const en = {
     copied: "Copied!",
     openLink: "Open link",
     skipToMain: "Skip to main content",
+    all: "All",
+    expandAll: "Expand All",
+    collapseAll: "Collapse All",
+  },
+  contextMenu: {
+    aboutPortfolio: "About This Portfolio",
+    bringToFront: "Bring to Front",
+    sendToBack: "Send to Back",
+    open: "Open",
   },
 };
 

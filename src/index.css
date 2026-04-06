@@ -116,6 +116,28 @@ body {
   color: var(--text-primary);
 }
 
+/* ===== Scroll Shadow ===== */
+.scroll-shadow {
+  background:
+    /* Shadow at top */
+    linear-gradient(var(--bg-glass) 33%, transparent) center top,
+    /* Shadow cover at bottom */
+    linear-gradient(transparent, var(--bg-glass) 66%) center bottom,
+    /* Top shadow */
+    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), transparent)
+      center top,
+    /* Bottom shadow */
+    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), transparent)
+      center bottom;
+  background-repeat: no-repeat;
+  background-size:
+    100% 12px,
+    100% 12px,
+    100% 6px,
+    100% 6px;
+  background-attachment: local, local, scroll, scroll;
+}
+
 /* ===== Reduced Motion ===== */
 @media (prefers-reduced-motion: reduce) {
   *,

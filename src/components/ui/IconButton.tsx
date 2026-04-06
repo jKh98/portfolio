@@ -26,6 +26,7 @@ export function IconButton({
         "hover:bg-[var(--bg-glass-hover)] hover:text-[var(--text-primary)]",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
         "active:scale-95",
+        "cursor-pointer",
         size === "sm" && "h-7 w-7",
         size === "md" && "h-9 w-9",
         className,

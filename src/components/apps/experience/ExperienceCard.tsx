@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -10,16 +9,17 @@ import type { Experience } from "@/types";
 
 export interface ExperienceCardProps {
   experience: Experience;
-  isFirst?: boolean;
+  expanded: boolean;
+  onToggle: () => void;
 }
 
 export function ExperienceCard({
   experience,
-  isFirst = false,
+  expanded,
+  onToggle,
 }: ExperienceCardProps) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
-  const [expanded, setExpanded] = useState(isFirst);
 
   const isCurrent = !experience.endDate;
   const position = t(`apps.experience.${experience.id}.position`);
@@ -28,11 +28,11 @@ export function ExperienceCard({
   }) as string[];
 
   return (
-    <GlassCard className="p-4">
+    <GlassCard className="p-4 cursor-pointer" hoverable>
       <button
         type="button"
-        className="w-full text-start"
-        onClick={() => setExpanded((prev) => !prev)}
+        className="w-full text-start cursor-pointer"
+        onClick={onToggle}
         aria-expanded={expanded}
       >
         <div className="flex items-start justify-between gap-2">
@@ -42,7 +42,7 @@ export function ExperienceCard({
                 {experience.company}
               </h3>
               {isCurrent && (
-                <Badge variant="accent" className="text-[10px]">
+                <Badge variant="accent" className="text-[10px] animate-pulse">
                   {t("common.present")}
                 </Badge>
               )}
@@ -89,8 +89,18 @@ export function ExperienceCard({
             </ul>
             {experience.tags && experience.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-3">
-                {experience.tags.map((tag) => (
-                  <Badge key={tag}>{tag}</Badge>
+                {experience.tags.map((tag, idx) => (
+                  <motion.span
+                    key={tag}
+                    initial={reduced ? false : { opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: reduced ? 0 : ANIMATION.duration.fast,
+                      delay: reduced ? 0 : idx * 0.03,
+                    }}
+                  >
+                    <Badge>{tag}</Badge>
+                  </motion.span>
                 ))}
               </div>
             )}

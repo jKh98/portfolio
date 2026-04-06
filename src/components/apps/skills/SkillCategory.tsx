@@ -17,8 +17,8 @@ export function SkillCategory({ category, className }: SkillCategoryProps) {
         {t(`apps.skills.categories.${category.nameKey}`)}
       </h3>
       <div className="flex flex-wrap gap-2">
-        {category.skills.map((skill) => (
-          <SkillBadge key={skill} name={skill} />
+        {category.skills.map((skill, idx) => (
+          <SkillBadge key={skill} name={skill} index={idx} />
         ))}
       </div>
     </div>

@@ -1,12 +1,20 @@
-import { EXPERIENCE } from "@/data";
 import { cn } from "@/utils/cn";
 import { ExperienceCard } from "./ExperienceCard";
+import type { Experience } from "@/types";
 
 export interface ExperienceTimelineProps {
+  experiences: Experience[];
+  expandedIds: Set<string>;
+  onToggleExpand: (id: string) => void;
   className?: string;
 }
 
-export function ExperienceTimeline({ className }: ExperienceTimelineProps) {
+export function ExperienceTimeline({
+  experiences,
+  expandedIds,
+  onToggleExpand,
+  className,
+}: ExperienceTimelineProps) {
   return (
     <div className={cn("relative", className)}>
       {/* Vertical timeline line */}
@@ -19,7 +27,7 @@ export function ExperienceTimeline({ className }: ExperienceTimelineProps) {
       />
 
       <div className="space-y-4">
-        {EXPERIENCE.map((exp, idx) => (
+        {experiences.map((exp) => (
           <div key={exp.id} className="relative flex items-start gap-4">
             {/* Timeline dot */}
             <div
@@ -33,7 +41,11 @@ export function ExperienceTimeline({ className }: ExperienceTimelineProps) {
               aria-hidden="true"
             />
             <div className="flex-1 min-w-0">
-              <ExperienceCard experience={exp} isFirst={idx === 0} />
+              <ExperienceCard
+                experience={exp}
+                expanded={expandedIds.has(exp.id)}
+                onToggle={() => onToggleExpand(exp.id)}
+              />
             </div>
           </div>
         ))}

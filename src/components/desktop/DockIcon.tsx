@@ -26,6 +26,10 @@ export interface DockIconProps {
   compact?: boolean;
   /** Disable magnification on hover (mobile/tablet) */
   disableMagnification?: boolean;
+  /** Long press pointer event handlers (desktop only) */
+  onPointerDown?: (e: React.PointerEvent) => void;
+  onPointerUp?: () => void;
+  onPointerLeave?: () => void;
 }
 
 const BASE_SIZE = 48;
@@ -42,6 +46,9 @@ export function DockIcon({
   index,
   compact = false,
   disableMagnification = false,
+  onPointerDown,
+  onPointerUp,
+  onPointerLeave,
 }: DockIconProps) {
   const reducedMotion = useReducedMotion();
   const IconComponent = ICON_MAP[icon];
@@ -92,6 +99,9 @@ export function DockIcon({
         aria-pressed={isActive}
         tabIndex={0}
         onClick={onClick}
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerLeave}
         style={{ width: size, height: size }}
         whileTap={reducedMotion ? undefined : { scale: 0.9 }}
         transition={ANIMATION.spring.snappy}

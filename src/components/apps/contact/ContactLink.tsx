@@ -41,8 +41,24 @@ export function ContactLink({ link, className }: ContactLinkProps) {
   };
 
   return (
-    <GlassCard hoverable className={cn("p-3", className)}>
-      <div className="flex items-center gap-3">
+    <GlassCard
+      hoverable
+      className={cn(
+        "p-3",
+        copied && "border-green-400/60 shadow-[0_0_8px_rgba(74,222,128,0.2)]",
+        className,
+      )}
+    >
+      <button
+        type="button"
+        onClick={handleAction}
+        aria-label={
+          link.copyable
+            ? `${t("apps.contact.copy")} ${link.platform}`
+            : `${t("apps.contact.open")} ${link.platform}`
+        }
+        className="flex items-center gap-3 w-full text-start cursor-pointer"
+      >
         <div className="text-[var(--accent)] shrink-0">
           {Icon && <Icon size={18} />}
         </div>
@@ -52,21 +68,13 @@ export function ContactLink({ link, className }: ContactLinkProps) {
             {link.displayValue}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={handleAction}
-          aria-label={
-            link.copyable
-              ? `${t("apps.contact.copy")} ${link.platform}`
-              : `${t("apps.contact.open")} ${link.platform}`
-          }
+        <span
           className={cn(
             "shrink-0 p-2 rounded-lg",
             "text-[var(--text-secondary)]",
-            "hover:text-[var(--accent)] hover:bg-[var(--bg-glass-hover)]",
             "transition-all duration-200",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
           )}
+          aria-hidden="true"
         >
           {link.copyable ? (
             copied ? (
@@ -77,8 +85,8 @@ export function ContactLink({ link, className }: ContactLinkProps) {
           ) : (
             <ExternalLink size={16} />
           )}
-        </button>
-      </div>
+        </span>
+      </button>
       {copied && link.copyable && (
         <p className="text-xs text-green-400 mt-1 ps-9">
           {t("apps.contact.copyFeedback")}

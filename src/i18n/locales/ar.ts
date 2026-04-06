@@ -78,6 +78,9 @@ const ar = {
     },
     skills: {
       title: "المهارات",
+      searchPlaceholder: "ابحث عن مهارة…",
+      noResults: "لا توجد مهارات تطابق بحثك.",
+      skillCount: "{{count}} تقنية",
       categories: {
         frontend: "تطوير الواجهة الأمامية",
         backend: "تطوير الخلفية",
@@ -93,6 +96,7 @@ const ar = {
       availability: "متاح لفرص جديدة ومشاريع مثيرة. مقيم في بيروت، لبنان.",
       copyFeedback: "تم النسخ!",
       location: "بيروت، لبنان",
+      timezone: "الوقت الآن {{time}} في بيروت",
       email: "البريد الإلكتروني",
       phone: "الهاتف",
       linkedin: "لينكد إن",
@@ -110,6 +114,15 @@ const ar = {
     copied: "تم النسخ!",
     openLink: "فتح الرابط",
     skipToMain: "تخطي إلى المحتوى الرئيسي",
+    all: "الكل",
+    expandAll: "توسيع الكل",
+    collapseAll: "طي الكل",
+  },
+  contextMenu: {
+    aboutPortfolio: "حول هذا الملف",
+    bringToFront: "إحضار للأمام",
+    sendToBack: "إرسال للخلف",
+    open: "فتح",
   },
 };
 
