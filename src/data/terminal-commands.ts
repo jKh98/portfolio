@@ -9,7 +9,10 @@ export interface CommandResult {
     | { type: "clear" };
 }
 
-export type CommandHandler = (args: string[], ctx: CommandContext) => CommandResult;
+export type CommandHandler = (
+  args: string[],
+  ctx: CommandContext,
+) => CommandResult;
 
 /** Shared mutable state across commands */
 export interface CommandContext {
@@ -64,13 +67,31 @@ const VIRTUAL_FS: FsNode = {
     Apps: {
       type: "dir",
       children: {
-        "profile.app": { type: "file", content: ["Profile application bundle"] },
-        "experience.app": { type: "file", content: ["Experience application bundle"] },
+        "profile.app": {
+          type: "file",
+          content: ["Profile application bundle"],
+        },
+        "experience.app": {
+          type: "file",
+          content: ["Experience application bundle"],
+        },
         "skills.app": { type: "file", content: ["Skills application bundle"] },
-        "contact.app": { type: "file", content: ["Contact application bundle"] },
-        "terminal.app": { type: "file", content: ["Terminal application bundle"] },
-        "projects.app": { type: "file", content: ["Projects application bundle"] },
-        "settings.app": { type: "file", content: ["Settings application bundle"] },
+        "contact.app": {
+          type: "file",
+          content: ["Contact application bundle"],
+        },
+        "terminal.app": {
+          type: "file",
+          content: ["Terminal application bundle"],
+        },
+        "projects.app": {
+          type: "file",
+          content: ["Projects application bundle"],
+        },
+        "settings.app": {
+          type: "file",
+          content: ["Settings application bundle"],
+        },
       },
     },
     Documents: {
@@ -131,14 +152,14 @@ const VIRTUAL_FS: FsNode = {
             "package.json": {
               type: "file",
               content: [
-                '{',
+                "{",
                 '  "name": "portfolio-v3",',
                 '  "version": "3.0.0",',
                 '  "scripts": {',
                 '    "dev": "vite",',
                 '    "build": "tsc -b && vite build"',
-                '  }',
-                '}',
+                "  }",
+                "}",
               ],
             },
             src: { type: "dir", children: {} },
@@ -256,7 +277,8 @@ function getNode(path: string): FsNode | null {
 /** Get completions for a partial path */
 export function getPathCompletions(partial: string): string[] {
   const lastSlash = partial.lastIndexOf("/");
-  const dirPath = lastSlash === -1 ? cwd : resolvePath(partial.slice(0, lastSlash) || ".");
+  const dirPath =
+    lastSlash === -1 ? cwd : resolvePath(partial.slice(0, lastSlash) || ".");
   const prefix = lastSlash === -1 ? partial : partial.slice(lastSlash + 1);
 
   const dir = getNode(dirPath === cwd ? "." : dirPath);
@@ -265,7 +287,8 @@ export function getPathCompletions(partial: string): string[] {
   return Object.entries(dir.children)
     .filter(([name]) => name.toLowerCase().startsWith(prefix.toLowerCase()))
     .map(([name, node]) => {
-      const base = lastSlash === -1 ? name : partial.slice(0, lastSlash + 1) + name;
+      const base =
+        lastSlash === -1 ? name : partial.slice(0, lastSlash + 1) + name;
       return node.type === "dir" ? base + "/" : base;
     });
 }
@@ -275,11 +298,11 @@ export function getPathCompletions(partial: string): string[] {
 // ---------------------------------------------------------------------------
 
 const ASCII_BANNER = [
-  "       _ _   _               _      _    _  _    _                 __",
-  "      | (_) | |_   __ _   __| |    / \\  | || |  | | ___   _  _ _ _/ _|__ _ _ _",
+  "       _ _   _                _      _    _  _    _                 __",
+  "      | (_) | |_    __ _   __| |    / \\  | || |  | | ___   _  _ _ _/ _|__ _ _ _",
   "   _  | | | | ' \\ / _` | / _` |   / _ \\ | || |_ | |/ / | | | | '_|  _/ _` | ' \\",
   "  | |_| | | | | | | (_| || (_| |  / ___ \\| |__  _|   <| |_| | |_| | | (_| | | | |",
-  "   \\___/|_| |_| |_|\\__,_| \\__,_| /_/   \\_\\_|  |_||_|\\_\\\\__,_|_| |_|  \\__,_|_| |_|",
+  "   \\__/|_| |_| |_|\\_,_| \\_,_| /_/   \\_\\_|  |_||_|\\_\\\\__,_|_| |_|  \\__,_|_| |_|",
   "",
   "  Senior Fullstack Engineer | React, TypeScript, Node.js",
   "  Type 'help' to get started.",
@@ -491,7 +514,8 @@ function themeCommand(args: string[]): CommandResult {
 // ---- Filesystem commands ----
 
 function pwdCommand(): CommandResult {
-  const display = cwd === "~" ? "/home/visitor" : cwd.replace("~", "/home/visitor");
+  const display =
+    cwd === "~" ? "/home/visitor" : cwd.replace("~", "/home/visitor");
   return { output: [display] };
 }
 
@@ -517,14 +541,18 @@ function cdCommand(args: string[]): CommandResult {
 }
 
 function lsCommand(args: string[]): CommandResult {
-  const showAll = args.includes("-a") || args.includes("-la") || args.includes("-al");
-  const showLong = args.includes("-l") || args.includes("-la") || args.includes("-al");
+  const showAll =
+    args.includes("-a") || args.includes("-la") || args.includes("-al");
+  const showLong =
+    args.includes("-l") || args.includes("-la") || args.includes("-al");
   const pathArg = args.find((a) => !a.startsWith("-")) || ".";
   const resolved = pathArg === "." ? cwd : resolvePath(pathArg);
   const node = getNode(resolved);
 
   if (!node) {
-    return { output: [`ls: cannot access '${pathArg}': No such file or directory`] };
+    return {
+      output: [`ls: cannot access '${pathArg}': No such file or directory`],
+    };
   }
   if (node.type === "file") {
     return { output: [pathArg] };
@@ -547,7 +575,11 @@ function lsCommand(args: string[]): CommandResult {
     const lines = all.map(([name, n]) => {
       const isDir = n.type === "dir";
       const perms = isDir ? "drwxr-xr-x" : "-rw-r--r--";
-      const size = n.content ? n.content.join("\n").length.toString().padStart(5) : isDir ? "  4096" : "     0";
+      const size = n.content
+        ? n.content.join("\n").length.toString().padStart(5)
+        : isDir
+          ? "  4096"
+          : "     0";
       return `${perms}  1 visitor  staff  ${size}  ${name}${isDir ? "/" : ""}`;
     });
     return { output: lines };
@@ -638,7 +670,12 @@ function findCommand(args: string[]): CommandResult {
   }
 
   walk(VIRTUAL_FS, "~");
-  return { output: results.length > 0 ? results : [`No files matching '${args.join(" ")}' found.`] };
+  return {
+    output:
+      results.length > 0
+        ? results
+        : [`No files matching '${args.join(" ")}' found.`],
+  };
 }
 
 function grepCommand(args: string[]): CommandResult {
@@ -787,7 +824,10 @@ function rmCommand(): CommandResult {
 
 function pingCommand(args: string[]): CommandResult {
   const host = args[0] || "google.com";
-  const ip = host === "google.com" ? "142.250.80.46" : `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+  const ip =
+    host === "google.com"
+      ? "142.250.80.46"
+      : `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
   return {
     output: [
       `PING ${host} (${ip}): 56 data bytes`,
@@ -834,8 +874,7 @@ function curlCommand(args: string[]): CommandResult {
 }
 
 function matrixCommand(): CommandResult {
-  const chars =
-    "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:.\"=*+-<>";
+  const chars = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ012345789Z:."=*+-<>';
   const lines: string[] = [];
   for (let i = 0; i < 8; i++) {
     let line = "";
@@ -898,7 +937,9 @@ function exitCommand(): CommandResult {
 function manCommand(args: string[]): CommandResult {
   const cmd = args[0]?.toLowerCase();
   if (!cmd) {
-    return { output: ["What manual page do you want?", "Usage: man <command>"] };
+    return {
+      output: ["What manual page do you want?", "Usage: man <command>"],
+    };
   }
 
   const manPages: Record<string, string[]> = {
@@ -1012,8 +1053,10 @@ function headCommand(args: string[]): CommandResult {
   const resolved = resolvePath(filePath);
   const node = getNode(resolved);
 
-  if (!node) return { output: [`head: ${filePath}: No such file or directory`] };
-  if (node.type === "dir") return { output: [`head: ${filePath}: Is a directory`] };
+  if (!node)
+    return { output: [`head: ${filePath}: No such file or directory`] };
+  if (node.type === "dir")
+    return { output: [`head: ${filePath}: Is a directory`] };
 
   return { output: (node.content ?? []).slice(0, n) };
 }
@@ -1039,8 +1082,10 @@ function tailCommand(args: string[]): CommandResult {
   const resolved = resolvePath(filePath);
   const node = getNode(resolved);
 
-  if (!node) return { output: [`tail: ${filePath}: No such file or directory`] };
-  if (node.type === "dir") return { output: [`tail: ${filePath}: Is a directory`] };
+  if (!node)
+    return { output: [`tail: ${filePath}: No such file or directory`] };
+  if (node.type === "dir")
+    return { output: [`tail: ${filePath}: Is a directory`] };
 
   const content = node.content ?? [];
   return { output: content.slice(-n) };
@@ -1056,15 +1101,21 @@ function wcCommand(args: string[]): CommandResult {
   const node = getNode(resolved);
 
   if (!node) return { output: [`wc: ${filePath}: No such file or directory`] };
-  if (node.type === "dir") return { output: [`wc: ${filePath}: Is a directory`] };
+  if (node.type === "dir")
+    return { output: [`wc: ${filePath}: Is a directory`] };
 
   const content = node.content ?? [];
   const lines = content.length;
-  const words = content.reduce((sum, line) => sum + line.split(/\s+/).filter(Boolean).length, 0);
+  const words = content.reduce(
+    (sum, line) => sum + line.split(/\s+/).filter(Boolean).length,
+    0,
+  );
   const chars = content.reduce((sum, line) => sum + line.length + 1, 0);
 
   return {
-    output: [`  ${lines.toString().padStart(5)}  ${words.toString().padStart(5)}  ${chars.toString().padStart(5)} ${filePath}`],
+    output: [
+      `  ${lines.toString().padStart(5)}  ${words.toString().padStart(5)}  ${chars.toString().padStart(5)} ${filePath}`,
+    ],
   };
 }
 
@@ -1134,8 +1185,10 @@ export function executeCommand(
   const lower = trimmed.toLowerCase();
   if (lower === "sudo hire me") return sudoHireCommand();
   if (lower.startsWith("rm ")) return rmCommand();
-  if (lower.startsWith("ping")) return pingCommand(trimmed.split(/\s+/).slice(1));
-  if (lower.startsWith("curl")) return curlCommand(trimmed.split(/\s+/).slice(1));
+  if (lower.startsWith("ping"))
+    return pingCommand(trimmed.split(/\s+/).slice(1));
+  if (lower.startsWith("curl"))
+    return curlCommand(trimmed.split(/\s+/).slice(1));
 
   const [cmd, ...args] = trimmed.split(/\s+/);
   const handler = COMMAND_REGISTRY[cmd.toLowerCase()];

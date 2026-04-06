@@ -101,14 +101,14 @@ export function TerminalApp() {
   return (
     <div
       className={cn(
-        "flex flex-col h-full",
+        "flex flex-col flex-1 min-h-0 overflow-hidden",
         "bg-[#0d1117] text-[#c9d1d9]",
         "font-mono",
         fontSize === "sm" ? "text-xs" : "text-sm",
       )}
     >
       <TerminalToolbar onClear={handleClear} onToggleFontSize={toggleFontSize} />
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 scroll-shadow">
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto p-3 scroll-shadow">
         <TerminalOutput lines={lines} />
       </div>
       <TerminalInput
