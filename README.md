@@ -16,7 +16,33 @@ A personal portfolio website built as an interactive **macOS-inspired desktop en
 - [Scripts](#scripts)
 - [Deployment](#deployment)
 - [Architecture](#architecture)
+- [Built with AI](#built-with-ai)
 - [License](#license)
+
+---
+
+## Built with AI
+
+This project was built in a single day using [OpenCode](https://opencode.ai) with GitHub Copilot (Claude Opus). I'm fully transparent about that -- and it's part of the point.
+
+My previous portfolio was an outdated single-page scroller. I had a vision for something far more ambitious: a fully interactive macOS-inspired desktop environment. Rather than spend weeks hand-writing every line, I wrote a detailed [technical spec](SPEC.md), broke the build into [8 orchestrated sessions](SESSIONS.md), and used AI as my execution partner.
+
+**What I did:**
+
+- Conceived the entire concept and design direction
+- Wrote a 1,400-line technical specification covering architecture, features, and implementation details
+- Orchestrated the build across 8 focused sessions, each with clear goals
+- Made every product, UX, and design decision
+- Caught bugs, directed fixes, and pushed for polish
+- Curated all content (experience, projects, skills, copy)
+
+**What AI did:**
+
+- Wrote the code under my direction
+- Implemented the architecture I specified
+- Generated boilerplate and wiring I would have written manually given more time
+
+**The takeaway:** AI doesn't replace vision, taste, or judgment. It accelerates execution. A clear spec and deliberate orchestration are the difference between getting mediocre output and shipping something you're proud of.
 
 ---
 
@@ -216,6 +242,10 @@ All sound effects are synthesized at runtime using the Web Audio API (oscillator
 
 ---
 
-## License
+## A Note on Usage
 
-This is a personal project. All rights reserved.
+This project reflects my personal portfolio.
+
+If you’re inspired by it, I’d encourage you to build your own version rather than replicate it directly.
+
+The code is shared for learning and inspiration purposes but is not intended for direct reuse without significant modification. The architecture, patterns, and techniques can be adapted, but the specific content (experience, projects, skills) is unique to my background.
