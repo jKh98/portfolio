@@ -91,6 +91,29 @@ export function FinderApp() {
     [currentPath, navigateTo, handleFileAction, playSound],
   );
 
+  /** Navigate up to the parent directory */
+  const goUp = useCallback(() => {
+    if (currentPath === "~") return;
+    const parentPath = currentPath.includes("/")
+      ? currentPath.slice(0, currentPath.lastIndexOf("/")) || "~"
+      : "~";
+    navigateTo(parentPath);
+  }, [currentPath, navigateTo]);
+
+  /** App-level keyboard shortcuts (Alt+Arrow for history navigation) */
+  const handleAppKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.altKey && e.key === "ArrowLeft") {
+        e.preventDefault();
+        goBack();
+      } else if (e.altKey && e.key === "ArrowRight") {
+        e.preventDefault();
+        goForward();
+      }
+    },
+    [goBack, goForward],
+  );
+
   const handleBreadcrumbClick = useCallback(
     (index: number) => {
       if (index === 0) {
@@ -104,7 +127,7 @@ export function FinderApp() {
   );
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col" onKeyDown={handleAppKeyDown}>
       {/* Toolbar with breadcrumbs + nav */}
       <WindowToolbar>
         <button
@@ -179,6 +202,7 @@ export function FinderApp() {
           selectedFile={selectedFile}
           onSelect={setSelectedFile}
           onDoubleClick={handleDoubleClick}
+          onGoBack={goUp}
           isMobile={isMobile}
         />
       </div>

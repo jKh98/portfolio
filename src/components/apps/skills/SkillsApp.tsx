@@ -136,7 +136,7 @@ export function SkillsApp() {
       </WindowToolbar>
       <div
         className={cn(
-          "h-full overflow-y-auto p-4 space-y-6",
+          "h-full overflow-y-auto p-4 pb-16 md:pb-4 space-y-6",
           "scrollbar-thin scroll-shadow",
         )}
       >

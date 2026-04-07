@@ -95,7 +95,7 @@ export function SettingsApp() {
       </nav>
 
       {/* Section content with transition */}
-      <div className="flex-1 overflow-y-auto p-4 scroll-shadow">
+      <div className="flex-1 overflow-y-auto p-4 pb-16 md:pb-4 scroll-shadow">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSection}

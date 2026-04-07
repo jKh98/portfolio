@@ -20,7 +20,7 @@ export function ProfileApp() {
   return (
     <div
       className={cn(
-        "h-full overflow-y-auto",
+        "h-full overflow-y-auto pb-12 md:pb-0",
         "scrollbar-thin scroll-shadow",
       )}
     >

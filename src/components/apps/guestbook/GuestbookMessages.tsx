@@ -49,7 +49,7 @@ export function GuestbookMessages({ entries, loading }: GuestbookMessagesProps) 
   }
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2 scroll-shadow">
+    <div className="flex-1 overflow-y-auto px-4 py-3 pb-14 md:pb-3 space-y-2 scroll-shadow">
       <AnimatePresence initial={!reduced}>
         {entries.map((entry, i) => (
           <motion.div

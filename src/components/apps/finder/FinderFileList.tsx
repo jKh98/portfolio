@@ -1,3 +1,4 @@
+import { useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import {
@@ -18,6 +19,7 @@ export interface FinderFileListProps {
   selectedFile: string | null;
   onSelect: (name: string | null) => void;
   onDoubleClick: (node: FileNode) => void;
+  onGoBack?: () => void;
   isMobile?: boolean;
 }
 
@@ -46,13 +48,92 @@ export function FinderFileList({
   selectedFile,
   onSelect,
   onDoubleClick,
+  onGoBack,
   isMobile = false,
 }: FinderFileListProps) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
   const children = node.children ?? [];
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const gridCols = isMobile ? "grid-cols-[1fr]" : "grid-cols-[1fr_80px_100px]";
+
+  const selectedIndex = selectedFile
+    ? children.findIndex((c) => c.name === selectedFile)
+    : -1;
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (children.length === 0) return;
+
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          const next =
+            selectedIndex < children.length - 1 ? selectedIndex + 1 : 0;
+          onSelect(children[next].name);
+          // Scroll the row into view
+          const row = containerRef.current?.querySelector(
+            `[data-index="${next}"]`,
+          );
+          row?.scrollIntoView({ block: "nearest" });
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          const prev =
+            selectedIndex > 0 ? selectedIndex - 1 : children.length - 1;
+          onSelect(children[prev].name);
+          const row = containerRef.current?.querySelector(
+            `[data-index="${prev}"]`,
+          );
+          row?.scrollIntoView({ block: "nearest" });
+          break;
+        }
+        case "Enter": {
+          e.preventDefault();
+          if (selectedIndex >= 0) {
+            onDoubleClick(children[selectedIndex]);
+          }
+          break;
+        }
+        case "Escape": {
+          e.preventDefault();
+          onSelect(null);
+          break;
+        }
+        case "Backspace": {
+          e.preventDefault();
+          onGoBack?.();
+          break;
+        }
+        case "Home": {
+          e.preventDefault();
+          if (children.length > 0) {
+            onSelect(children[0].name);
+            const row = containerRef.current?.querySelector(
+              `[data-index="0"]`,
+            );
+            row?.scrollIntoView({ block: "nearest" });
+          }
+          break;
+        }
+        case "End": {
+          e.preventDefault();
+          if (children.length > 0) {
+            const last = children.length - 1;
+            onSelect(children[last].name);
+            const row = containerRef.current?.querySelector(
+              `[data-index="${last}"]`,
+            );
+            row?.scrollIntoView({ block: "nearest" });
+          }
+          break;
+        }
+      }
+    },
+    [children, selectedIndex, onSelect, onDoubleClick, onGoBack],
+  );
 
   if (children.length === 0) {
     return (
@@ -62,8 +143,19 @@ export function FinderFileList({
     );
   }
 
+  const activeDescendant =
+    selectedIndex >= 0 ? `finder-row-${selectedIndex}` : undefined;
+
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div
+      ref={containerRef}
+      role="listbox"
+      tabIndex={0}
+      aria-label={t("apps.finder.name")}
+      aria-activedescendant={activeDescendant}
+      onKeyDown={handleKeyDown}
+      className="flex-1 overflow-y-auto pb-12 md:pb-0 outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-inset rounded-sm"
+    >
       {/* Header row */}
       <div
         className={cn(
@@ -73,6 +165,7 @@ export function FinderFileList({
           "text-[var(--text-tertiary)] border-b border-[var(--border)]",
           "sticky top-0 bg-[var(--bg-glass-inner)] backdrop-blur-sm z-10",
         )}
+        aria-hidden="true"
       >
         <span>{t("apps.finder.name")}</span>
         {!isMobile && <span>{t("apps.finder.kind")}</span>}
@@ -85,9 +178,12 @@ export function FinderFileList({
         const isSelected = selectedFile === child.name;
 
         return (
-          <motion.button
+          <motion.div
             key={child.name}
-            type="button"
+            id={`finder-row-${i}`}
+            data-index={i}
+            role="option"
+            aria-selected={isSelected}
             initial={reduced ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
@@ -126,7 +222,7 @@ export function FinderFileList({
                 {formatDate(child.modified)}
               </span>
             )}
-          </motion.button>
+          </motion.div>
         );
       })}
     </div>

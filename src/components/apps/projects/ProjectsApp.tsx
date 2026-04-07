@@ -29,7 +29,7 @@ export function ProjectsApp() {
       />
       <div
         className={cn(
-          "flex-1 overflow-y-auto p-4 scroll-shadow",
+          "flex-1 overflow-y-auto p-4 pb-16 md:pb-4 scroll-shadow",
           "grid gap-4",
           isMobile ? "grid-cols-1" : "grid-cols-2",
         )}
