@@ -3,6 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src 'self' https://www.google.com https://www.gstatic.com https://www.recaptcha.net;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data:;
+        connect-src 'self'
+          https://*.googleapis.com
+          https://*.firebaseio.com
+          https://*.cloudfunctions.net
+          https://firestore.googleapis.com
+          https://www.google-analytics.com
+          https://analyticsdata.googleapis.com
+          https://www.recaptcha.net
+          https://recaptchaenterprise.googleapis.com;
+        frame-src https://www.google.com https://www.recaptcha.net;
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+      "
+    />
     <title>Jihad Al-Khurfan | Senior Software Engineer</title>
     <meta
       name="description"

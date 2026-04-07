@@ -9,7 +9,7 @@ import { ANIMATION } from "@/constants";
 const MAX_CHARS = 500;
 
 export interface NotepadInputProps {
-  onSubmit: (name: string, message: string) => void;
+  onSubmit: (name: string, message: string, honeypot: string) => void;
   disabled: boolean;
 }
 
@@ -18,14 +18,17 @@ export function NotepadInput({ onSubmit, disabled }: NotepadInputProps) {
   const reduced = useReducedMotion();
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  // Honeypot: invisible field that bots will fill in, humans won't see
+  const [website, setWebsite] = useState("");
 
   const canSubmit = message.trim().length > 0 && !disabled;
 
   const handleSubmit = () => {
     if (!canSubmit) return;
-    onSubmit(name, message);
+    onSubmit(name, message, website);
     setName("");
     setMessage("");
+    setWebsite("");
   };
 
   return (
@@ -54,6 +57,26 @@ export function NotepadInput({ onSubmit, disabled }: NotepadInputProps) {
           "transition-colors",
         )}
       />
+
+      {/* Honeypot field — hidden from humans, attractive to bots */}
+      <input
+        type="text"
+        name="website"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          width: "1px",
+          height: "1px",
+          overflow: "hidden",
+          opacity: 0,
+        }}
+      />
+
       <textarea
         placeholder={
           disabled

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
 import {
@@ -15,6 +15,9 @@ export type { GuestbookEntry };
 
 const RATE_LIMIT_KEY = "portfolio-guestbook-submitted";
 
+/** Minimum time (ms) the form must be open before submission is accepted. */
+const MIN_SUBMIT_DELAY_MS = 3_000;
+
 export function NotepadApp() {
   const { t } = useTranslation();
   const { playSound } = useAudio();
@@ -24,6 +27,9 @@ export function NotepadApp() {
   const [hasSubmitted, setHasSubmitted] = useState(
     () => sessionStorage.getItem(RATE_LIMIT_KEY) === "true",
   );
+
+  // Track when the component mounted for timing-based bot detection
+  const mountedAt = useRef(Date.now());
 
   // Subscribe to real-time Firestore updates
   useEffect(() => {
@@ -44,8 +50,23 @@ export function NotepadApp() {
   }, [t]);
 
   const handleSubmit = useCallback(
-    async (name: string, message: string) => {
+    async (name: string, message: string, honeypot: string) => {
       if (hasSubmitted) return;
+
+      // Honeypot check: if the hidden field has a value, silently reject
+      if (honeypot) {
+        // Pretend it worked so the bot doesn't retry
+        setHasSubmitted(true);
+        sessionStorage.setItem(RATE_LIMIT_KEY, "true");
+        return;
+      }
+
+      // Timing check: reject submissions that happen too fast (bot behavior)
+      if (Date.now() - mountedAt.current < MIN_SUBMIT_DELAY_MS) {
+        setHasSubmitted(true);
+        sessionStorage.setItem(RATE_LIMIT_KEY, "true");
+        return;
+      }
 
       const trimmedName = name.trim() || t("apps.notepad.anonymous");
       const trimmedMessage = message.trim();

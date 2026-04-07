@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics, isSupported } from "firebase/analytics";
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+} from "firebase/app-check";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,6 +18,23 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+
+// App Check — protects Firebase resources from abuse.
+// Requires a reCAPTCHA Enterprise site key set in VITE_RECAPTCHA_SITE_KEY.
+// In development, set VITE_APPCHECK_DEBUG=true to use the debug provider.
+const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+if (recaptchaSiteKey) {
+  // Enable debug token in development so App Check doesn't block local requests
+  if (import.meta.env.DEV && import.meta.env.VITE_APPCHECK_DEBUG === "true") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+  }
+
+  initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
+    isTokenAutoRefreshEnabled: true,
+  });
+}
 
 // Analytics initializes only in browsers that support it (not SSR, not blocked)
 export const analyticsPromise = isSupported().then((supported) =>
