@@ -69,7 +69,7 @@ export function ContactLink({ link, className }: ContactLinkProps) {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs text-[var(--text-tertiary)]">{link.platform}</p>
-          <p className="text-sm text-[var(--text-primary)] truncate">
+          <p className="text-sm text-[var(--text-primary)] truncate" dir="ltr">
             {link.displayValue}
           </p>
         </div>
