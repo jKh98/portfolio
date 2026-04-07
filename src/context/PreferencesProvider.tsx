@@ -14,11 +14,20 @@ import type {
   DockIconSize,
   AudioCategory,
 } from "@/types";
-import { applyAccentColor, DEFAULT_WALLPAPER_ID } from "@/constants";
+import { applyAccentColor, DEFAULT_WALLPAPER_BY_THEME } from "@/constants";
 import { DEFAULT_AUDIO_PREFERENCES } from "@/constants/audio";
 import { trackEvent, setUserProps } from "@/lib/analytics";
 
 const STORAGE_KEY = "portfolio-preferences";
+
+/** Detect OS color scheme to pick a matching default wallpaper */
+function getDefaultWallpaper(): string {
+  if (typeof window === "undefined") return DEFAULT_WALLPAPER_BY_THEME.dark;
+  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+  return prefersLight
+    ? DEFAULT_WALLPAPER_BY_THEME.light
+    : DEFAULT_WALLPAPER_BY_THEME.dark;
+}
 
 const DEFAULT_PREFERENCES: Preferences = {
   accentColor: "indigo",
@@ -28,7 +37,7 @@ const DEFAULT_PREFERENCES: Preferences = {
   autoCascade: true,
   reduceMotion: null,
   fontSize: "normal",
-  wallpaper: DEFAULT_WALLPAPER_ID,
+  wallpaper: getDefaultWallpaper(),
   audio: DEFAULT_AUDIO_PREFERENCES,
 };
 
