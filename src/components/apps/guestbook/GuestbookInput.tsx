@@ -8,12 +8,12 @@ import { ANIMATION } from "@/constants";
 
 const MAX_CHARS = 500;
 
-export interface NotepadInputProps {
+export interface GuestbookInputProps {
   onSubmit: (name: string, message: string, honeypot: string) => void;
   disabled: boolean;
 }
 
-export function NotepadInput({ onSubmit, disabled }: NotepadInputProps) {
+export function GuestbookInput({ onSubmit, disabled }: GuestbookInputProps) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
   const [name, setName] = useState("");
@@ -43,7 +43,7 @@ export function NotepadInput({ onSubmit, disabled }: NotepadInputProps) {
     >
       <input
         type="text"
-        placeholder={t("apps.notepad.namePlaceholder")}
+        placeholder={t("apps.guestbook.namePlaceholder")}
         value={name}
         onChange={(e) => setName(e.target.value)}
         disabled={disabled}
@@ -80,8 +80,8 @@ export function NotepadInput({ onSubmit, disabled }: NotepadInputProps) {
       <textarea
         placeholder={
           disabled
-            ? t("apps.notepad.alreadySubmitted")
-            : t("apps.notepad.messagePlaceholder")
+            ? t("apps.guestbook.alreadySubmitted")
+            : t("apps.guestbook.messagePlaceholder")
         }
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -115,7 +115,7 @@ export function NotepadInput({ onSubmit, disabled }: NotepadInputProps) {
           )}
         >
           <Send size={12} />
-          {t("apps.notepad.submit")}
+          {t("apps.guestbook.submit")}
         </motion.button>
       </div>
     </motion.div>

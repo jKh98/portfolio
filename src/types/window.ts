@@ -6,7 +6,7 @@ export type AppId =
   | "contact"
   | "terminal"
   | "projects"
-  | "notepad"
+  | "guestbook"
   | "settings"
   | "finder";
 

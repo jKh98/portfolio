@@ -22,7 +22,7 @@ const ALL_APP_IDS: AppId[] = [
   "contact",
   "terminal",
   "projects",
-  "notepad",
+  "guestbook",
   "settings",
   "finder",
 ];

@@ -13,7 +13,7 @@ import {
   Terminal,
   FolderGit2,
   Folder,
-  StickyNote,
+  MessageSquare,
   Settings,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -30,7 +30,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> = {
   Terminal,
   FolderGit2,
   Folder,
-  StickyNote,
+  MessageSquare,
   Settings,
 };
 

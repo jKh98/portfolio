@@ -58,7 +58,7 @@ const PRIMARY_APPS: AppDefinition[] = [
 
 /**
  * Utility apps (right side of dock divider).
- * Order: Terminal, Finder, Notepad, Settings
+   * Order: Terminal, Finder, Guestbook, Settings
  */
 const UTILITY_APPS: AppDefinition[] = [
   {
@@ -80,11 +80,11 @@ const UTILITY_APPS: AppDefinition[] = [
     mobileVisible: false,
   },
   {
-    id: "notepad",
-    titleKey: "apps.notepad.title",
-    icon: "StickyNote",
+    id: "guestbook",
+    titleKey: "apps.guestbook.title",
+    icon: "MessageSquare",
     component: lazy(
-      () => import("@/components/apps/notepad/NotepadApp"),
+      () => import("@/components/apps/guestbook/GuestbookApp"),
     ),
   },
   {

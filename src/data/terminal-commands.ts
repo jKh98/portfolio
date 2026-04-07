@@ -98,9 +98,9 @@ const VIRTUAL_FS: FsNode = {
           type: "file",
           content: ["Finder application bundle"],
         },
-        "notepad.app": {
+        "guestbook.app": {
           type: "file",
-          content: ["Notepad application bundle"],
+          content: ["Guestbook application bundle"],
         },
       },
     },
@@ -398,7 +398,7 @@ const VALID_APPS: AppId[] = [
   "projects",
   "settings",
   "finder",
-  "notepad",
+  "guestbook",
 ];
 
 // ---------------------------------------------------------------------------
@@ -1015,7 +1015,7 @@ function manCommand(args: string[]): CommandResult {
       "",
       "APPS",
       "     profile, experience, skills, contact,",
-      "     terminal, projects, settings, finder, notepad",
+      "     terminal, projects, settings, finder, guestbook",
     ],
   };
 

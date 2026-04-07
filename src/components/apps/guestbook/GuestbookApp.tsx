@@ -8,8 +8,8 @@ import {
 } from "@/lib/guestbook";
 import { trackEvent } from "@/lib/analytics";
 import { useAudio } from "@/hooks";
-import { NotepadInput } from "./NotepadInput";
-import { NotepadMessages } from "./NotepadMessages";
+import { GuestbookInput } from "./GuestbookInput";
+import { GuestbookMessages } from "./GuestbookMessages";
 
 export type { GuestbookEntry };
 
@@ -18,7 +18,7 @@ const RATE_LIMIT_KEY = "portfolio-guestbook-submitted";
 /** Minimum time (ms) the form must be open before submission is accepted. */
 const MIN_SUBMIT_DELAY_MS = 3_000;
 
-export function NotepadApp() {
+export function GuestbookApp() {
   const { t } = useTranslation();
   const { playSound } = useAudio();
   const [entries, setEntries] = useState<GuestbookEntry[]>([]);
@@ -41,7 +41,7 @@ export function NotepadApp() {
       },
       (err) => {
         console.error("Guestbook subscription error:", err);
-        setError(t("apps.notepad.loadError"));
+        setError(t("apps.guestbook.loadError"));
         setLoading(false);
       },
     );
@@ -68,7 +68,7 @@ export function NotepadApp() {
         return;
       }
 
-      const trimmedName = name.trim() || t("apps.notepad.anonymous");
+      const trimmedName = name.trim() || t("apps.guestbook.anonymous");
       const trimmedMessage = message.trim();
 
       try {
@@ -79,7 +79,7 @@ export function NotepadApp() {
         playSound("guestbookSubmit");
       } catch (err) {
         console.error("Failed to submit guestbook entry:", err);
-        setError(t("apps.notepad.submitError"));
+        setError(t("apps.guestbook.submitError"));
         playSound("error");
       }
     },
@@ -104,13 +104,13 @@ export function NotepadApp() {
 
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
         {/* Input area */}
-        <NotepadInput onSubmit={handleSubmit} disabled={hasSubmitted} />
+        <GuestbookInput onSubmit={handleSubmit} disabled={hasSubmitted} />
 
         {/* Messages list */}
-        <NotepadMessages entries={entries} loading={loading} />
+        <GuestbookMessages entries={entries} loading={loading} />
       </div>
     </div>
   );
 }
 
-export default NotepadApp;
+export default GuestbookApp;

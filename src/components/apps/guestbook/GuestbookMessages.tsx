@@ -4,9 +4,9 @@ import { MessageSquare, Loader2 } from "lucide-react";
 import { useReducedMotion } from "@/hooks";
 import { ANIMATION } from "@/constants";
 import { GlassCard } from "@/components/ui";
-import type { GuestbookEntry } from "./NotepadApp";
+import type { GuestbookEntry } from "./GuestbookApp";
 
-export interface NotepadMessagesProps {
+export interface GuestbookMessagesProps {
   entries: GuestbookEntry[];
   loading?: boolean;
 }
@@ -21,7 +21,7 @@ function formatTimestamp(iso: string): string {
   });
 }
 
-export function NotepadMessages({ entries, loading }: NotepadMessagesProps) {
+export function GuestbookMessages({ entries, loading }: GuestbookMessagesProps) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
 
@@ -29,7 +29,7 @@ export function NotepadMessages({ entries, loading }: NotepadMessagesProps) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center gap-2 text-[var(--text-tertiary)]">
         <Loader2 size={20} className="animate-spin" />
-        <p className="text-xs">{t("apps.notepad.loading")}</p>
+        <p className="text-xs">{t("apps.guestbook.loading")}</p>
       </div>
     );
   }
@@ -43,7 +43,7 @@ export function NotepadMessages({ entries, loading }: NotepadMessagesProps) {
         className="flex-1 flex flex-col items-center justify-center gap-2 text-[var(--text-tertiary)]"
       >
         <MessageSquare size={24} />
-        <p className="text-xs">{t("apps.notepad.noMessages")}</p>
+        <p className="text-xs">{t("apps.guestbook.noMessages")}</p>
       </motion.div>
     );
   }

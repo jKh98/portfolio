@@ -159,10 +159,11 @@ const en = {
         pdf: "PDF Document",
         txt: "Text File",
         link: "Link",
+        app: "Application",
       },
     },
-    notepad: {
-      title: "Notepad",
+    guestbook: {
+      title: "Guestbook",
       namePlaceholder: "Your name (optional)",
       messagePlaceholder: "Write a message…",
       alreadySubmitted: "You have already submitted a message this session.",
@@ -378,7 +379,7 @@ const en = {
     contact: "Click Copy to grab an email or link instantly. The local time in Beirut is shown at the bottom.",
     terminal: "Type 'help' to see available commands. Try 'about', 'skills', or 'projects'.",
     finder: "Browse downloadable files like the resume. Navigate folders from the sidebar.",
-    notepad: "Leave a public message \u2014 it's a guestbook! Your name is optional.",
+    guestbook: "Leave a public message \u2014 it's a guestbook! Your name is optional.",
     settings: "Customize the theme, accent color, wallpaper, dock size, and animation speed.",
   },
   welcome: {

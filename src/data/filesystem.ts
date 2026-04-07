@@ -11,7 +11,7 @@ export interface FileNode {
   /** Display name */
   name: string;
   /** "folder" or a file extension hint */
-  kind: "folder" | "pdf" | "txt" | "link";
+  kind: "folder" | "pdf" | "txt" | "link" | "app";
   /** ISO date for display */
   modified: string;
   /** Children (only for folders) */
@@ -26,6 +26,67 @@ export const FILE_TREE: FileNode = {
   kind: "folder",
   modified: "2025-06-01",
   children: [
+    {
+      name: "Applications",
+      kind: "folder",
+      modified: "2025-06-01",
+      children: [
+        {
+          name: "Profile.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "profile" },
+        },
+        {
+          name: "Experience.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "experience" },
+        },
+        {
+          name: "Skills.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "skills" },
+        },
+        {
+          name: "Projects.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "projects" },
+        },
+        {
+          name: "Contact.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "contact" },
+        },
+        {
+          name: "Terminal.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "terminal" },
+        },
+        {
+          name: "Finder.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "finder" },
+        },
+        {
+          name: "Guestbook.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "guestbook" },
+        },
+        {
+          name: "Settings.app",
+          kind: "app",
+          modified: "2025-06-01",
+          action: { type: "openApp", appId: "settings" },
+        },
+      ],
+    },
     {
       name: "Documents",
       kind: "folder",
@@ -55,7 +116,7 @@ export const FILE_TREE: FileNode = {
           modified: "2023-06-15",
           action: {
             type: "openUrl",
-            url: "https://learn.microsoft.com/en-us/users/jihadal-khurfan/credentials/46c61e916fb16642",
+            url: "https://learn.microsoft.com/en-us/users/jalkhurfan/credentials/46c61e916fb16642",
           },
         },
       ],

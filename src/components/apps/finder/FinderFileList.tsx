@@ -6,6 +6,7 @@ import {
   Folder,
   ExternalLink,
   Download,
+  AppWindow,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useReducedMotion } from "@/hooks";
@@ -28,6 +29,7 @@ const KIND_ICONS: Record<
   pdf: Download,
   txt: FileText,
   link: ExternalLink,
+  app: AppWindow,
 };
 
 function formatDate(iso: string): string {
