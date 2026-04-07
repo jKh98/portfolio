@@ -3,6 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src 'self' https://www.google.com https://www.gstatic.com https://www.recaptcha.net;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data:;
+        connect-src 'self'
+          https://*.googleapis.com
+          https://*.firebaseio.com
+          https://*.cloudfunctions.net
+          https://firestore.googleapis.com
+          https://www.google-analytics.com
+          https://analyticsdata.googleapis.com
+          https://www.recaptcha.net
+          https://recaptchaenterprise.googleapis.com;
+        frame-src https://www.google.com https://www.recaptcha.net;
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+      "
+    />
     <title>Jihad Al-Khurfan | Senior Software Engineer</title>
     <meta
       name="description"
@@ -33,12 +56,12 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="/assets/index-QaNR2upB.js"></script>
+    <script type="module" crossorigin src="/assets/index-DF7q60-K.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-i18n-Bhnqcje0.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-motion-CtgXy7pn.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-QrE1Bo9U.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-h2TMEXwI.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-I8_8rFWb.css">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-DayCbCui.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-XSvPOHn7.css">
   </head>
   <body>
     <div id="root"></div>
