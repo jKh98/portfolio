@@ -1,40 +1,47 @@
-import React, { useEffect } from "react";
-import { ConfigProvider } from "antd";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { HashRouter, Route, Switch } from "react-router-dom";
-import ReactGA from "react-ga";
-import "antd/dist/antd.css";
-import "./App.css";
+import { useDirection } from "@/i18n/useDirection";
+import { usePreferences } from "@/hooks";
+import { Desktop } from "@/components/desktop";
+import { getWallpaper } from "@/constants";
 
-import { Landing } from "&components/pages/landing/landing.component";
-import { gaKey } from "&config/meta";
-
-ReactGA.initialize(gaKey);
-
-function App() {
+export function App() {
   const { i18n } = useTranslation();
+  const direction = useDirection();
+  const { preferences } = usePreferences();
 
   useEffect(() => {
-    if (
-      navigator.userAgent.includes("Instagram") &&
-      !sessionStorage.getItem("didReloadForInAppBrowser")
-    ) {
-      sessionStorage.setItem("didReloadForInAppBrowser", "true");
-      window.location.reload();
-    }
+    document.documentElement.dir = direction;
+    document.documentElement.lang = i18n.language;
+  }, [direction, i18n.language]);
 
-    ReactGA.pageview(window.location.pathname);
-  }, [i18n.language]);
+  const wp = getWallpaper(preferences.wallpaper);
 
   return (
-    <ConfigProvider direction={i18n?.dir()}>
-      <HashRouter>
-        <Switch>
-          <Route exact path={"/"} component={Landing} />
-        </Switch>
-      </HashRouter>
-    </ConfigProvider>
+    <div className="relative h-full w-full">
+      {/* ── Wallpaper layer ─────────────────────────────── */}
+
+      {/* CSS-only wallpaper (minimal category) */}
+      {wp.css && (
+        <div
+          className="fixed inset-0 z-0"
+          style={{ background: wp.css }}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Image-based wallpaper */}
+      {wp.src && !wp.css && (
+        <div
+          className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${wp.src})` }}
+          aria-hidden="true"
+        />
+      )}
+
+      <div className="relative z-10 h-full w-full">
+        <Desktop />
+      </div>
+    </div>
   );
 }
-
-export default App;

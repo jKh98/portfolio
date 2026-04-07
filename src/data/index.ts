@@ -1,0 +1,12 @@
+export { EXPERIENCE, YEARS_OF_EXPERIENCE } from "./experience";
+export { EDUCATION } from "./education";
+export { SKILLS } from "./skills";
+export { CERTIFICATES } from "./certificates";
+export { buildSpotlightIndex } from "./spotlight-index";
+export type { SpotlightItem, SpotlightCategory } from "./spotlight-index";
+export { PROJECTS, getProjectTags } from "./projects";
+export type { Project } from "./projects";
+export { executeCommand, ASCII_BANNER, COMMAND_NAMES, getPathCompletions } from "./terminal-commands";
+export type { CommandResult, CommandHandler, CommandContext } from "./terminal-commands";
+export { FILE_TREE, resolveNode, pathSegments } from "./filesystem";
+export type { FileNode, FileAction } from "./filesystem";

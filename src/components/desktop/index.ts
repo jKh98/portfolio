@@ -1,0 +1,13 @@
+export { Desktop } from "./Desktop";
+export { TopBar } from "./TopBar";
+export { Dock } from "./Dock";
+export { DockIcon } from "./DockIcon";
+export { BootSequence } from "./BootSequence";
+export type { BootSequenceHandle } from "./BootSequence";
+export { BrandingMenu } from "./BrandingMenu";
+export { AppMenu } from "./AppMenu";
+export { Spotlight } from "./Spotlight";
+export { SpotlightResults } from "./SpotlightResults";
+export { ShortcutCheatSheet } from "./ShortcutCheatSheet";
+export { AppTips } from "./AppTips";
+export { WelcomeModal } from "./WelcomeModal";

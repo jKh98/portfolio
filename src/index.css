@@ -1,13 +1,308 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+@import "tailwindcss";
+
+/* ===== Font Families ===== */
+@theme {
+  --font-sans:
+    "Inter", "IBM Plex Sans Arabic", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ===== Light Theme (Default in :root) ===== */
+:root {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.72);
+  --bg-glass-hover: rgba(255, 255, 255, 0.82);
+  --bg-glass-inner: rgba(255, 255, 255, 0.55);
+  --accent: #06b6d4;
+  --accent-hover: #22d3ee;
+  --accent-glow: rgba(6, 182, 212, 0.2);
+  --accent-subtle: rgba(6, 182, 212, 0.08);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --border: rgba(0, 0, 0, 0.12);
+  --border-accent: rgba(6, 182, 212, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md:
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg:
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.12);
+  --shadow-topbar:
+    0 1px 0 rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+  --glass-text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+
+  /* Terminal (always dark) */
+  --terminal-bg: #0d1117;
+  --terminal-text: #c9d1d9;
+  --terminal-muted: #8b949e;
+  --terminal-border: #21262d;
+
+  color-scheme: light;
+}
+
+/* ===== Dark Theme ===== */
+:root.dark {
+  --bg-primary: #0a0e1a;
+  --bg-surface: #111827;
+  --bg-glass: rgba(15, 20, 35, 0.72);
+  --bg-glass-hover: rgba(20, 28, 50, 0.82);
+  --bg-glass-inner: rgba(15, 20, 35, 0.5);
+  --accent: #06b6d4;
+  --accent-hover: #22d3ee;
+  --accent-glow: rgba(6, 182, 212, 0.2);
+  --accent-subtle: rgba(6, 182, 212, 0.1);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-accent: rgba(6, 182, 212, 0.35);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md:
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 12px 40px rgba(0, 0, 0, 0.3);
+  --shadow-lg:
+    0 8px 16px rgba(0, 0, 0, 0.25),
+    0 20px 60px rgba(0, 0, 0, 0.35);
+  --shadow-topbar:
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  --glass-text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+
+  /* Terminal (always dark) */
+  --terminal-bg: #0d1117;
+  --terminal-text: #c9d1d9;
+  --terminal-muted: #8b949e;
+  --terminal-border: #21262d;
+
+  color-scheme: dark;
+}
+
+/* ===== Base Styles ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  width: 100vw;
+  height: 100dvh;
+  transition:
+    background-color 300ms ease,
+    color 300ms ease;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== Scrollbar Styling ===== */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-tertiary) transparent;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ===== Selection ===== */
+::selection {
+  background-color: var(--accent-glow);
+  color: var(--text-primary);
+}
+
+/* ===== Scroll Shadow ===== */
+/* Uses --scroll-bg which defaults to --bg-surface (opaque) and can be overridden locally.
+   Semi-transparent backgrounds like --bg-glass cause visible artifacts in scroll fades. */
+.scroll-shadow {
+  --scroll-bg: var(--bg-surface);
+  background:
+    /* Cover at top */
+    linear-gradient(var(--scroll-bg) 33%, transparent) center top,
+    /* Cover at bottom */
+    linear-gradient(transparent, var(--scroll-bg) 66%) center bottom,
+    /* Top shadow */
+    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), transparent)
+      center top,
+    /* Bottom shadow */
+    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), transparent)
+      center bottom;
+  background-repeat: no-repeat;
+  background-size:
+    100% 12px,
+    100% 12px,
+    100% 6px,
+    100% 6px;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== Liquid Glass Aesthetic ===== */
+
+/* Fine noise texture overlay for glass materiality */
+.glass-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  border-radius: inherit;
+  z-index: 0;
+  mix-blend-mode: overlay;
+}
+
+/* Multi-stop gradient overlay simulating light refraction through glass */
+.glass-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.06) 25%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.03) 100%
+    );
+  border-radius: inherit;
+  z-index: 0;
+}
+
+:root.dark .glass-gradient::after {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 25%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.06) 100%
+    );
+}
+
+/* Focused window: elevated with subtle accent ring + soft glow */
+.glass-focused {
+  box-shadow:
+    var(--shadow-lg),
+    0 0 24px -4px var(--accent-glow),
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.05) inset;
+  border-color: var(--border-accent);
+}
+
+:root.dark .glass-focused {
+  box-shadow:
+    var(--shadow-lg),
+    0 0 24px -4px var(--accent-glow),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+  border-color: var(--border-accent);
+}
+
+/* Unfocused window: recessed, desaturated
+   Note: opacity is controlled by framer-motion animate prop in Window.tsx
+   to avoid inline style conflicts. */
+.glass-unfocused {
+  backdrop-filter: blur(20px) saturate(1.2);
+}
+
+/* Top-edge inner highlight (bevel/refraction) */
+.glass-inner-highlight {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.15) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.04) inset;
+}
+
+:root.dark .glass-inner-highlight {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.07) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.12) inset;
+}
+
+/* Subtle text shadow to lift text off busy glass backgrounds */
+.glass-text-shadow {
+  text-shadow: var(--glass-text-shadow);
+}
+
+/* ===== Context Menu Animation ===== */
+@keyframes context-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.context-menu-enter {
+  animation: context-menu-in 100ms ease-out forwards;
+}
+
+/* ===== Marquee Animation ===== */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 18s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }

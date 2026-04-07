@@ -1,0 +1,175 @@
+import { useState, useCallback } from "react";
+import type { DragControls } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import { Maximize2, Minimize2, X, Minus } from "lucide-react";
+import { cn } from "@/utils/cn";
+import { useAudio } from "@/hooks";
+
+export interface WindowHeaderProps {
+  title: string;
+  onClose: () => void;
+  onMinimize?: () => void;
+  onMaximize?: () => void;
+  isMaximized?: boolean;
+  dragControls?: DragControls;
+  onContextMenu?: (e: React.MouseEvent) => void;
+  className?: string;
+}
+
+export function WindowHeader({
+  title,
+  onClose,
+  onMinimize,
+  onMaximize,
+  isMaximized = false,
+  dragControls,
+  onContextMenu,
+  className,
+}: WindowHeaderProps) {
+  const { t } = useTranslation();
+  const { playSound } = useAudio();
+  const [isHoveringTrafficLights, setIsHoveringTrafficLights] = useState(false);
+
+  const handleDoubleClick = useCallback(() => {
+    onMaximize?.();
+  }, [onMaximize]);
+
+  const handleClose = useCallback(() => {
+    playSound("windowClose");
+    onClose();
+  }, [playSound, onClose]);
+
+  const handleMinimize = useCallback(() => {
+    playSound("windowMinimize");
+    onMinimize?.();
+  }, [playSound, onMinimize]);
+
+  const handleMaximize = useCallback(() => {
+    playSound(isMaximized ? "windowRestore" : "windowMaximize");
+    onMaximize?.();
+  }, [playSound, isMaximized, onMaximize]);
+
+  return (
+    <div
+      className={cn(
+        "flex items-center h-10 px-3 shrink-0",
+        "border-b border-[var(--border)]",
+        "select-none",
+        dragControls && "cursor-grab active:cursor-grabbing",
+        className,
+      )}
+      onPointerDown={(e) => {
+        // Only start drag from the title bar area, not the buttons
+        if ((e.target as HTMLElement).closest("button")) return;
+        dragControls?.start(e);
+      }}
+      onDoubleClick={(e) => {
+        // Don't trigger maximize on button double-click
+        if ((e.target as HTMLElement).closest("button")) return;
+        handleDoubleClick();
+      }}
+      onContextMenu={(e) => {
+        if ((e.target as HTMLElement).closest("button")) return;
+        onContextMenu?.(e);
+      }}
+    >
+      {/* Traffic light buttons */}
+      <div
+        className="flex items-center gap-2"
+        onMouseEnter={() => setIsHoveringTrafficLights(true)}
+        onMouseLeave={() => setIsHoveringTrafficLights(false)}
+      >
+        <button
+          type="button"
+          aria-label={t("common.close")}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleClose();
+          }}
+          className={cn(
+            "w-3 h-3 rounded-full",
+            "bg-[#ff5f57] hover:bg-[#ff3b30]",
+            "transition-colors duration-150",
+            "cursor-pointer",
+            "flex items-center justify-center",
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
+          )}
+        >
+          {isHoveringTrafficLights && (
+            <X className="w-2 h-2 text-black/80" strokeWidth={3} />
+          )}
+        </button>
+        {onMinimize && (
+          <button
+            type="button"
+            aria-label={t("common.minimize")}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleMinimize();
+            }}
+            className={cn(
+              "w-3 h-3 rounded-full",
+              "bg-[#febc2e] hover:bg-[#f5a623]",
+              "transition-colors duration-150",
+              "cursor-pointer",
+              "flex items-center justify-center",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
+            )}
+          >
+            {isHoveringTrafficLights && (
+              <Minus className="w-2 h-2 text-black/80" strokeWidth={3} />
+            )}
+          </button>
+        )}
+        {onMaximize ? (
+          <button
+            type="button"
+            aria-label={
+              isMaximized ? t("common.restore") : t("common.maximize")
+            }
+            onClick={(e) => {
+              e.stopPropagation();
+              handleMaximize();
+            }}
+            className={cn(
+              "w-3 h-3 rounded-full",
+              "bg-[#28c840] hover:bg-[#1aab29]",
+              "transition-colors duration-150",
+              "cursor-pointer",
+              "flex items-center justify-center",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
+            )}
+          >
+            {isHoveringTrafficLights &&
+              (isMaximized ? (
+                <Minimize2 className="w-2 h-2 text-black/80" strokeWidth={3} />
+              ) : (
+                <Maximize2 className="w-2 h-2 text-black/80" strokeWidth={3} />
+              ))}
+          </button>
+        ) : (
+          <div
+            className="w-3 h-3 rounded-full bg-[#28c840] opacity-50"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+
+      {/* Window title */}
+      <span
+        className={cn(
+          "flex-1 text-center text-sm font-medium truncate",
+          "text-[var(--text-secondary)] glass-text-shadow",
+        )}
+      >
+        {title}
+      </span>
+
+      {/* Spacer to balance the traffic lights */}
+      <div
+        className={cn(onMinimize ? "w-[52px]" : "w-[36px]")}
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
