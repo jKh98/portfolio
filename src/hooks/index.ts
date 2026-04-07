@@ -10,3 +10,5 @@ export { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 export { useAppMenuAction, dispatchAppMenuAction } from "./useAppMenuAction";
 export { usePreferences } from "./usePreferences";
 export { useAudio } from "./useAudio";
+export { useMagneticGroup } from "./useMagneticGroup";
+export type { MagneticState } from "./useMagneticGroup";
