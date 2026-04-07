@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/utils/cn";
-import { useWindowManager, useTheme } from "@/context";
+import { useWindowManager } from "@/context/WindowProvider";
+import { useTheme } from "@/context/ThemeProvider";
 import { executeCommand, ASCII_BANNER } from "@/data/terminal-commands";
 import { trackEvent } from "@/lib/analytics";
 import { useAudio } from "@/hooks";

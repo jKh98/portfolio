@@ -39,6 +39,11 @@ export default defineConfig({
           "vendor-react": ["react", "react-dom"],
           "vendor-motion": ["framer-motion"],
           "vendor-i18n": ["i18next", "react-i18next"],
+          "vendor-firebase": [
+            "firebase/app",
+            "firebase/firestore",
+            "firebase/analytics",
+          ],
         },
       },
     },

@@ -21,6 +21,9 @@ export function useFocusTrap(active: boolean) {
     const container = containerRef.current;
     if (!container) return;
 
+    // Save the previously focused element to restore on deactivation
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== "Tab") return;
 
@@ -53,7 +56,13 @@ export function useFocusTrap(active: boolean) {
       (focusableElements[0] as HTMLElement).focus();
     }
 
-    return () => container.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      container.removeEventListener("keydown", handleKeyDown);
+      // Restore focus to the element that was focused before the trap activated
+      if (previouslyFocused && typeof previouslyFocused.focus === "function") {
+        previouslyFocused.focus();
+      }
+    };
   }, [active]);
 
   return containerRef;

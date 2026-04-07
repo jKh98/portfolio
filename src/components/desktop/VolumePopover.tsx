@@ -102,6 +102,7 @@ const VolumePanel = forwardRef<HTMLDivElement, VolumePanelProps>(
         right: window.innerWidth - rect.right,
       });
       setMeasured(true);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- state setters are stable
     }, [anchorRef]);
 
     return (

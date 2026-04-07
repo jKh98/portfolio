@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Moon, Sun, Check, Link } from "lucide-react";
-import { useTheme } from "@/context";
+import { useTheme } from "@/context/ThemeProvider";
 import { usePreferences, useAudio } from "@/hooks";
 import {
   ACCENT_COLORS,
