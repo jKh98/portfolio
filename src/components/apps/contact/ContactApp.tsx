@@ -17,12 +17,12 @@ export function ContactApp() {
       )}
     >
       <ContactInfo />
-      <div className="space-y-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {SOCIAL_LINKS.map((link, i) => (
           <motion.div
             key={link.platform}
-            initial={reduced ? false : { opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: reduced ? 0 : ANIMATION.duration.normal,
               delay: reduced ? 0 : 0.1 + i * 0.08,

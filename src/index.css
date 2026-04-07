@@ -145,28 +145,50 @@ body {
 }
 
 /* ===== Scroll Shadow ===== */
-/* Uses --scroll-bg which defaults to --bg-surface (opaque) and can be overridden locally.
-   Semi-transparent backgrounds like --bg-glass cause visible artifacts in scroll fades. */
-.scroll-shadow {
-  --scroll-bg: var(--bg-surface);
-  background:
-    /* Cover at top */
-    linear-gradient(var(--scroll-bg) 33%, transparent) center top,
-    /* Cover at bottom */
-    linear-gradient(transparent, var(--scroll-bg) 66%) center bottom,
-    /* Top shadow */
-    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), transparent)
-      center top,
-    /* Bottom shadow */
-    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), transparent)
-      center bottom;
-  background-repeat: no-repeat;
-  background-size:
-    100% 12px,
-    100% 12px,
-    100% 6px,
-    100% 6px;
-  background-attachment: local, local, scroll, scroll;
+/* Uses --scroll-bg which defaults to --bg-surface (opaque) and can be overridden locally
+   via Tailwind arbitrary-property utilities like [--scroll-bg:var(--terminal-bg)].
+   Semi-transparent backgrounds like --bg-glass cause visible artifacts in scroll fades.
+   Shadow colour/size tokens are split so :root.dark can strengthen them.
+   Wrapped in @layer components so Tailwind @layer utilities can override --scroll-bg. */
+@layer components {
+  .scroll-shadow {
+    --scroll-bg: var(--bg-surface);
+    --scroll-shadow-color: rgba(0, 0, 0, 0.12);
+    --scroll-shadow-size: 8px;
+    --scroll-cover-size: 14px;
+    background:
+      /* Cover at top */
+      linear-gradient(var(--scroll-bg) 33%, transparent) center top,
+      /* Cover at bottom */
+      linear-gradient(transparent, var(--scroll-bg) 66%) center bottom,
+      /* Top shadow */
+      radial-gradient(
+          farthest-side at 50% 0,
+          var(--scroll-shadow-color),
+          transparent
+        )
+        center top,
+      /* Bottom shadow */
+      radial-gradient(
+          farthest-side at 50% 100%,
+          var(--scroll-shadow-color),
+          transparent
+        )
+        center bottom;
+    background-repeat: no-repeat;
+    background-size:
+      100% var(--scroll-cover-size),
+      100% var(--scroll-cover-size),
+      100% var(--scroll-shadow-size),
+      100% var(--scroll-shadow-size);
+    background-attachment: local, local, scroll, scroll;
+  }
+
+  :root.dark .scroll-shadow {
+    --scroll-shadow-color: rgba(0, 0, 0, 0.28);
+    --scroll-shadow-size: 10px;
+    --scroll-cover-size: 16px;
+  }
 }
 
 /* ===== Reduced Motion ===== */
