@@ -11,7 +11,6 @@ const ar = {
     },
     menu: {
       file: "ملف",
-      edit: "تحرير",
       view: "عرض",
       closeWindow: "إغلاق النافذة",
       closeAll: "إغلاق جميع النوافذ",
@@ -33,11 +32,11 @@ const ar = {
   apps: {
     profile: {
       title: "الملف الشخصي",
-      role: "مهندس برمجيات متكامل أول",
+      role: "مهندس Full Stack أول",
       location: "بيروت، لبنان",
       availableStatus: "متاح للعمل",
       summary:
-        "مهندس برمجيات متكامل أول بخبرة 6+ سنوات في بناء حلول ويب وتطبيقات قابلة للتطوير. متخصص في React و TypeScript و Node.js والبنية التحتية السحابية عبر مشاريع التقنيات المالية واللوجستية والتحول الرقمي الحكومي في الشرق الأوسط وأوروبا والولايات المتحدة.",
+        "مهندس Full Stack أول بخبرة 6+ سنوات في بناء حلول ويب وتطبيقات قابلة للتطوير. متخصص في React و TypeScript و Node.js والبنية التحتية السحابية عبر مشاريع التقنيات المالية واللوجستية والتحول الرقمي الحكومي في الشرق الأوسط وأوروبا والولايات المتحدة.",
       stats: {
         experience: "سنوات خبرة",
         projects: "مشاريع منجزة",
@@ -45,13 +44,12 @@ const ar = {
       },
       education: "التعليم",
       certificates: "الشهادات",
-      trustedBy: "موثوق من قبل",
       downloadResume: "تحميل السيرة الذاتية",
     },
     experience: {
       title: "الخبرة",
       "cme-senior-fullstack": {
-        position: "مهندس برمجيات متكامل أول",
+        position: "مهندس Full Stack أول",
         highlights: [
           "قيادة إعادة كتابة الهيكل الأمامي باستخدام React Query و TypeScript، تحسين الأداء بنسبة 40%",
           "تحسين APIs الخلفية واستعلامات قواعد البيانات، تقليل أوقات الاستجابة بنسبة 35%",
@@ -60,7 +58,7 @@ const ar = {
         ],
       },
       "cme-senior-frontend": {
-        position: "مهندس برمجيات أمامي أول",
+        position: "مهندس Frontend أول",
         highlights: [
           "قيادة اعتماد TypeScript وهجرة كود Redux القديم إلى Redux Toolkit",
           "إنشاء مكتبة مكونات قابلة لإعادة الاستخدام باستخدام Storybook مع تغطية اختبار 95%",
@@ -69,7 +67,7 @@ const ar = {
         ],
       },
       "cme-fullstack": {
-        position: "مهندس برمجيات متكامل",
+        position: "مهندس Full Stack",
         highlights: [
           "إعادة كتابة الواجهات الأمامية القديمة من Clojure إلى ReactJS، تحسين قابلية الصيانة وسرعة التطوير",
           "تحديث خدمات الخلفية بالهجرة من GoLang إلى Node.js + Spring Boot",
@@ -78,7 +76,7 @@ const ar = {
         ],
       },
       "areeba-junior-fullstack": {
-        position: "مهندس برمجيات متكامل مبتدئ",
+        position: "مهندس Full Stack مبتدئ",
         highlights: [
           "بناء ميزات KYC/KYB متكاملة مع استخراج بيانات OCR من وثائق الهوية",
           "دمج بوابات Visa/Mastercard عبر Antelope SDK و MagicCube SDK",
@@ -124,12 +122,7 @@ const ar = {
       subtitle: "لنتواصل",
       availability: "متاح لفرص جديدة ومشاريع مثيرة. مقيم في بيروت، لبنان.",
       copyFeedback: "تم النسخ!",
-      location: "بيروت، لبنان",
       timezone: "الوقت الآن {{time}} في بيروت",
-      email: "البريد الإلكتروني",
-      phone: "الهاتف",
-      linkedin: "لينكد إن",
-      github: "غيت هب",
       copy: "نسخ",
       open: "فتح",
     },
@@ -176,7 +169,7 @@ const ar = {
       },
       items: {
         portfolioV3: {
-          name: "الملف الشخصي v3",
+          name: "Portfolio v3",
           description:
             "ملف شخصي بأسلوب macOS مع خلفية ثلاثية الأبعاد ونوافذ قابلة للسحب ومحاكي طرفية.",
         },
@@ -227,6 +220,7 @@ const ar = {
         light: "فاتح",
         accentColor: "لون التمييز",
         wallpaper: "خلفية سطح المكتب",
+        pairedWallpaper: "تتبدّل تلقائيًا عند تغيير المظهر",
         wallpaperCategories: {
           abstract: "تجريدي",
           nature: "طبيعة",
@@ -312,16 +306,14 @@ const ar = {
     minimize: "تصغير",
     maximize: "تكبير",
     restore: "استعادة",
-    present: "حالياً",
-    copied: "تم النسخ!",
-    openLink: "فتح الرابط",
+    present: "الحالي",
     skipToMain: "تخطي إلى المحتوى الرئيسي",
     all: "الكل",
     expandAll: "توسيع الكل",
     collapseAll: "طي الكل",
   },
   contextMenu: {
-    aboutPortfolio: "حول هذا الملف",
+    aboutPortfolio: "حول هذا الملف الشخصي",
     bringToFront: "إحضار للأمام",
     sendToBack: "إرسال للخلف",
     open: "فتح",

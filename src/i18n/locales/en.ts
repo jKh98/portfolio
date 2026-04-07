@@ -11,7 +11,6 @@ const en = {
     },
     menu: {
       file: "File",
-      edit: "Edit",
       view: "View",
       closeWindow: "Close Window",
       closeAll: "Close All Windows",
@@ -45,7 +44,6 @@ const en = {
       },
       education: "Education",
       certificates: "Certificates",
-      trustedBy: "Trusted By",
       downloadResume: "Download Resume",
     },
     experience: {
@@ -125,12 +123,7 @@ const en = {
       availability:
         "Available for new opportunities and interesting projects. Based in Beirut, Lebanon.",
       copyFeedback: "Copied!",
-      location: "Beirut, Lebanon",
       timezone: "Currently {{time}} in Beirut",
-      email: "Email",
-      phone: "Phone",
-      linkedin: "LinkedIn",
-      github: "GitHub",
       copy: "Copy",
       open: "Open",
     },
@@ -228,6 +221,7 @@ const en = {
         light: "Light",
         accentColor: "Accent Color",
         wallpaper: "Wallpaper",
+        pairedWallpaper: "Auto-swaps on theme change",
         wallpaperCategories: {
           abstract: "Abstract",
           nature: "Nature",
@@ -314,8 +308,6 @@ const en = {
     maximize: "Maximize",
     restore: "Restore",
     present: "Present",
-    copied: "Copied!",
-    openLink: "Open link",
     skipToMain: "Skip to main content",
     all: "All",
     expandAll: "Expand All",

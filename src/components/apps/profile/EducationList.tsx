@@ -1,52 +1,27 @@
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { LucideSchool } from "lucide-react";
 import { EDUCATION } from "@/data";
 import { formatDate } from "@/utils/format";
 import { cn } from "@/utils/cn";
 import { useReducedMotion, useIsMobile } from "@/hooks";
-import { useTheme } from "@/context/ThemeProvider";
 import { ANIMATION } from "@/constants";
 import { GlassCard } from "@/components/ui";
-import { getCompanyLogo } from "@/constants/company-logos";
-import type { CompanyLogo } from "@/constants/company-logos";
-import { LucideSchool } from "lucide-react";
 
-/** Resolve fill for a single path, respecting explicit fills and theme overrides. */
-function resolvePathFill(
-  path: CompanyLogo["paths"][number],
-  logo: CompanyLogo,
-  isDark: boolean,
-): string {
-  if (path.fill) return path.fill;
-  return isDark
-    ? (logo.darkFill ?? "currentColor")
-    : (logo.lightFill ?? "currentColor");
-}
-
-/** Renders the institution logo or falls back to the generic school icon. */
-function InstitutionIcon({
-  institution,
-  isDark,
-}: {
-  institution: string;
-  isDark: boolean;
-}) {
-  const logo = getCompanyLogo(institution);
-
-  if (!logo) {
-    return <LucideSchool size={18} />;
-  }
-
+/** Generic school icon for all institutions. */
+function InstitutionIcon() {
   return (
-    <svg
-      viewBox={logo.viewBox}
-      className="h-5 w-5"
+    <div
+      className={cn(
+        "shrink-0 flex items-center justify-center",
+        "w-10 h-10 rounded-xl",
+        "bg-[var(--accent-glow)]",
+        "text-[var(--accent)]",
+      )}
       aria-hidden="true"
     >
-      {logo.paths.map((p, i) => (
-        <path key={i} d={p.d} fill={resolvePathFill(p, logo, isDark)} />
-      ))}
-    </svg>
+      <LucideSchool size={18} />
+    </div>
   );
 }
 
@@ -58,8 +33,6 @@ export function EducationList({ className }: EducationListProps) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
   const isMobile = useIsMobile();
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
 
   return (
     <div className={cn("space-y-3", className)}>
@@ -93,16 +66,7 @@ export function EducationList({ className }: EducationListProps) {
                   isMobile && "flex-wrap",
                 )}
               >
-                <div
-                  className={cn(
-                    "shrink-0 flex items-center justify-center",
-                    "w-10 h-10 rounded-xl",
-                    "bg-[var(--accent-glow)]",
-                    "text-[var(--accent)]",
-                  )}
-                >
-                  <InstitutionIcon institution={edu.institution} isDark={isDark} />
-                </div>
+                <InstitutionIcon />
 
                 <div className="min-w-0 flex-1">
                   <p

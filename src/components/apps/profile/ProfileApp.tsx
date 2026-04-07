@@ -6,12 +6,10 @@ import { ProfileHeader } from "./ProfileHeader";
 import { StatsRow } from "./StatsRow";
 import { EducationList } from "./EducationList";
 import { CertificateList } from "./CertificateList";
-import { TrustedBy } from "./TrustedBy";
 
 const SECTIONS = [
   { key: "header", Component: ProfileHeader },
   { key: "stats", Component: StatsRow },
-  { key: "trustedBy", Component: TrustedBy },
   { key: "education", Component: EducationList },
   { key: "certificates", Component: CertificateList },
 ] as const;
