@@ -9,3 +9,5 @@ export { AppMenu } from "./AppMenu";
 export { Spotlight } from "./Spotlight";
 export { SpotlightResults } from "./SpotlightResults";
 export { ShortcutCheatSheet } from "./ShortcutCheatSheet";
+export { AppTips } from "./AppTips";
+export { WelcomeModal } from "./WelcomeModal";

@@ -1,4 +1,6 @@
 import { chromium } from "playwright";
+import { execSync } from "child_process";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -15,29 +17,29 @@ const combos = [
   {
     name: "portfolio-dark-terminal",
     theme: "dark",
-    accentColor: "cyan",
-    wallpaper: "abstract-dark-2",
+    accentColor: "green",
+    wallpaper: "nature-dark-3",
     openApps: ["terminal"],
   },
   {
     name: "portfolio-light-profile",
     theme: "light",
-    accentColor: "purple",
-    wallpaper: "nature-light-2",
+    accentColor: "blue",
+    wallpaper: "abstract-light-1",
     openApps: ["profile"],
   },
   {
     name: "portfolio-dark-skills",
     theme: "dark",
-    accentColor: "amber",
-    wallpaper: "city-dark-1",
+    accentColor: "orange",
+    wallpaper: "minimal-accent-dark",
     openApps: ["skills"],
   },
   {
     name: "portfolio-light-settings",
     theme: "light",
-    accentColor: "rose",
-    wallpaper: "minimal-gradient-light",
+    accentColor: "indigo",
+    wallpaper: "city-light-2",
     openApps: ["settings"],
   },
 ];
@@ -109,9 +111,12 @@ async function main() {
       // Final settle time
       await page.waitForTimeout(1000);
 
-      const filePath = path.join(outDir, `${combo.name}.png`);
-      await page.screenshot({ path: filePath, type: "png" });
-      console.log(`  -> Saved ${filePath}`);
+      const pngPath = path.join(outDir, `${combo.name}.png`);
+      const webpPath = path.join(outDir, `${combo.name}.webp`);
+      await page.screenshot({ path: pngPath, type: "png" });
+      execSync(`cwebp -q 80 "${pngPath}" -o "${webpPath}"`);
+      fs.unlinkSync(pngPath);
+      console.log(`  -> Saved ${webpPath}`);
     } catch (err) {
       console.error(`  X Failed ${combo.name}: ${err.message}`);
     }

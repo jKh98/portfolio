@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronsUpDown } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { EXPERIENCE } from "@/data";
-import { useAppMenuAction } from "@/hooks";
+import { useAppMenuAction, useAudio } from "@/hooks";
 import { WindowToolbar } from "@/components/window";
 import { ExperienceTimeline } from "./ExperienceTimeline";
 
@@ -12,6 +12,7 @@ const COMPANIES = ["All", ...new Set(EXPERIENCE.map((exp) => exp.company))];
 
 export function ExperienceApp() {
   const { t } = useTranslation();
+  const { playSound } = useAudio();
   const [activeCompany, setActiveCompany] = useState("All");
   const [allExpanded, setAllExpanded] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => {
@@ -29,12 +30,14 @@ export function ExperienceApp() {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
+        playSound("cardCollapse");
       } else {
         next.add(id);
+        playSound("cardExpand");
       }
       return next;
     });
-  }, []);
+  }, [playSound]);
 
   const expandAll = useCallback(() => {
     setAllExpanded(true);

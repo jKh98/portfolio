@@ -56,12 +56,12 @@ export function Window({ appId }: WindowProps) {
 
   const windowState = windows[appId];
   const appDef = APP_DEFINITIONS.find((app) => app.id === appId);
-  const isVisible = windowState.isOpen && !windowState.isMinimized;
   const isMaximized = windowState.isMaximized;
   const isDraggable = !isMobile && !isTablet && !isMaximized;
   const isDesktop = !isMobile && !isTablet;
 
-  // Focus trap: active when this window is visible and focused
+  // Focus trap: active when this window is visible (open & not minimized) and focused
+  const isVisible = windowState.isOpen && !windowState.isMinimized;
   const focusTrapRef = useFocusTrap(isVisible && windowState.isFocused);
 
   const handleFocus = useCallback(() => {
@@ -212,7 +212,7 @@ export function Window({ appId }: WindowProps) {
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {windowState.isOpen && (
         <motion.div
           ref={(node: HTMLDivElement | null) => {
             // Combine windowRef and focusTrapRef
@@ -227,15 +227,25 @@ export function Window({ appId }: WindowProps) {
           role="dialog"
           aria-labelledby={`window-title-${appId}`}
           aria-modal="true"
-          drag={isDraggable}
+          aria-hidden={windowState.isMinimized}
+          drag={isDraggable && !windowState.isMinimized}
           dragControls={dragControls}
           dragListener={false}
           dragMomentum={false}
           dragConstraints={dragConstraints}
           dragElastic={0}
           onPointerDown={handleFocus}
-          layout={!skipAnimation}
-          style={maximizedStyle}
+          layout={!skipAnimation && !windowState.isMinimized}
+          style={{
+            ...maximizedStyle,
+            // Keep the component mounted but invisible when minimized so
+            // internal app state (filters, search, selected page, etc.) is
+            // preserved. Use visibility:hidden instead of display:none so
+            // framer-motion's internal animation state is not disrupted.
+            ...(windowState.isMinimized
+              ? { visibility: "hidden" as const, pointerEvents: "none" as const }
+              : {}),
+          }}
           className={cn(
             "flex flex-col",
             "overflow-hidden",

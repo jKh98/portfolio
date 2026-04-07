@@ -3,6 +3,7 @@ import type { DragControls } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Maximize2, Minimize2, X, Minus } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { useAudio } from "@/hooks";
 
 export interface WindowHeaderProps {
   title: string;
@@ -26,11 +27,27 @@ export function WindowHeader({
   className,
 }: WindowHeaderProps) {
   const { t } = useTranslation();
+  const { playSound } = useAudio();
   const [isHoveringTrafficLights, setIsHoveringTrafficLights] = useState(false);
 
   const handleDoubleClick = useCallback(() => {
     onMaximize?.();
   }, [onMaximize]);
+
+  const handleClose = useCallback(() => {
+    playSound("windowClose");
+    onClose();
+  }, [playSound, onClose]);
+
+  const handleMinimize = useCallback(() => {
+    playSound("windowMinimize");
+    onMinimize?.();
+  }, [playSound, onMinimize]);
+
+  const handleMaximize = useCallback(() => {
+    playSound(isMaximized ? "windowRestore" : "windowMaximize");
+    onMaximize?.();
+  }, [playSound, isMaximized, onMaximize]);
 
   return (
     <div
@@ -67,7 +84,7 @@ export function WindowHeader({
           aria-label={t("common.close")}
           onClick={(e) => {
             e.stopPropagation();
-            onClose();
+            handleClose();
           }}
           className={cn(
             "w-3 h-3 rounded-full",
@@ -88,7 +105,7 @@ export function WindowHeader({
             aria-label={t("common.minimize")}
             onClick={(e) => {
               e.stopPropagation();
-              onMinimize();
+              handleMinimize();
             }}
             className={cn(
               "w-3 h-3 rounded-full",
@@ -112,7 +129,7 @@ export function WindowHeader({
             }
             onClick={(e) => {
               e.stopPropagation();
-              onMaximize();
+              handleMaximize();
             }}
             className={cn(
               "w-3 h-3 rounded-full",

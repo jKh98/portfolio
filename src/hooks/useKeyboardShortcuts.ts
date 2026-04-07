@@ -39,8 +39,6 @@ export function useKeyboardShortcuts({ onSpotlight, onShowShortcuts }: KeyboardS
       if (idx < APP_DEFINITIONS.length) openWindow(APP_DEFINITIONS[idx].id);
       return;
     }
-    // Cmd+W: Close focused window (only when window focused, to avoid closing browser tab)
-    if (isMod && e.key === "w" && focusedAppId) { e.preventDefault(); closeWindow(focusedAppId); return; }
     // Cmd+M: Minimize focused window
     if (isMod && e.key === "m" && focusedAppId) { e.preventDefault(); minimizeWindow(focusedAppId); return; }
     // Cmd+`: Cycle to next open window

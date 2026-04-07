@@ -3,7 +3,7 @@ import { useMotionValue } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/utils/cn";
 import { useWindowManager } from "@/context";
-import { useIsMobile, useIsTablet, usePreferences } from "@/hooks";
+import { useIsMobile, useIsTablet, usePreferences, useAudio } from "@/hooks";
 import { APP_DEFINITIONS, DOCK_DIVIDER_INDEX } from "@/constants";
 import { ContextMenu } from "@/components/ui";
 import type { ContextMenuItem } from "@/components/ui";
@@ -23,6 +23,7 @@ export function Dock() {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
   const { preferences } = usePreferences();
+  const { playSound } = useAudio();
   const mouseX = useMotionValue(-1);
   const isDesktop = !isMobile && !isTablet;
 
@@ -56,8 +57,10 @@ export function Dock() {
     }
     const win = windows[id];
     if (!win.isOpen) {
+      playSound("dockLaunch");
       openWindow(id);
     } else if (win.isMinimized) {
+      playSound("windowRestore");
       restoreWindow(id);
     } else {
       focusWindow(id);
@@ -143,9 +146,9 @@ export function Dock() {
     openWindow,
   ]);
 
-  // On mobile, only show primary apps (first DOCK_DIVIDER_INDEX items)
+  // On mobile, only show apps marked as mobile-visible (defaults to true)
   const visibleApps = isMobile
-    ? APP_DEFINITIONS.slice(0, DOCK_DIVIDER_INDEX)
+    ? APP_DEFINITIONS.filter((app) => app.mobileVisible !== false)
     : APP_DEFINITIONS;
 
   return (

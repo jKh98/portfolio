@@ -7,6 +7,7 @@ import {
   AppWindow,
   Globe,
   Accessibility,
+  Volume2,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useReducedMotion, useIsMobile } from "@/hooks";
@@ -16,9 +17,11 @@ import { DockSection } from "./DockSection";
 import { WindowsSection } from "./WindowsSection";
 import { LanguageSection } from "./LanguageSection";
 import { AccessibilitySection } from "./AccessibilitySection";
+import { SoundSection } from "./SoundSection";
 
 const SECTIONS = [
   "appearance",
+  "sound",
   "dock",
   "windows",
   "language",
@@ -32,6 +35,7 @@ const SECTION_ICONS: Record<
   React.ComponentType<{ size?: number }>
 > = {
   appearance: Paintbrush,
+  sound: Volume2,
   dock: PanelBottom,
   windows: AppWindow,
   language: Globe,
@@ -40,6 +44,7 @@ const SECTION_ICONS: Record<
 
 const SECTION_COMPONENTS: Record<SettingsSection, React.ComponentType> = {
   appearance: AppearanceSection,
+  sound: SoundSection,
   dock: DockSection,
   windows: WindowsSection,
   language: LanguageSection,

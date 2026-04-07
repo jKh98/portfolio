@@ -1,7 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { useAudio } from "@/hooks";
 
 export interface ImageCarouselProps {
   images: string[];
@@ -27,6 +29,7 @@ const slideVariants = {
 export function ImageCarousel({ images, alt, className }: ImageCarouselProps) {
   const [[current, direction], setCurrent] = useState([0, 0]);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const { playSound } = useAudio();
 
   const paginate = useCallback(
     (dir: number) => {
@@ -34,8 +37,9 @@ export function ImageCarousel({ images, alt, className }: ImageCarouselProps) {
         const next = (prev + dir + images.length) % images.length;
         return [next, dir];
       });
+      playSound("carouselSlide");
     },
-    [images.length],
+    [images.length, playSound],
   );
 
   const handleDragEnd = useCallback(
@@ -205,7 +209,7 @@ interface LightboxProps {
 }
 
 function Lightbox({ open, src, alt, onClose }: LightboxProps) {
-  return (
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -243,6 +247,7 @@ function Lightbox({ open, src, alt, onClose }: LightboxProps) {
           />
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

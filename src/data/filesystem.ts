@@ -24,17 +24,17 @@ export interface FileNode {
 export const FILE_TREE: FileNode = {
   name: "~",
   kind: "folder",
-  modified: "2025-01-01",
+  modified: "2025-06-01",
   children: [
     {
       name: "Documents",
       kind: "folder",
-      modified: "2025-01-01",
+      modified: "2025-06-01",
       children: [
         {
           name: "Resume.pdf",
           kind: "pdf",
-          modified: "2025-01-01",
+          modified: "2025-06-01",
           action: {
             type: "download",
             url: "/assets/documents/Jihad_Al-Khurfan_Resume.pdf",
@@ -43,7 +43,7 @@ export const FILE_TREE: FileNode = {
         {
           name: "Resume_Detailed.pdf",
           kind: "pdf",
-          modified: "2025-01-01",
+          modified: "2025-06-01",
           action: {
             type: "download",
             url: "/assets/documents/Jihad_Al-Khurfan_Resume_Detailed.pdf",
@@ -52,10 +52,10 @@ export const FILE_TREE: FileNode = {
         {
           name: "Azure_AZ-900.pdf",
           kind: "pdf",
-          modified: "2024-06-15",
+          modified: "2023-06-15",
           action: {
             type: "openUrl",
-            url: "https://learn.microsoft.com/en-us/certifications/azure-fundamentals/",
+            url: "https://learn.microsoft.com/en-us/users/jihadal-khurfan/credentials/46c61e916fb16642",
           },
         },
       ],
@@ -63,53 +63,86 @@ export const FILE_TREE: FileNode = {
     {
       name: "Projects",
       kind: "folder",
-      modified: "2025-01-01",
+      modified: "2025-06-01",
       children: [
         {
           name: "portfolio-v3",
           kind: "link",
-          modified: "2025-01-01",
+          modified: "2025-06-01",
           action: {
             type: "openUrl",
-            url: "https://github.com/jalkhurfan/portfolio",
+            url: "https://github.com/jKh98/portfolio",
           },
         },
         {
-          name: "dga-platform",
+          name: "denworld-travel",
           kind: "link",
           modified: "2024-06-01",
-          action: { type: "openApp", appId: "projects" },
+          action: {
+            type: "openUrl",
+            url: "https://denworldtravel.com",
+          },
         },
         {
-          name: "fintech-app",
+          name: "wa-automator",
           kind: "link",
-          modified: "2023-09-01",
+          modified: "2024-01-01",
+          action: {
+            type: "openUrl",
+            url: "https://github.com/jKh98/wa-automator",
+          },
+        },
+        {
+          name: "lead-crm",
+          kind: "link",
+          modified: "2023-06-01",
           action: { type: "openApp", appId: "projects" },
         },
         {
-          name: "testing-platform",
+          name: "ngo-website",
           kind: "link",
           modified: "2023-03-01",
           action: { type: "openApp", appId: "projects" },
         },
         {
-          name: "investment-calculator",
+          name: "campaign-tracker",
           kind: "link",
-          modified: "2024-01-01",
+          modified: "2023-01-01",
           action: { type: "openApp", appId: "projects" },
+        },
+        {
+          name: "dukkani",
+          kind: "link",
+          modified: "2022-06-01",
+          action: {
+            type: "openUrl",
+            url: "https://github.com/jKh98/dukkani",
+          },
         },
       ],
     },
     {
       name: "About.txt",
       kind: "txt",
-      modified: "2025-01-01",
+      modified: "2025-06-01",
       action: { type: "openApp", appId: "profile" },
+    },
+    {
+      name: "Experience.txt",
+      kind: "txt",
+      modified: "2025-01-02",
+      action: { type: "openApp", appId: "experience" },
+    },
+    {
+      name: "Skills.txt",
+      kind: "txt",
+      modified: "2025-06-01",
+      action: { type: "openApp", appId: "skills" },
     },
     {
       name: "Contact.txt",
       kind: "txt",
-      modified: "2025-01-01",
+      modified: "2025-06-01",
       action: { type: "openApp", appId: "contact" },
     },
   ],

@@ -41,8 +41,8 @@ export interface WallpaperEntry {
 //
 // | # | Category | Light ID              | Dark ID              |
 // |---|----------|-----------------------|----------------------|
-// | 1 | abstract | abstract-light-1      | abstract-dark-2      |
-// | 2 | abstract | abstract-light-2      | abstract-dark-1      |
+// | 1 | abstract | abstract-light-1      | abstract-dark-1      |
+// | 2 | abstract | abstract-light-2      | abstract-dark-2      |
 // | 3 | abstract | abstract-light-3      | abstract-dark-3      |
 // | 4 | nature   | nature-light-1        | nature-dark-1        |
 // | 5 | nature   | nature-light-2        | nature-dark-2        |
@@ -57,7 +57,7 @@ export interface WallpaperEntry {
 /** Default wallpaper per theme (used on first visit or after reset) */
 export const DEFAULT_WALLPAPER_BY_THEME = {
   light: "abstract-light-1",
-  dark: "abstract-dark-2",
+  dark: "abstract-dark-1",
 } as const;
 
 /** Default wallpaper ID (used as final fallback) */
@@ -73,13 +73,13 @@ export const WALLPAPERS: WallpaperEntry[] = [
     src: "/wallpapers/abstract-light-1.webp",
     thumbnail: "/wallpapers/thumbnails/abstract-light-1.webp",
     theme: "light",
-    pairId: "abstract-dark-2",
+    pairId: "abstract-dark-1",
   },
   {
-    id: "abstract-dark-2",
+    id: "abstract-dark-1",
     category: "abstract",
-    src: "/wallpapers/abstract-dark-2.webp",
-    thumbnail: "/wallpapers/thumbnails/abstract-dark-2.webp",
+    src: "/wallpapers/abstract-dark-1.webp",
+    thumbnail: "/wallpapers/thumbnails/abstract-dark-1.webp",
     theme: "dark",
     pairId: "abstract-light-1",
   },
@@ -90,13 +90,13 @@ export const WALLPAPERS: WallpaperEntry[] = [
     src: "/wallpapers/abstract-light-2.webp",
     thumbnail: "/wallpapers/thumbnails/abstract-light-2.webp",
     theme: "light",
-    pairId: "abstract-dark-1",
+    pairId: "abstract-dark-2",
   },
   {
-    id: "abstract-dark-1",
+    id: "abstract-dark-2",
     category: "abstract",
-    src: "/wallpapers/abstract-dark-1.webp",
-    thumbnail: "/wallpapers/thumbnails/abstract-dark-1.webp",
+    src: "/wallpapers/abstract-dark-2.webp",
+    thumbnail: "/wallpapers/thumbnails/abstract-dark-2.webp",
     theme: "dark",
     pairId: "abstract-light-2",
   },
@@ -300,7 +300,9 @@ export function getWallpapersByCategory(
 }
 
 /** Get all wallpapers matching the given theme */
-export function getWallpapersByTheme(theme: "light" | "dark"): WallpaperEntry[] {
+export function getWallpapersByTheme(
+  theme: "light" | "dark",
+): WallpaperEntry[] {
   return WALLPAPERS.filter((w) => w.theme === theme);
 }
 
@@ -309,9 +311,7 @@ export function getWallpapersByCategoryAndTheme(
   category: WallpaperCategory,
   theme: "light" | "dark",
 ): WallpaperEntry[] {
-  return WALLPAPERS.filter(
-    (w) => w.category === category && w.theme === theme,
-  );
+  return WALLPAPERS.filter((w) => w.category === category && w.theme === theme);
 }
 
 /**

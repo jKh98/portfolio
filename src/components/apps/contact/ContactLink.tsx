@@ -9,7 +9,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { GlassCard } from "@/components/ui";
-import { useCopyToClipboard } from "@/hooks";
+import { useCopyToClipboard, useAudio } from "@/hooks";
 import { cn } from "@/utils/cn";
 import { trackEvent } from "@/lib/analytics";
 import type { SocialLink } from "@/types";
@@ -29,6 +29,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> = {
 export function ContactLink({ link, className }: ContactLinkProps) {
   const { t } = useTranslation();
   const { copied, copy } = useCopyToClipboard();
+  const { playSound } = useAudio();
 
   const Icon = ICON_MAP[link.icon];
 
@@ -36,6 +37,7 @@ export function ContactLink({ link, className }: ContactLinkProps) {
     if (link.copyable) {
       const value = link.url.replace("mailto:", "").replace("tel:", "");
       copy(value);
+      playSound("copyClipboard");
       trackEvent("contact_copy", { platform: link.platform });
     } else {
       window.open(link.url, "_blank", "noopener,noreferrer");

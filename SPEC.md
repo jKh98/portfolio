@@ -10,7 +10,7 @@
 6. [Type System](#6-type-system)
 7. [Component Architecture](#7-component-architecture)
 8. [State Management](#8-state-management)
-9. [3D Background System](#9-3d-background-system)
+9. [Wallpaper System](#9-wallpaper-system-replaced-3d-background)
 10. [Window System](#10-window-system)
 11. [Desktop Shell](#11-desktop-shell)
 12. [App Sections](#12-app-sections)
@@ -23,10 +23,13 @@
 19. [Data Layer](#19-data-layer)
 20. [Configuration](#20-configuration)
 21. [Build & Deploy](#21-build--deploy)
-22. [Cleanup Checklist](#22-cleanup-checklist)
-23. [Implementation Phases](#23-implementation-phases)
-24. [Enhancement Spec (Post-Session 5)](#24-enhancement-spec-post-session-5)
-25. [Implementation Sessions (Post-Session 5)](#25-implementation-sessions-post-session-5)
+22. [Audio System](#22-audio-system)
+23. [Onboarding & Help](#23-onboarding--help)
+24. [SEO & PWA](#24-seo--pwa)
+25. [Cleanup Checklist](#25-cleanup-checklist)
+26. [Implementation Phases](#26-implementation-phases)
+27. [Enhancement Spec (Post-Session 5)](#27-enhancement-spec-post-session-5)
+28. [Implementation Sessions (Post-Session 5)](#28-implementation-sessions-post-session-5)
 
 ---
 
@@ -309,13 +312,16 @@ portfolio/
     ├── lib/                             # Firebase & external service wrappers
     │   ├── firebase.ts                  # Firebase app init + Firestore + Analytics
     │   ├── analytics.ts                 # trackEvent / setUserProps helpers
-    │   └── guestbook.ts                 # Firestore guestbook CRUD + real-time sub
+    │   ├── guestbook.ts                 # Firestore guestbook CRUD + real-time sub
+    │   └── audio-engine.ts              # Web Audio API synthesis engine (30+ effects)
     │
     ├── types/                           # Shared type definitions
     │   ├── index.ts                     # Barrel export
     │   ├── window.ts                    # WindowId, WindowState, AppDefinition
     │   ├── resume.ts                    # Experience, Education, Skill, etc.
-    │   └── theme.ts                     # Theme, ThemeMode
+    │   ├── preferences.ts              # Preferences, AccentColor, FontSize
+    │   ├── audio.ts                    # AudioCategory, SoundEffect, AudioPreferences
+    │   └── theme.ts                    # Theme, ThemeMode
     │
     ├── constants/                       # App-wide constants
     │   ├── index.ts                     # Barrel export
@@ -324,6 +330,7 @@ portfolio/
     │   ├── company-logos.ts             # Inline SVG company logos
     │   ├── skill-icons.ts              # Skill → simple-icons SVG mapping
     │   ├── wallpapers.ts               # Wallpaper catalog + pair helpers
+    │   ├── audio.ts                    # Sound definitions + category mapping
     │   └── social.ts                    # Social links data
     │
     ├── data/                            # Static content data (resume, etc.)
@@ -339,7 +346,8 @@ portfolio/
     │   ├── useTheme.ts                  # Theme read/toggle
     │   ├── useReducedMotion.ts          # prefers-reduced-motion detection
     │   ├── useCopyToClipboard.ts        # Clipboard API wrapper
-    │   └── useIsMobile.ts              # Responsive breakpoint detection
+    │   ├── useIsMobile.ts              # Responsive breakpoint detection
+    │   └── useAudio.ts                 # Synthesized sound effect playback
     │
     ├── context/                         # React contexts
     │   ├── index.ts                     # Barrel export
@@ -375,7 +383,14 @@ portfolio/
         │   ├── TopBar.tsx               # Menu bar (name, clock, toggles)
         │   ├── Dock.tsx                 # Bottom dock bar
         │   ├── DockIcon.tsx             # Individual dock icon
-        │   └── BootSequence.tsx         # Startup animation
+        │   ├── BootSequence.tsx         # Startup animation
+        │   ├── Spotlight.tsx            # Cmd+K search overlay
+        │   ├── BrandingMenu.tsx         # Logo dropdown menu in TopBar
+        │   ├── AppMenu.tsx              # Dynamic app menus in TopBar
+        │   ├── WelcomeModal.tsx         # First-visit onboarding modal
+        │   ├── AppTips.tsx              # Contextual per-app help dialog
+        │   ├── VolumePopover.tsx        # Volume control popover
+        │   └── ShortcutCheatSheet.tsx   # Keyboard shortcuts overlay
         │
         ├── window/                      # Window system
         │   ├── Window.tsx               # Window frame (glass, shadow, title bar)
@@ -454,6 +469,12 @@ export interface AppDefinition {
   icon: string;
   /** Lazy-loaded React component */
   component: React.LazyExoticComponent<React.ComponentType>;
+  /** Optional menu configuration */
+  menuConfig?: AppMenuGroup[];
+  /** Optional minimum window width (default: 400) */
+  minWidth?: number;
+  /** Whether this app appears in the dock on mobile (default: true) */
+  mobileVisible?: boolean;
 }
 
 /** Actions dispatched to the window reducer */
@@ -621,8 +642,11 @@ Rules:
 | ------------------------ | -------------------------------- | --------------------------- |
 | Window open/close/focus  | `WindowContext` + `useReducer`   | Multiple components need it |
 | Theme mode               | `ThemeContext` + `useState`      | Global, persisted           |
+| Preferences (accent,     | `PreferencesContext` +           | Global, persisted to        |
+|   wallpaper, audio, etc) | `useReducer`                     | localStorage                |
 | i18n language            | i18next built-in state           | Managed by library          |
 | Boot sequence shown      | `sessionStorage` + local state   | One-time per session        |
+| Welcome modal shown      | `localStorage` + local state     | One-time per visitor        |
 | Expanded experience      | Local `useState` in card         | Component-scoped            |
 | Clipboard feedback       | Local `useState` in copy button  | Component-scoped            |
 | Dock hover magnification | Local `useState` + framer motion | Component-scoped            |
@@ -702,8 +726,8 @@ counterpart via `getPairedWallpaper()` in `ThemeProvider`.
 
 | #  | Category | Light ID                | Dark ID               |
 | -- | -------- | ----------------------- | --------------------- |
-| 1  | abstract | `abstract-light-1`      | `abstract-dark-2`     |
-| 2  | abstract | `abstract-light-2`      | `abstract-dark-1`     |
+| 1  | abstract | `abstract-light-1`      | `abstract-dark-1`     |
+| 2  | abstract | `abstract-light-2`      | `abstract-dark-2`     |
 | 3  | abstract | `abstract-light-3`      | `abstract-dark-3`     |
 | 4  | nature   | `nature-light-1`        | `nature-dark-1`       |
 | 5  | nature   | `nature-light-2`        | `nature-dark-2`       |
@@ -1516,7 +1540,136 @@ plugins.
 
 ---
 
-## 22. Cleanup Checklist
+## 22. Audio System
+
+### 22.1 Overview
+
+A complete synthesized audio feedback system using the Web Audio API. All
+sounds are generated programmatically -- no external audio files required.
+This keeps the bundle size minimal while providing rich audio feedback.
+
+### 22.2 Architecture
+
+- **Engine**: `src/lib/audio-engine.ts` -- Core synthesis engine using
+  oscillators, gain nodes, and noise buffers. Generates 30+ distinct
+  sound effects organized into 6 categories.
+- **Types**: `src/types/audio.ts` -- `AudioCategory`, `SoundEffect`,
+  `AudioPreferences`, `SoundDefinition`.
+- **Constants**: `src/constants/audio.ts` -- Default preferences, category
+  metadata with i18n keys, sound-to-category mapping.
+- **Hook**: `src/hooks/useAudio.ts` -- React hook providing `playSound()`
+  that respects mute state, per-category toggles, and master volume.
+
+### 22.3 Sound Categories
+
+| Category       | Examples                                           |
+| -------------- | -------------------------------------------------- |
+| System         | Startup chime, shutdown sweep, restart              |
+| Navigation     | Spotlight open/select, dock launch, context menu   |
+| Window         | Open, close, minimize, restore, maximize, focus    |
+| Interaction    | Toggle switch, button click, tab switch, slider    |
+| Notification   | Error, success, welcome chime, new message ping    |
+| App-specific   | Terminal execute/error/clear, finder navigate, etc.|
+
+### 22.4 Preferences
+
+Audio preferences are part of the serialized preferences object in
+localStorage with full reducer support:
+
+- **Master mute** toggle (`SET_AUDIO_MUTED`)
+- **Master volume** 0-100% (`SET_AUDIO_VOLUME`)
+- **Per-category** enable/disable (`SET_AUDIO_CATEGORY`)
+
+### 22.5 UI Controls
+
+- **Sound Settings Section** (`components/apps/settings/SoundSection.tsx`):
+  Master mute toggle, volume slider, per-category toggles with descriptions
+  and preview buttons.
+- **Volume Popover** (`components/desktop/VolumePopover.tsx`): Top-bar
+  popover with volume icon (changes based on level), click-to-toggle mute,
+  compact volume slider.
+
+### 22.6 Integration
+
+Sound is integrated into 15+ components including: ContactLink,
+ExperienceApp, FinderApp, NotepadApp, ProjectToolbar, AppearanceSection,
+TerminalApp, Desktop, Dock, Spotlight, TopBar, BrandingMenu, WindowHeader,
+ImageCarousel, and BootSequence.
+
+---
+
+## 23. Onboarding & Help
+
+### 23.1 Welcome Modal
+
+`components/desktop/WelcomeModal.tsx` -- First-visit onboarding modal
+shown after boot sequence completes:
+
+- 6 feature rows with icons: Apps, Windows, Terminal, Spotlight,
+  Shortcuts, Theme customization
+- Mobile-aware: shows "visit on desktop for full experience" note
+- Persisted via `localStorage` (`portfolio-welcomed` key)
+- Re-shown after reboot/shutdown (clears the welcomed flag)
+- Animated entrance with scale + fade
+
+### 23.2 App Tips
+
+`components/desktop/AppTips.tsx` -- Contextual help panel accessible
+from the Help menu:
+
+- Shows per-app tips (e.g., "Type 'help' to see available commands"
+  for Terminal)
+- Falls back to a generic tip when no app is focused
+- Glass-morphism styled dialog with lightbulb icon
+
+### 23.3 Help Menu
+
+The `AppMenu` component always shows a **Help** menu with:
+
+- "Keyboard Shortcuts" (shortcut: `?`)
+- "Welcome Guide" (with separator)
+- "Tips for [App Name]" (contextual, only when an app is focused, with
+  separator)
+
+Menu items now support a `separator` boolean property for visual
+dividers between groups.
+
+---
+
+## 24. SEO & PWA
+
+### 24.1 Static Assets
+
+The following files are served from `public/`:
+
+| File                        | Purpose                          |
+| --------------------------- | -------------------------------- |
+| `favicon.svg`               | Vector favicon (modern browsers) |
+| `favicon-16x16.png`         | Legacy 16px favicon              |
+| `favicon-32x32.png`         | Legacy 32px favicon              |
+| `apple-touch-icon.png`      | iOS home screen icon             |
+| `android-chrome-192x192.png`| Android PWA icon (192px)         |
+| `android-chrome-512x512.png`| Android PWA icon (512px)         |
+| `og-image.png`              | Open Graph social sharing image  |
+| `robots.txt`                | Search engine crawl directives   |
+| `sitemap.xml`               | XML sitemap for search engines   |
+| `site.webmanifest`          | PWA manifest                     |
+
+### 24.2 Dynamic Meta
+
+The `index.html` meta description uses a `__YEARS_EXP__` placeholder
+that is replaced at build time by a custom Vite plugin
+(`inject-years-of-experience` in `vite.config.ts`). This ensures the
+years of experience is always current.
+
+### 24.3 Profile Image
+
+`public/assets/images/profile-face.webp` -- Separate face crop used
+for OG image and mobile circular headshot.
+
+---
+
+## 25. Cleanup Checklist
 
 Files and directories to **remove** when scaffolding v3:
 
@@ -1572,7 +1725,7 @@ Files and directories to **remove** when scaffolding v3:
 
 ---
 
-## 23. Implementation Phases
+## 26. Implementation Phases
 
 ### Phase 1: Scaffold & Cleanup
 
@@ -1702,17 +1855,33 @@ Files and directories to **remove** when scaffolding v3:
 5. Deploy to gh-pages branch
 6. Verify live site
 
+### Phase 15: Audio System + Onboarding + SEO + Polish (Session 6g)
+
+1. Web Audio API synthesis engine (30+ effects)
+2. Audio types, constants, and useAudio hook
+3. Audio preferences integration (mute, volume, per-category)
+4. Sound Settings UI and Volume Popover
+5. Audio integrated into 15+ components
+6. Welcome Modal (first-visit onboarding)
+7. App Tips (contextual help)
+8. Help menu with separators
+9. Window minimize state preservation
+10. Mobile dock visibility (mobileVisible)
+11. Dynamic years of experience (utility + Vite plugin)
+12. SEO/PWA assets (favicons, manifest, robots, sitemap, OG image)
+13. Updated wallpapers, screenshots, data, and i18n
+
 ---
 
-## 24. Enhancement Spec (Post-Session 5)
+## 27. Enhancement Spec (Post-Session 5)
 
 This section specifies all enhancements planned after the initial build
 (sessions 1-5). These are organized by feature area and will be implemented
 across sessions 6a through 6e.
 
-### 24.1 Window System Enhancements
+### 27.1 Window System Enhancements
 
-#### 24.1.1 Drag Constraints (Fix)
+#### 27.1.1 Drag Constraints (Fix)
 
 The current drag constraints use arbitrary pixel values
 (`top: 0, left: -400, right: 400, bottom: 200`). Replace with dynamic
@@ -1728,7 +1897,7 @@ viewport-aware constraints:
   constraints dynamically in a `useMemo` based on `window.innerWidth`,
   `window.innerHeight`, and window dimensions.
 
-#### 24.1.2 Green Button - Maximize/Fullscreen Toggle
+#### 27.1.2 Green Button - Maximize/Fullscreen Toggle
 
 Convert the decorative green dot into a functional maximize button:
 
@@ -1744,7 +1913,7 @@ Convert the decorative green dot into a functional maximize button:
 - **Constraints**: When maximized, dragging is disabled. Clicking green button
   or double-clicking title bar restores to normal size.
 
-#### 24.1.3 Window Resize
+#### 27.1.3 Window Resize
 
 Windows should be freely resizable from edges and corners:
 
@@ -1763,7 +1932,7 @@ Windows should be freely resizable from edges and corners:
   on resize handles and updates width/height. Not Framer Motion drag -- use
   raw pointer events for precision.
 
-#### 24.1.4 Cascade Offset for New Windows
+#### 27.1.4 Cascade Offset for New Windows
 
 When multiple windows are open, each new window should offset ~30px down and
 ~30px right from the previous window's position:
@@ -1776,7 +1945,7 @@ When multiple windows are open, each new window should offset ~30px down and
 - **Starting position**: First window centered. Second window at
   center + 30px/30px. Third at center + 60px/60px. Etc.
 
-#### 24.1.5 Window Arrange (Right-Click Context Menu)
+#### 27.1.5 Window Arrange (Right-Click Context Menu)
 
 Right-clicking a window title bar shows a context menu with:
 
@@ -1786,11 +1955,11 @@ Right-clicking a window title bar shows a context menu with:
 - Bring to Front
 - Send to Back
 
-Implementation details in Section 24.6 (Context Menus).
+Implementation details in Section 27.6 (Context Menus).
 
-### 24.2 Visual Enhancements ("Wow Factor")
+### 27.2 Visual Enhancements ("Wow Factor")
 
-#### 24.2.1 Enhanced Glass Aesthetic
+#### 27.2.1 Enhanced Glass Aesthetic
 
 Upgrade the current glass effect to feel more premium:
 
@@ -1809,7 +1978,7 @@ Upgrade the current glass effect to feel more premium:
 - **Depth layers**: Unfocused windows get a stronger blur + darker overlay
   to create more visual separation between layers.
 
-#### 24.2.2 Technology Logos in Skills
+#### 27.2.2 Technology Logos in Skills
 
 Replace plain text skill badges with logo + text badges:
 
@@ -1824,7 +1993,7 @@ Replace plain text skill badges with logo + text badges:
   component.
 - **Fallback**: Skills without a recognized logo show just text (graceful).
 
-#### 24.2.3 Company Logos in Experience
+#### 27.2.3 Company Logos in Experience
 
 Add company logos to experience cards:
 
@@ -1834,7 +2003,7 @@ Add company logos to experience cards:
   ExperienceCard.
 - **Fallback**: Company initial in a colored circle if no logo available.
 
-#### 24.2.4 Wallpaper System
+#### 27.2.4 Wallpaper System
 
 Offer 24 selectable wallpapers (12 light/dark pairs across 4 categories)
 managed through the Settings app:
@@ -1856,9 +2025,9 @@ managed through the Settings app:
 - **Assets**: Full wallpapers in `public/wallpapers/*.webp`, thumbnails
   in `public/wallpapers/thumbnails/*.webp`.
 
-### 24.3 Interaction Improvements
+### 27.3 Interaction Improvements
 
-#### 24.3.1 Click Target Expansion
+#### 27.3.1 Click Target Expansion
 
 Fix areas where clicking on padding/margins of interactive elements doesn't
 trigger the action:
@@ -1874,7 +2043,7 @@ trigger the action:
   `cursor-pointer` on the full interactive area and handle clicks on the
   parent container.
 
-#### 24.3.2 Cursor Management
+#### 27.3.2 Cursor Management
 
 Audit and fix cursors across all interactive elements:
 
@@ -1894,7 +2063,7 @@ Audit and fix cursors across all interactive elements:
 | Text content          | `cursor-text` (browser default)                                 |
 | Disabled elements     | `cursor-not-allowed`                                            |
 
-#### 24.3.3 Hover State Enhancements
+#### 27.3.3 Hover State Enhancements
 
 Add clear hover visual feedback to all clickable elements that currently
 lack it:
@@ -1907,7 +2076,7 @@ lack it:
   add a slight `translateY(-1px)` lift in addition to background change.
 - **ContactLink cards**: Add border accent color + slight lift on hover.
 
-#### 24.3.4 Long Press on Dock Icons
+#### 27.3.4 Long Press on Dock Icons
 
 Long-pressing (500ms) a dock icon shows a small context popover:
 
@@ -1919,7 +2088,7 @@ Long-pressing (500ms) a dock icon shows a small context popover:
 - **Desktop only**: On mobile, long press is often system-reserved. Use
   regular tap behavior.
 
-#### 24.3.5 Right-Click Context Menus
+#### 27.3.5 Right-Click Context Menus
 
 ##### Desktop Context Menu
 
@@ -1947,26 +2116,26 @@ Right-clicking a window title bar shows:
   positioning, and click-away dismissal.
 - Render via portal to avoid z-index issues.
 
-### 24.4 Toolbars
+### 27.4 Toolbars
 
 Add window-specific toolbars below the title bar where they add value:
 
-#### 24.4.1 Experience App Toolbar
+#### 27.4.1 Experience App Toolbar
 
 - Filter by company (pills: All, CME, areeba, TecFrac, NAR)
 - Expand All / Collapse All toggle
 
-#### 24.4.2 Skills App Toolbar
+#### 27.4.2 Skills App Toolbar
 
 - Filter by category (pills matching category names)
 - Search input to filter skills by name
 
-#### 24.4.3 Terminal App Toolbar
+#### 27.4.3 Terminal App Toolbar
 
 - Clear button
 - Font size toggle (small/medium/large)
 
-#### 24.4.4 Finder App Toolbar
+#### 27.4.4 Finder App Toolbar
 
 - Breadcrumb navigation (current path)
 - Back/Forward buttons
@@ -1982,9 +2151,9 @@ Create a reusable `<WindowToolbar>` component:
 - Height: 36px
 - Border-bottom matching window border
 
-### 24.5 New Apps
+### 27.5 New Apps
 
-#### 24.5.1 Terminal App
+#### 27.5.1 Terminal App
 
 An interactive terminal emulator window:
 
@@ -2018,7 +2187,7 @@ An interactive terminal emulator window:
 - **Auto-scroll**: Terminal output auto-scrolls to bottom.
 - **Welcome message**: On open, prints a welcome banner with ASCII art.
 
-#### 24.5.2 Projects App
+#### 27.5.2 Projects App
 
 Showcase portfolio projects:
 
@@ -2045,7 +2214,7 @@ Showcase portfolio projects:
 - **Note**: The owner will need to provide actual project data. Include 3-5
   placeholder entries for now that can be filled in later.
 
-#### 24.5.3 Notepad / Guestbook App
+#### 27.5.3 Notepad / Guestbook App
 
 Visitors can leave a note:
 
@@ -2100,7 +2269,7 @@ Control visual and behavioral preferences:
 - **Implementation note**: Settings changes should take effect immediately
   (live preview) without needing to close the settings window.
 
-#### 24.5.5 Finder / File Browser App
+#### 27.5.5 Finder / File Browser App
 
 Browse a virtual file system:
 
@@ -2130,7 +2299,7 @@ Browse a virtual file system:
 - **No real filesystem access**: Everything is a static data tree that maps
   to actions (download, open window, open URL).
 
-#### 24.5.6 App Registry Updates
+#### 27.5.6 App Registry Updates
 
 Update `AppId` type and `APP_DEFINITIONS` to include all new apps:
 
@@ -2156,9 +2325,9 @@ or adjusting dock layout:
 - Utility apps (right, separated by a subtle divider): Terminal, Finder,
   Notepad, Settings
 
-### 24.6 TopBar Enhancements
+### 27.6 TopBar Enhancements
 
-#### 24.6.1 Apple Logo / Branding Menu
+#### 27.6.1 Apple Logo / Branding Menu
 
 Replace the owner name text on the left with a dropdown menu:
 
@@ -2174,7 +2343,7 @@ Replace the owner name text on the left with a dropdown menu:
 - **Implementation**: Dropdown component rendered in the TopBar. Click-away
   to dismiss.
 
-#### 24.6.2 App Menu (File, Edit, View)
+#### 27.6.2 App Menu (File, Edit, View)
 
 Dynamic menu bar that changes based on the focused window:
 
@@ -2192,7 +2361,7 @@ Dynamic menu bar that changes based on the focused window:
 - **Note**: Menus are optional per app. Apps without menu config get only the
   default File menu.
 
-#### 24.6.3 Spotlight / Search (Cmd+K)
+#### 27.6.3 Spotlight / Search (Cmd+K)
 
 A command-palette / search overlay:
 
@@ -2211,7 +2380,7 @@ A command-palette / search overlay:
   items in a flat array. Filter on input change. Enter selects first result.
   Arrow keys navigate. Escape closes.
 
-#### 24.6.4 Status Icons Tray
+#### 27.6.4 Status Icons Tray
 
 Decorative status icons on the right side of the TopBar (before the existing
 theme/language toggles):
@@ -2225,7 +2394,7 @@ theme/language toggles):
   "Portfolio updated" -- mostly decorative.
 - **Purpose**: Strengthens the OS metaphor. These are decorative only.
 
-### 24.7 Keyboard Shortcuts
+### 27.7 Keyboard Shortcuts
 
 Implement a comprehensive keyboard shortcut system:
 
@@ -2253,9 +2422,9 @@ Implement a comprehensive keyboard shortcut system:
 - **Visual hint**: Show available shortcuts in the Settings app or via a
   `?` keyboard shortcut that opens a shortcuts cheat sheet overlay.
 
-### 24.8 App-Level UI Polish
+### 27.8 App-Level UI Polish
 
-#### 24.8.1 Profile App
+#### 27.8.1 Profile App
 
 - Add subtle staggered entrance animation for each section (stats, education,
   certs slide in one after another).
@@ -2264,7 +2433,7 @@ Implement a comprehensive keyboard shortcut system:
 - Stats row: animate numbers counting up from 0 on first view.
 - Download resume button: add a subtle download icon animation on hover.
 
-#### 24.8.2 Experience App
+#### 27.8.2 Experience App
 
 - Add color-coded company indicators (each company gets a subtle color).
 - Transition between expanded/collapsed states should feel smoother -- add
@@ -2272,7 +2441,7 @@ Implement a comprehensive keyboard shortcut system:
 - Add "Current" badge to the active role that pulses subtly.
 - Tags in expanded cards: stagger entrance.
 
-#### 24.8.3 Skills App
+#### 27.8.3 Skills App
 
 - Add staggered entrance for skill badges (wave effect per category).
 - Consider grouping by proficiency level visually (e.g., primary skills
@@ -2280,14 +2449,14 @@ Implement a comprehensive keyboard shortcut system:
 - Add a total skill count or a visual summary (pie chart, bar, or just text
   like "46 technologies across 6 categories").
 
-#### 24.8.4 Contact App
+#### 27.8.4 Contact App
 
 - Add entrance animations for each contact link (staggered slide-in).
 - The "Let's Connect" heading could have a subtle gradient text effect.
 - Copy success state: flash the card border green briefly.
 - Add a "timezone" indicator: "Currently X:XX PM in Beirut" (live).
 
-#### 24.8.5 General Polish (All Apps)
+#### 27.8.5 General Polish (All Apps)
 
 - Add subtle section dividers between content blocks (thin gradient lines).
 - Ensure consistent padding/margins across all apps (audit spacing).
@@ -2297,7 +2466,7 @@ Implement a comprehensive keyboard shortcut system:
   indicate more content above.
 - Loading states: ensure skeleton loaders match the actual content layout.
 
-### 24.9 Updated Type Definitions
+### 27.9 Updated Type Definitions
 
 The following types need updating to support new features:
 
@@ -2372,7 +2541,7 @@ export interface Preferences {
 }
 ```
 
-### 24.10 New Data Files
+### 27.10 New Data Files
 
 #### `data/projects.ts`
 
@@ -2390,7 +2559,7 @@ actions (download, open-app, open-url).
 Command registry for the Terminal app. Maps command names to handler
 functions that return output strings.
 
-### 24.11 New Hooks
+### 27.11 New Hooks
 
 | Hook                   | Purpose                                      |
 | ---------------------- | -------------------------------------------- |
@@ -2399,8 +2568,9 @@ functions that return output strings.
 | `useContextMenu`       | Manages right-click context menu state       |
 | `useKeyboardShortcuts` | Registers global keyboard shortcuts          |
 | `usePreferences`       | Reads/writes to PreferencesContext           |
+| `useAudio`             | Plays synthesized sound effects              |
 
-### 24.12 New Components
+### 27.12 New Components
 
 | Component        | Location                    | Purpose                           |
 | ---------------- | --------------------------- | --------------------------------- |
@@ -2413,6 +2583,10 @@ functions that return output strings.
 | `BrandingMenu`   | `components/desktop/`       | Apple logo dropdown in TopBar     |
 | `AppMenu`        | `components/desktop/`       | Dynamic File/Edit/View menus      |
 | `StatusTray`     | `components/desktop/`       | WiFi/battery/bell icons           |
+| `WelcomeModal`   | `components/desktop/`       | First-visit onboarding overlay    |
+| `AppTips`        | `components/desktop/`       | Contextual per-app help dialog    |
+| `VolumePopover`  | `components/desktop/`       | Top-bar volume control popover    |
+| `SoundSection`   | `components/apps/settings/` | Audio preferences settings panel  |
 | `TerminalApp`    | `components/apps/terminal/` | Terminal emulator                 |
 | `ProjectsApp`    | `components/apps/projects/` | Project showcase grid             |
 | `NotepadApp`     | `components/apps/notepad/`  | Guestbook / notes (Firebase)      |
@@ -2421,7 +2595,7 @@ functions that return output strings.
 
 ---
 
-## 25. Implementation Sessions (Post-Session 5)
+## 28. Implementation Sessions (Post-Session 5)
 
 These sessions replace the original Session 6 (Deploy). Deployment moves to
 after all enhancements are complete.
@@ -2541,6 +2715,56 @@ after all enhancements are complete.
   guestbook states, updated profile section strings.
 - **CSS updates**: New CSS variables (`--accent-subtle`), updated wallpaper
   layer z-indexing, refined glass effects and scrollbar styles.
+
+### Session 6g: Audio System + Onboarding + SEO + Polish
+
+(Post-6f, final feature session before deploy)
+
+- **Synthesized audio system**: Complete Web Audio API-based sound engine
+  (`src/lib/audio-engine.ts`) generating 30+ effects via oscillators, gain
+  nodes, and noise buffers. No external audio files. 6 sound categories:
+  system, navigation, window, interaction, notification, app-specific.
+- **Audio types & constants**: `types/audio.ts` (AudioCategory, SoundEffect,
+  AudioPreferences, SoundDefinition), `constants/audio.ts` (default prefs,
+  category metadata, sound-to-category mapping).
+- **Audio hook**: `hooks/useAudio.ts` providing `playSound()` respecting
+  mute, per-category toggles, and master volume.
+- **Audio preferences**: Integrated into PreferencesContext with full reducer
+  support (SET_AUDIO_MUTED, SET_AUDIO_VOLUME, SET_AUDIO_CATEGORY).
+- **Sound Settings UI**: `SoundSection.tsx` in Settings app with master mute,
+  volume slider, per-category toggles with descriptions and preview buttons.
+- **Volume Popover**: `VolumePopover.tsx` in TopBar with adaptive icon,
+  click-to-toggle mute, compact slider.
+- **Audio integrated into 15+ components**: ContactLink, ExperienceApp,
+  FinderApp, NotepadApp, ProjectToolbar, AppearanceSection, TerminalApp,
+  Desktop, Dock, Spotlight, TopBar, BrandingMenu, WindowHeader,
+  ImageCarousel, BootSequence.
+- **Welcome Modal**: First-visit onboarding modal (`WelcomeModal.tsx`) with
+  6 feature rows, mobile-aware, localStorage-persisted, re-shown after
+  reboot/shutdown.
+- **App Tips**: Contextual help panel (`AppTips.tsx`) accessible from Help
+  menu with per-app tips and generic fallback.
+- **Help Menu**: AppMenu always shows Help with "Keyboard Shortcuts",
+  "Welcome Guide", and contextual "Tips for [App Name]". Menu items now
+  support `separator` boolean for visual dividers.
+- **Window minimize state preservation**: Minimized windows stay mounted but
+  hidden (`visibility: hidden`) to preserve internal app state.
+- **Mobile dock visibility**: `mobileVisible` property on AppDefinition.
+  Terminal and Finder hidden on mobile.
+- **Window OPEN auto-restore**: OPEN action restores minimized windows.
+- **Dynamic years of experience**: `getYearsOfExperience()` utility, used
+  across ProfileHeader, StatsRow, terminal commands, and HTML meta via Vite
+  plugin `inject-years-of-experience`.
+- **SEO & PWA assets**: favicon.svg, multiple PNG favicons, apple-touch-icon,
+  Android Chrome icons, og-image, robots.txt, sitemap.xml, site.webmanifest,
+  profile-face.webp.
+- **Keyboard shortcut changes**: Removed Cmd+W, close window now Esc only.
+- **Updated wallpaper images**: All 24 wallpapers + thumbnails replaced.
+- **Updated project screenshots**: 4 portfolio screenshots refreshed.
+- **Data/content updates**: Experience tags, expanded filesystem, terminal
+  skills, expanded Spotlight index (projects, certificates, education, files),
+  Arabic i18n quality pass, default accent color changed to indigo.
+- **Branding logo**: SVG "JK" monogram replacing styled letter.
 
 ---
 

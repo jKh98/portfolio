@@ -24,3 +24,10 @@ export type {
   PreferencesAction,
   PreferencesContextValue,
 } from "./preferences";
+export type {
+  AudioCategory,
+  AudioPreferences,
+  AudioContextValue,
+  SoundEffect,
+  SoundDefinition,
+} from "./audio";

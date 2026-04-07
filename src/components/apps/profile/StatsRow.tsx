@@ -6,6 +6,7 @@ import { ANIMATION } from "@/constants";
 import { cn } from "@/utils/cn";
 import { GlassCard } from "@/components/ui";
 import { Briefcase, FolderKanban, Cpu } from "lucide-react";
+import { YEARS_OF_EXPERIENCE } from "@/data";
 
 export interface StatsRowProps {
   className?: string;
@@ -13,7 +14,7 @@ export interface StatsRowProps {
 
 const STATS = [
   {
-    value: 6,
+    value: YEARS_OF_EXPERIENCE,
     suffix: "+",
     labelKey: "apps.profile.stats.experience",
     icon: Briefcase,

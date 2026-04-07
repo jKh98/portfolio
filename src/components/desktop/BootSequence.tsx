@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useReducedMotion, useIsMobile } from "@/hooks";
 import { useWindowManager } from "@/context";
 import { trackEvent } from "@/lib/analytics";
+import { synthesizeSound } from "@/lib/audio-engine";
 
 const BOOT_TEXT = "> jalkhurfan.com";
 const TYPING_CHAR_DELAY = 50; // ms per character
@@ -87,6 +88,8 @@ export const BootSequence = forwardRef<BootSequenceHandle>(
           sessionStorage.setItem("booted", "true");
           setPhase("done");
           openWindow("profile");
+          // Play startup chime as boot completes
+          try { synthesizeSound("startup", 0.5); } catch { /* ignore */ }
           trackEvent("boot_complete", { skipped: false });
         }, PHASE_DELAY_FADE);
       }

@@ -3,6 +3,7 @@ import { cn } from "@/utils/cn";
 import { useWindowManager, useTheme } from "@/context";
 import { executeCommand, ASCII_BANNER } from "@/data/terminal-commands";
 import { trackEvent } from "@/lib/analytics";
+import { useAudio } from "@/hooks";
 import type { CommandResult } from "@/data/terminal-commands";
 import { TerminalOutput } from "./TerminalOutput";
 import { TerminalInput } from "./TerminalInput";
@@ -19,6 +20,7 @@ let lineId = 0;
 export function TerminalApp() {
   const { openWindow, closeWindow } = useWindowManager();
   const { setTheme } = useTheme();
+  const { playSound } = useAudio();
   const [lines, setLines] = useState<OutputLine[]>(() =>
     ASCII_BANNER.map((text) => ({ id: lineId++, text })),
   );
@@ -74,6 +76,7 @@ export function TerminalApp() {
       if (result.action?.type === "clear") {
         setLines([]);
         handleAction(result);
+        playSound("terminalClear");
       } else {
         const outputLines: OutputLine[] = result.output.map((text) => ({
           id: lineId++,
@@ -81,6 +84,12 @@ export function TerminalApp() {
         }));
         setLines((prev) => [...prev, commandLine, ...outputLines]);
         handleAction(result);
+
+        // Play error sound for unknown commands, success sound otherwise
+        const isError = result.output.some(
+          (line) => line.includes("command not found") || line.includes("not found"),
+        );
+        playSound(isError ? "terminalError" : "terminalExecute");
       }
 
       if (input.trim()) {
@@ -89,12 +98,13 @@ export function TerminalApp() {
         trackEvent("terminal_command", { command: input.trim().split(/\s+/)[0] });
       }
     },
-    [handleAction, history],
+    [handleAction, history, playSound],
   );
 
   const handleClear = useCallback(() => {
     setLines([]);
-  }, []);
+    playSound("terminalClear");
+  }, [playSound]);
 
   const toggleFontSize = useCallback(() => {
     setFontSize((prev) => (prev === "sm" ? "base" : "sm"));
@@ -102,6 +112,7 @@ export function TerminalApp() {
 
   return (
     <div
+      dir="ltr"
       className={cn(
         "flex flex-col flex-1 min-h-0 overflow-hidden",
         "bg-[var(--terminal-bg)] text-[var(--terminal-text)]",

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useWindowManager } from "@/context";
-import { useIsMobile } from "@/hooks";
+import { useIsMobile, useAudio } from "@/hooks";
 import { FILE_TREE, resolveNode, pathSegments } from "@/data";
 import type { FileNode, FileAction } from "@/data";
 import { WindowToolbar } from "@/components/window";
@@ -14,6 +14,7 @@ export function FinderApp() {
   const { t } = useTranslation();
   const { openWindow } = useWindowManager();
   const isMobile = useIsMobile();
+  const { playSound } = useAudio();
   const [currentPath, setCurrentPath] = useState("~");
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>(["~"]);
@@ -29,8 +30,9 @@ export function FinderApp() {
       const newHistory = [...history.slice(0, historyIndex + 1), path];
       setHistory(newHistory);
       setHistoryIndex(newHistory.length - 1);
+      playSound("finderNavigate");
     },
-    [history, historyIndex],
+    [history, historyIndex, playSound],
   );
 
   const goBack = useCallback(() => {
@@ -59,6 +61,7 @@ export function FinderApp() {
           a.href = action.url;
           a.download = "";
           a.click();
+          playSound("fileDownload");
           break;
         }
         case "openApp":
@@ -69,7 +72,7 @@ export function FinderApp() {
           break;
       }
     },
-    [openWindow],
+    [openWindow, playSound],
   );
 
   const handleDoubleClick = useCallback(
@@ -80,11 +83,12 @@ export function FinderApp() {
             ? `~/${node.name}`
             : `${currentPath}/${node.name}`;
         navigateTo(newPath);
+        playSound("finderOpen");
       } else if (node.action) {
         handleFileAction(node.action);
       }
     },
-    [currentPath, navigateTo, handleFileAction],
+    [currentPath, navigateTo, handleFileAction, playSound],
   );
 
   const handleBreadcrumbClick = useCallback(

@@ -1,4 +1,5 @@
 import type { Experience } from "@/types";
+import { getYearsOfExperience } from "@/utils/format";
 
 export const EXPERIENCE: Experience[] = [
   {
@@ -16,7 +17,7 @@ export const EXPERIENCE: Experience[] = [
       "NestJS",
       "Azure",
       "Docker",
-      "PostgreSQL",
+      "MongoDB",
     ],
   },
   {
@@ -96,3 +97,6 @@ export const EXPERIENCE: Experience[] = [
     tags: ["Android", "Java", "ProGuard"],
   },
 ];
+
+/** Computed years of professional experience based on the earliest start date. */
+export const YEARS_OF_EXPERIENCE = getYearsOfExperience(EXPERIENCE);

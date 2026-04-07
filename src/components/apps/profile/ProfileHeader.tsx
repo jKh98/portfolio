@@ -5,6 +5,7 @@ import { useReducedMotion, useIsMobile } from "@/hooks";
 import { ANIMATION } from "@/constants";
 import { GlassCard } from "@/components/ui";
 import { trackEvent } from "@/lib/analytics";
+import { YEARS_OF_EXPERIENCE } from "@/data";
 import {
   MapPin,
   Linkedin,
@@ -174,7 +175,7 @@ export function ProfileHeader({ className }: ProfileHeaderProps) {
           }}
           className="text-sm text-[var(--text-secondary)] leading-relaxed"
         >
-          {t("apps.profile.summary")}
+          {t("apps.profile.summary", { years: YEARS_OF_EXPERIENCE })}
         </motion.p>
 
         {/* Actions */}

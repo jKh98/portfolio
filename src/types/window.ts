@@ -36,6 +36,8 @@ export interface AppMenuItem {
   action: string;
   /** Keyboard shortcut hint (display only) */
   shortcut?: string;
+  /** Whether to render a separator line above this item */
+  separator?: boolean;
 }
 
 /** A menu group (e.g. "File", "Edit", "View") */
@@ -58,6 +60,8 @@ export interface AppDefinition {
   menuConfig?: AppMenuGroup[];
   /** Optional minimum window width in pixels (default: 400) */
   minWidth?: number;
+  /** Whether this app should appear in the dock on mobile (default: true) */
+  mobileVisible?: boolean;
 }
 
 /** Actions dispatched to the window reducer */

@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Sun, Moon, Languages, Search } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/context";
-import { useIsMobile } from "@/hooks";
+import { useIsMobile, useAudio } from "@/hooks";
 import { IconButton } from "@/components/ui";
 import { trackEvent, setUserProps } from "@/lib/analytics";
 import { BrandingMenu } from "./BrandingMenu";
 import { AppMenu } from "./AppMenu";
+import { VolumePopover } from "./VolumePopover";
 
 export interface TopBarProps {
   onSpotlightOpen?: () => void;
@@ -18,6 +19,7 @@ export function TopBar({ onSpotlightOpen, onRestart }: TopBarProps) {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
+  const { playSound } = useAudio();
   const [time, setTime] = useState(() => formatTime());
 
   useEffect(() => {
@@ -28,8 +30,19 @@ export function TopBar({ onSpotlightOpen, onRestart }: TopBarProps) {
   const toggleLanguage = () => {
     const next = i18n.language === "ar" ? "en" : "ar";
     i18n.changeLanguage(next);
+    playSound("languageToggle");
     trackEvent("language_toggle", { language: next });
     setUserProps({ language: next });
+  };
+
+  const handleThemeToggle = () => {
+    toggleTheme();
+    playSound("themeToggle");
+  };
+
+  const handleSpotlightOpen = () => {
+    playSound("spotlightOpen");
+    onSpotlightOpen?.();
   };
 
   return (
@@ -61,21 +74,22 @@ export function TopBar({ onSpotlightOpen, onRestart }: TopBarProps) {
         {time}
       </span>
 
-      {/* End: Spotlight + Theme + Language toggles */}
+      {/* End: Volume + Spotlight + Theme + Language toggles */}
       <div className="flex items-center gap-1">
         {onSpotlightOpen && (
           <IconButton
             label={t("topbar.spotlight.placeholder")}
             size="sm"
-            onClick={onSpotlightOpen}
+            onClick={handleSpotlightOpen}
           >
             <Search size={14} />
           </IconButton>
         )}
+        <VolumePopover />
         <IconButton
           label={t("topbar.switchTheme")}
           size="sm"
-          onClick={toggleTheme}
+          onClick={handleThemeToggle}
         >
           {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
         </IconButton>

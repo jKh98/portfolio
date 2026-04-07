@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
 import { useWindowManager, useTheme } from "@/context";
+import { useAudio } from "@/hooks";
 import { buildSpotlightIndex } from "@/data";
 import { trackEvent } from "@/lib/analytics";
 import type { SpotlightCategory, SpotlightItem } from "@/data";
@@ -19,6 +20,7 @@ export function Spotlight({ isOpen, onClose }: SpotlightProps) {
   const { t, i18n } = useTranslation();
   const { openWindow } = useWindowManager();
   const { toggleTheme } = useTheme();
+  const { playSound } = useAudio();
   const [query, setQuery] = useState("");
   const [selectedIdx, setSelectedIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -68,6 +70,7 @@ export function Spotlight({ isOpen, onClose }: SpotlightProps) {
   const executeAction = useCallback(
     (item: SpotlightItem & { label: string }) => {
       onClose();
+      playSound("spotlightSelect");
       trackEvent("spotlight_select", { label: item.label, category: item.category });
       const { action } = item;
       if (action.type === "open-app") openWindow(action.appId);
@@ -77,7 +80,7 @@ export function Spotlight({ isOpen, onClose }: SpotlightProps) {
       else if (action.id === "switch-language")
         i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar");
     },
-    [onClose, openWindow, toggleTheme, i18n],
+    [onClose, openWindow, toggleTheme, i18n, playSound],
   );
 
   const handleKeyDown = useCallback(
@@ -179,25 +182,26 @@ export function Spotlight({ isOpen, onClose }: SpotlightProps) {
 }
 
 function SpotlightFooter() {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between px-4 py-2 border-t border-[var(--border)] text-[10px] text-[var(--text-tertiary)]">
       <span>
         <kbd className="px-1 rounded bg-[var(--bg-surface)] border border-[var(--border)]">
           &uarr;&darr;
         </kbd>{" "}
-        navigate
+        {t("topbar.spotlight.footer.navigate")}
       </span>
       <span>
         <kbd className="px-1 rounded bg-[var(--bg-surface)] border border-[var(--border)]">
           &crarr;
         </kbd>{" "}
-        select
+        {t("topbar.spotlight.footer.select")}
       </span>
       <span>
         <kbd className="px-1 rounded bg-[var(--bg-surface)] border border-[var(--border)]">
           esc
         </kbd>{" "}
-        close
+        {t("topbar.spotlight.footer.close")}
       </span>
     </div>
   );

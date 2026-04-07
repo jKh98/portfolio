@@ -1,3 +1,5 @@
+import type { AudioCategory, AudioPreferences } from "./audio";
+
 /** Accent color identifier */
 export type AccentColor =
   | "blue"
@@ -39,6 +41,8 @@ export interface Preferences {
   fontSize: FontSize;
   /** Desktop wallpaper ID (references a WallpaperEntry.id) */
   wallpaper: string;
+  /** Audio feedback preferences */
+  audio: AudioPreferences;
 }
 
 /** Actions dispatched to the preferences reducer */
@@ -51,6 +55,9 @@ export type PreferencesAction =
   | { type: "SET_REDUCE_MOTION"; value: boolean | null }
   | { type: "SET_FONT_SIZE"; size: FontSize }
   | { type: "SET_WALLPAPER"; wallpaper: string }
+  | { type: "SET_AUDIO_MUTED"; muted: boolean }
+  | { type: "SET_AUDIO_VOLUME"; volume: number }
+  | { type: "SET_AUDIO_CATEGORY"; category: AudioCategory; enabled: boolean }
   | { type: "RESET" };
 
 /** The preferences context value */
@@ -66,5 +73,8 @@ export interface PreferencesContextValue {
   setReduceMotion: (value: boolean | null) => void;
   setFontSize: (size: FontSize) => void;
   setWallpaper: (wallpaper: string) => void;
+  setAudioMuted: (muted: boolean) => void;
+  setAudioVolume: (volume: number) => void;
+  setAudioCategory: (category: AudioCategory, enabled: boolean) => void;
   resetPreferences: () => void;
 }

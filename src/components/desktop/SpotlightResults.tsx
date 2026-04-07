@@ -1,12 +1,25 @@
 import { cn } from "@/utils/cn";
 import type { SpotlightCategory } from "@/data";
-import { AppWindow, Zap, Building2, Code } from "lucide-react";
+import {
+  AppWindow,
+  Zap,
+  Building2,
+  Code,
+  FolderOpen,
+  Award,
+  GraduationCap,
+  FileText,
+} from "lucide-react";
 
 const CATEGORY_ICONS: Record<SpotlightCategory, React.ReactNode> = {
   apps: <AppWindow size={14} />,
   skills: <Code size={14} />,
   actions: <Zap size={14} />,
   companies: <Building2 size={14} />,
+  projects: <FolderOpen size={14} />,
+  certificates: <Award size={14} />,
+  education: <GraduationCap size={14} />,
+  files: <FileText size={14} />,
 };
 
 export interface SpotlightResultItem {

@@ -68,6 +68,7 @@ const UTILITY_APPS: AppDefinition[] = [
     component: lazy(
       () => import("@/components/apps/terminal/TerminalApp"),
     ),
+    mobileVisible: false,
   },
   {
     id: "finder",
@@ -76,6 +77,7 @@ const UTILITY_APPS: AppDefinition[] = [
     component: lazy(
       () => import("@/components/apps/finder/FinderApp"),
     ),
+    mobileVisible: false,
   },
   {
     id: "notepad",

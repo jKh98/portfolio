@@ -16,3 +16,9 @@ export {
   getPairedWallpaper,
 } from "./wallpapers";
 export type { WallpaperCategory, WallpaperEntry, WallpaperTheme } from "./wallpapers";
+export {
+  DEFAULT_AUDIO_PREFERENCES,
+  AUDIO_CATEGORIES,
+  SOUND_DEFINITIONS,
+  getSoundsByCategory,
+} from "./audio";

@@ -7,6 +7,7 @@ import {
   type GuestbookEntry,
 } from "@/lib/guestbook";
 import { trackEvent } from "@/lib/analytics";
+import { useAudio } from "@/hooks";
 import { NotepadInput } from "./NotepadInput";
 import { NotepadMessages } from "./NotepadMessages";
 
@@ -16,6 +17,7 @@ const RATE_LIMIT_KEY = "portfolio-guestbook-submitted";
 
 export function NotepadApp() {
   const { t } = useTranslation();
+  const { playSound } = useAudio();
   const [entries, setEntries] = useState<GuestbookEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,12 +55,14 @@ export function NotepadApp() {
         setHasSubmitted(true);
         sessionStorage.setItem(RATE_LIMIT_KEY, "true");
         trackEvent("guestbook_submit");
+        playSound("guestbookSubmit");
       } catch (err) {
         console.error("Failed to submit guestbook entry:", err);
         setError(t("apps.notepad.submitError"));
+        playSound("error");
       }
     },
-    [hasSubmitted, t],
+    [hasSubmitted, t, playSound],
   );
 
   return (

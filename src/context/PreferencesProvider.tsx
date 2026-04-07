@@ -12,14 +12,16 @@ import type {
   AnimationSpeed,
   FontSize,
   DockIconSize,
+  AudioCategory,
 } from "@/types";
 import { applyAccentColor, DEFAULT_WALLPAPER_ID } from "@/constants";
+import { DEFAULT_AUDIO_PREFERENCES } from "@/constants/audio";
 import { trackEvent, setUserProps } from "@/lib/analytics";
 
 const STORAGE_KEY = "portfolio-preferences";
 
 const DEFAULT_PREFERENCES: Preferences = {
-  accentColor: "cyan",
+  accentColor: "indigo",
   dockMagnification: true,
   dockIconSize: "medium",
   animationSpeed: "normal",
@@ -27,6 +29,7 @@ const DEFAULT_PREFERENCES: Preferences = {
   reduceMotion: null,
   fontSize: "normal",
   wallpaper: DEFAULT_WALLPAPER_ID,
+  audio: DEFAULT_AUDIO_PREFERENCES,
 };
 
 function loadPreferences(): Preferences {
@@ -69,6 +72,18 @@ function preferencesReducer(
       return { ...state, fontSize: action.size };
     case "SET_WALLPAPER":
       return { ...state, wallpaper: action.wallpaper };
+    case "SET_AUDIO_MUTED":
+      return { ...state, audio: { ...state.audio, muted: action.muted } };
+    case "SET_AUDIO_VOLUME":
+      return { ...state, audio: { ...state.audio, volume: action.volume } };
+    case "SET_AUDIO_CATEGORY":
+      return {
+        ...state,
+        audio: {
+          ...state.audio,
+          categories: { ...state.audio.categories, [action.category]: action.enabled },
+        },
+      };
     case "RESET":
       return DEFAULT_PREFERENCES;
     default:
@@ -153,6 +168,22 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
     },
     [],
   );
+  const setAudioMuted = useCallback(
+    (muted: boolean) => {
+      trackEvent("preference_change", { setting: "audio_muted", value: String(muted) });
+      dispatch({ type: "SET_AUDIO_MUTED", muted });
+    },
+    [],
+  );
+  const setAudioVolume = useCallback(
+    (volume: number) => dispatch({ type: "SET_AUDIO_VOLUME", volume }),
+    [],
+  );
+  const setAudioCategory = useCallback(
+    (category: AudioCategory, enabled: boolean) =>
+      dispatch({ type: "SET_AUDIO_CATEGORY", category, enabled }),
+    [],
+  );
   const resetPreferences = useCallback(
     () => dispatch({ type: "RESET" }),
     [],
@@ -171,6 +202,9 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
         setReduceMotion,
         setFontSize,
         setWallpaper,
+        setAudioMuted,
+        setAudioVolume,
+        setAudioCategory,
         resetPreferences,
       }}
     >

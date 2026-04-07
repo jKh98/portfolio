@@ -856,6 +856,103 @@ Follow all rules in .opencode/rules/portfolio-v3.md strictly.
 
 ---
 
+## Session 6g: Audio System + Onboarding + SEO + Polish
+
+````
+I'm building a portfolio v3. Read SPEC.md and the rules in .opencode/rules/ before doing anything.
+
+This is Session 6g: Audio System + Onboarding + SEO + Polish.
+
+Sessions 6a-6f are complete: all 9 apps built, image-based wallpaper system, Firebase backend, window system overhauled, interactions polished, profile redesigned.
+
+This session adds a synthesized audio feedback system, first-visit onboarding, contextual help, SEO/PWA assets, and further polish across the board.
+
+Tasks (in order):
+
+1. **Synthesized audio system** (Web Audio API):
+   - Create `src/lib/audio-engine.ts`: Core synthesis engine using oscillators, gain nodes, and noise buffers. 30+ sound effects across 6 categories (system, navigation, window, interaction, notification, app-specific).
+   - Create `src/types/audio.ts`: AudioCategory, SoundEffect, AudioPreferences, SoundDefinition types.
+   - Create `src/constants/audio.ts`: Default preferences, category metadata with i18n keys, sound-to-category mapping.
+   - Create `src/hooks/useAudio.ts`: React hook providing `playSound()` that respects mute, per-category toggles, and master volume.
+   - Integrate audio preferences into PreferencesContext (SET_AUDIO_MUTED, SET_AUDIO_VOLUME, SET_AUDIO_CATEGORY actions).
+
+2. **Sound settings UI**:
+   - Create `src/components/apps/settings/SoundSection.tsx`: Master mute toggle, volume slider (0-100%), per-category toggles with descriptions and preview buttons.
+   - Wire into SettingsApp.
+
+3. **Volume popover**:
+   - Create `src/components/desktop/VolumePopover.tsx`: Top-bar popover with volume icon (changes based on level), click-to-toggle mute with indicator dot, compact volume slider.
+   - Wire into TopBar (next to theme/language toggles).
+
+4. **Integrate audio into components**:
+   - Add `playSound()` calls to 15+ components: ContactLink, ExperienceApp, FinderApp, NotepadApp, ProjectToolbar, AppearanceSection, TerminalApp, Desktop, Dock, Spotlight, TopBar, BrandingMenu, WindowHeader, ImageCarousel, BootSequence.
+
+5. **Welcome modal**:
+   - Create `src/components/desktop/WelcomeModal.tsx`: First-visit onboarding modal shown after boot sequence.
+   - 6 feature rows with icons: Apps, Windows, Terminal, Spotlight, Shortcuts, Theme.
+   - Mobile-aware: "visit on desktop for full experience" note.
+   - Persisted via localStorage (`portfolio-welcomed` key).
+   - Re-shown after reboot/shutdown.
+
+6. **App tips / contextual help**:
+   - Create `src/components/desktop/AppTips.tsx`: Contextual help panel accessible from Help menu.
+   - Shows per-app tips with fallback to generic tip.
+   - Add Help menu to AppMenu with "Keyboard Shortcuts", "Welcome Guide", and contextual "Tips for [App Name]".
+   - Menu items now support `separator` boolean for visual dividers.
+
+7. **Window minimize state preservation**:
+   - Update Window.tsx: minimized windows stay mounted but hidden (visibility: hidden, pointerEvents: none) instead of unmounting.
+   - Preserves internal app state (filters, search queries, selected tabs) across minimize/restore cycles.
+
+8. **Mobile dock visibility**:
+   - Add `mobileVisible` property to AppDefinition.
+   - Terminal and Finder hidden on mobile (mobileVisible: false).
+   - Update Dock to filter apps by mobileVisible on mobile.
+
+9. **Window OPEN auto-restore**:
+   - Update WindowProvider: OPEN action automatically restores a minimized window.
+
+10. **Dynamic years of experience**:
+    - Add `getYearsOfExperience()` to src/utils/format.ts.
+    - Use in ProfileHeader, StatsRow, terminal commands.
+    - Vite plugin `inject-years-of-experience` replaces `__YEARS_EXP__` in index.html at build time.
+
+11. **SEO & PWA assets**:
+    - Add: favicon.svg, favicon-16x16.png, favicon-32x32.png, apple-touch-icon.png, android-chrome icons, og-image.png, robots.txt, sitemap.xml, site.webmanifest, profile-face.webp.
+
+12. **Keyboard shortcut changes**:
+    - Remove Cmd+W (avoid closing browser tabs).
+    - Close window shortcut changed to Esc.
+
+13. **Updated wallpaper images**: Replace all 24 wallpapers + thumbnails with new higher-quality images.
+
+14. **Updated project screenshots**: Refresh 4 portfolio screenshots.
+
+15. **Data/content updates**:
+    - Experience: "PostgreSQL" → "MongoDB" in latest role tags.
+    - Filesystem: expanded from 5 to 7 projects, added root-level Experience.txt and Skills.txt.
+    - Terminal: added React Native, NGINX, AI skills, Finder/Notepad to valid apps.
+    - Spotlight: expanded index with projects, certificates, education, files categories.
+    - i18n: comprehensive Arabic quality pass, all new feature translations.
+    - Default accent color: cyan → indigo.
+
+16. **Update SPEC.md**: Document audio system, onboarding, SEO, new components.
+
+17. **Verify**:
+    - Audio plays correctly with volume/mute/category controls.
+    - Welcome modal shows on first visit, re-shows after reboot.
+    - App tips accessible from Help menu.
+    - SEO meta tags and PWA manifest correct.
+    - All new features work in both themes, both languages, RTL.
+    - `yarn build` passes clean.
+
+18. **Commit** to v3 branch.
+
+Follow all rules in .opencode/rules/portfolio-v3.md strictly.
+````
+
+---
+
 ## Session 7: Deploy + Final QA
 
 ```

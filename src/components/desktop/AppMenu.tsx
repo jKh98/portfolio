@@ -12,8 +12,8 @@ export type AppMenuAction = string;
 
 /**
  * Dynamic menu bar shown in the TopBar. Displays "File" menu always,
- * plus per-app menus based on the currently focused window's menuConfig.
- * Actions are broadcast via custom DOM events (useAppMenuAction).
+ * plus per-app menus based on the currently focused window's menuConfig,
+ * and a "Help" menu with keyboard shortcuts and contextual tips.
  */
 export function AppMenu() {
   const { t } = useTranslation();
@@ -33,13 +33,32 @@ export function AppMenu() {
   const fileMenu: AppMenuGroup = {
     titleKey: "topbar.menu.file",
     items: [
-      { labelKey: "topbar.menu.closeWindow", action: "close-window", shortcut: "\u2318W" },
+      { labelKey: "topbar.menu.closeWindow", action: "close-window", shortcut: "Esc" },
       { labelKey: "topbar.menu.closeAll", action: "close-all" },
     ],
   };
 
-  // Combine default + per-app menus
-  const menus: AppMenuGroup[] = [fileMenu, ...(focusedApp?.menuConfig ?? [])];
+  // Help menu — always present, with contextual tips when an app is focused
+  const helpItems: AppMenuGroup["items"] = [
+    { labelKey: "topbar.menu.keyboardShortcuts", action: "show-shortcuts", shortcut: "?" },
+    { labelKey: "topbar.menu.welcomeGuide", action: "show-welcome", separator: true },
+  ];
+
+  if (focusedApp) {
+    helpItems.push({
+      labelKey: "topbar.menu.tipsForApp",
+      action: "show-app-tips",
+      separator: true,
+    });
+  }
+
+  const helpMenu: AppMenuGroup = {
+    titleKey: "topbar.menu.help",
+    items: helpItems,
+  };
+
+  // Combine default + per-app menus + help
+  const menus: AppMenuGroup[] = [fileMenu, ...(focusedApp?.menuConfig ?? []), helpMenu];
 
   const handleItemClick = useCallback(
     (action: string) => {
@@ -111,26 +130,34 @@ export function AppMenu() {
                 )}
               >
                 {menu.items.map((item) => (
-                  <button
-                    key={item.action}
-                    type="button"
-                    role="menuitem"
-                    onClick={() => handleItemClick(item.action)}
-                    className={cn(
-                      "flex items-center justify-between w-full px-3 py-1.5",
-                      "text-xs text-[var(--text-primary)]",
-                      "hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)]",
-                      "transition-colors duration-100",
-                      "cursor-pointer",
+                  <div key={item.action}>
+                    {item.separator && (
+                      <div className="border-t border-[var(--border)] my-1 mx-2" />
                     )}
-                  >
-                    <span>{t(item.labelKey)}</span>
-                    {item.shortcut && (
-                      <span className="text-[10px] text-[var(--text-tertiary)] ms-4">
-                        {item.shortcut}
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => handleItemClick(item.action)}
+                      className={cn(
+                        "flex items-center justify-between w-full px-3 py-1.5",
+                        "text-xs text-[var(--text-primary)]",
+                        "hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)]",
+                        "transition-colors duration-100",
+                        "cursor-pointer",
+                      )}
+                    >
+                      <span>
+                        {item.labelKey === "topbar.menu.tipsForApp" && focusedApp
+                          ? t(item.labelKey, { app: t(focusedApp.titleKey) })
+                          : t(item.labelKey)}
                       </span>
-                    )}
-                  </button>
+                      {item.shortcut && (
+                        <span className="text-[10px] text-[var(--text-tertiary)] ms-4">
+                          {item.shortcut}
+                        </span>
+                      )}
+                    </button>
+                  </div>
                 ))}
               </motion.div>
             )}

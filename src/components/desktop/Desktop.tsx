@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Sun, Moon, Languages, Info } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useWindowManager, useTheme } from "@/context";
-import { useIsMobile, useContextMenu, useKeyboardShortcuts } from "@/hooks";
+import { useIsMobile, useContextMenu, useKeyboardShortcuts, useAppMenuAction, useAudio } from "@/hooks";
 import { APP_DEFINITIONS } from "@/constants";
 import { TopBar } from "./TopBar";
 import { Dock } from "./Dock";
@@ -11,20 +11,27 @@ import { BootSequence } from "./BootSequence";
 import type { BootSequenceHandle } from "./BootSequence";
 import { Spotlight } from "./Spotlight";
 import { ShortcutCheatSheet } from "./ShortcutCheatSheet";
+import { AppTips } from "./AppTips";
+import { WelcomeModal } from "./WelcomeModal";
 import { Window } from "@/components/window";
 import { ContextMenu } from "@/components/ui";
 import type { ContextMenuItem } from "@/components/ui";
+import type { AppId } from "@/types";
+
+const WELCOMED_KEY = "portfolio-welcomed";
 
 export function Desktop() {
   const { t, i18n } = useTranslation();
-  const { openWindow } = useWindowManager();
+  const { windows, openWindow } = useWindowManager();
   const { theme, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
   const desktopMenu = useContextMenu();
+  const { playSound } = useAudio();
   const bootRef = useRef<BootSequenceHandle>(null);
 
   // Restart handler: triggers the boot sequence to replay
   const handleRestart = useCallback(() => {
+    setWelcomePending(true);
     bootRef.current?.reboot();
   }, []);
 
@@ -38,11 +45,61 @@ export function Desktop() {
   const openShortcuts = useCallback(() => setShortcutsOpen(true), []);
   const closeShortcuts = useCallback(() => setShortcutsOpen(false), []);
 
+  // App tips state
+  const [tipsOpen, setTipsOpen] = useState(false);
+  const closeTips = useCallback(() => setTipsOpen(false), []);
+
+  // Find the currently focused app for contextual tips
+  const focusedAppId = (Object.keys(windows) as AppId[]).find(
+    (id) => windows[id].isFocused && windows[id].isOpen,
+  );
+
+  // Welcome modal state — shown for first-time visitors and after reboot/shutdown
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const [welcomePending, setWelcomePending] = useState(
+    () => !localStorage.getItem(WELCOMED_KEY),
+  );
+
+  // After boot finishes (profile window opens), show welcome if pending
+  useEffect(() => {
+    if (!windows.profile?.isOpen) return;
+    if (!welcomePending) return;
+
+    // Short delay so the desktop settles before the modal appears
+    const timer = setTimeout(() => {
+      setWelcomeOpen(true);
+      playSound("welcomeModal");
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [windows.profile?.isOpen, welcomePending, playSound]);
+
+  const dismissWelcome = useCallback(() => {
+    setWelcomeOpen(false);
+    setWelcomePending(false);
+    localStorage.setItem(WELCOMED_KEY, "true");
+  }, []);
+
   // Register keyboard shortcuts
   useKeyboardShortcuts({
     onSpotlight: openSpotlight,
     onShowShortcuts: openShortcuts,
   });
+
+  // Listen for Help menu actions dispatched via the event bus
+  useAppMenuAction(
+    useCallback(
+      (action: string) => {
+        if (action === "show-shortcuts") {
+          setShortcutsOpen(true);
+        } else if (action === "show-app-tips") {
+          setTipsOpen(true);
+        } else if (action === "show-welcome") {
+          setWelcomeOpen(true);
+        }
+      },
+      [],
+    ),
+  );
 
   const toggleLanguage = useCallback(() => {
     const next = i18n.language === "ar" ? "en" : "ar";
@@ -86,8 +143,9 @@ export function Desktop() {
         return;
       }
       desktopMenu.open(e);
+      playSound("contextMenu");
     },
-    [desktopMenu],
+    [desktopMenu, playSound],
   );
 
   return (
@@ -145,6 +203,12 @@ export function Desktop() {
 
       {/* Keyboard shortcuts cheat sheet */}
       <ShortcutCheatSheet isOpen={shortcutsOpen} onClose={closeShortcuts} />
+
+      {/* App tips panel */}
+      <AppTips isOpen={tipsOpen} onClose={closeTips} appId={focusedAppId} />
+
+      {/* First-visit welcome modal */}
+      <WelcomeModal isOpen={welcomeOpen} onDismiss={dismissWelcome} />
     </div>
   );
 }

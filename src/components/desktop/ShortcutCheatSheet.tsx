@@ -26,11 +26,10 @@ export function ShortcutCheatSheet({ isOpen, onClose }: ShortcutCheatSheetProps)
   }));
 
   const systemShortcuts: ShortcutEntry[] = [
-    { keys: "\u2318W", descriptionKey: "shortcuts.closeWindow" },
+    { keys: "Esc", descriptionKey: "shortcuts.closeWindow" },
     { keys: "\u2318M", descriptionKey: "shortcuts.minimizeWindow" },
     { keys: "\u2318K", descriptionKey: "shortcuts.openSpotlight" },
     { keys: "\u2318`", descriptionKey: "shortcuts.cycleWindows" },
-    { keys: "Esc", descriptionKey: "shortcuts.closeOrDeselect" },
     { keys: "?", descriptionKey: "shortcuts.showShortcuts" },
   ];
 

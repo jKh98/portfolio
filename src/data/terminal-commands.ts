@@ -1,4 +1,5 @@
 import type { AppId } from "@/types";
+import { YEARS_OF_EXPERIENCE } from "./experience";
 
 export interface CommandResult {
   output: string[];
@@ -39,7 +40,7 @@ const VIRTUAL_FS: FsNode = {
         "Jihad Al-Khurfan",
         "Senior Fullstack Engineer",
         "",
-        "6+ years of experience building scalable web and mobile",
+        `${YEARS_OF_EXPERIENCE}+ years of experience building scalable web and mobile`,
         "solutions. Specializing in React, TypeScript, Node.js,",
         "and cloud infrastructure across fintech, logistics, and",
         "government digital transformation projects.",
@@ -48,9 +49,10 @@ const VIRTUAL_FS: FsNode = {
     "Contact.txt": {
       type: "file",
       content: [
-        "Email     jihadkhurfan@gmail.com",
+        "Email     jalkhurfan@gmail.com",
+        "Phone     +961 76 380 589",
         "LinkedIn  linkedin.com/in/jalkhurfan",
-        "GitHub    github.com/jalkhurfan",
+        "GitHub    github.com/jKh98",
         "Location  Beirut, Lebanon",
       ],
     },
@@ -59,7 +61,7 @@ const VIRTUAL_FS: FsNode = {
       content: [
         "Jihad Al-Khurfan - Senior Fullstack Engineer",
         "----------------------------------------------",
-        "6+ years | React, TypeScript, Node.js, Azure",
+        `${YEARS_OF_EXPERIENCE}+ years | React, TypeScript, Node.js, Azure`,
         "",
         "Download the full resume from the Profile app.",
       ],
@@ -92,6 +94,14 @@ const VIRTUAL_FS: FsNode = {
           type: "file",
           content: ["Settings application bundle"],
         },
+        "finder.app": {
+          type: "file",
+          content: ["Finder application bundle"],
+        },
+        "notepad.app": {
+          type: "file",
+          content: ["Notepad application bundle"],
+        },
       },
     },
     Documents: {
@@ -103,7 +113,7 @@ const VIRTUAL_FS: FsNode = {
             "Dear Hiring Manager,",
             "",
             "I am writing to express my interest in your engineering position.",
-            "With 6+ years of full-stack experience and a passion for building",
+            `With ${YEARS_OF_EXPERIENCE}+ years of full-stack experience and a passion for building`,
             "elegant, scalable solutions, I believe I would be a great fit.",
             "",
             "Best regards,",
@@ -117,16 +127,26 @@ const VIRTUAL_FS: FsNode = {
             "",
             "## Frontend",
             "- React 19, TypeScript, Next.js, Tailwind CSS",
-            "- Framer Motion, Vite, Storybook",
+            "- Framer Motion, Vite, Storybook, React Native",
             "",
             "## Backend",
             "- Node.js, NestJS, Express.js, Spring Boot, GraphQL",
             "",
             "## DevOps",
-            "- Docker, GitHub Actions, GitLab CI, Azure, Firebase",
+            "- Docker, GitHub Actions, GitLab CI, Azure, Firebase, NGINX",
             "",
             "## Databases",
             "- PostgreSQL, MongoDB, SQL Server",
+            "",
+            "## Testing",
+            "- Jest, Cypress, Playwright, Cucumber, WebDriverIO",
+            "",
+            "## Languages",
+            "- JavaScript, TypeScript, Java, Python",
+            "",
+            "## AI",
+            "- GitHub Copilot, OpenCode, ChatGPT, Claude",
+            "- AI Agent Authoring",
           ],
         },
       },
@@ -377,6 +397,8 @@ const VALID_APPS: AppId[] = [
   "terminal",
   "projects",
   "settings",
+  "finder",
+  "notepad",
 ];
 
 // ---------------------------------------------------------------------------
@@ -445,7 +467,7 @@ function aboutCommand(): CommandResult {
       "Jihad Al-Khurfan",
       "Senior Fullstack Engineer",
       "",
-      "6+ years of experience building scalable web and",
+      `${YEARS_OF_EXPERIENCE}+ years of experience building scalable web and`,
       "mobile solutions. Specializing in React, TypeScript,",
       "Node.js, and cloud infrastructure across fintech,",
       "logistics, and government digital transformation",
@@ -462,9 +484,10 @@ function skillsCommand(): CommandResult {
       "  Frontend   React, TypeScript, Next.js, Tailwind CSS, ...",
       "  Backend    Node.js, NestJS, Express.js, Spring Boot, ...",
       "  DevOps     Docker, GitHub Actions, Azure, Firebase, ...",
-      "  Databases  PostgreSQL, MongoDB, SQL Server, ...",
+      "  Databases  PostgreSQL, MongoDB, SQL Server",
       "  Testing    Jest, Cypress, Playwright, Cucumber, ...",
-      "  Languages  JavaScript, TypeScript, Java, Python, ...",
+      "  Languages  JavaScript, TypeScript, Java, Python",
+      "  AI         GitHub Copilot, OpenCode, ChatGPT, Claude, ...",
       "",
       "  Run 'open skills' for the full interactive view.",
     ],
@@ -493,9 +516,10 @@ function contactCommand(): CommandResult {
     output: [
       "Contact Information:",
       "",
-      "  Email     jihadkhurfan@gmail.com",
+      "  Email     jalkhurfan@gmail.com",
+      "  Phone     +961 76 380 589",
       "  LinkedIn  linkedin.com/in/jalkhurfan",
-      "  GitHub    github.com/jalkhurfan",
+      "  GitHub    github.com/jKh98",
       "  Location  Beirut, Lebanon",
       "",
       "  Run 'open contact' for interactive contact card.",
@@ -991,7 +1015,7 @@ function manCommand(args: string[]): CommandResult {
       "",
       "APPS",
       "     profile, experience, skills, contact,",
-      "     terminal, projects, settings",
+      "     terminal, projects, settings, finder, notepad",
     ],
   };
 

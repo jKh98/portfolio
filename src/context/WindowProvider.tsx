@@ -102,7 +102,11 @@ function windowReducer(
   switch (action.type) {
     case "OPEN": {
       const { id, autoCascade = true } = action;
-      // If already open, just focus it
+      // If already open but minimized, restore it
+      if (state.windows[id].isOpen && state.windows[id].isMinimized) {
+        return windowReducer(state, { type: "RESTORE", id });
+      }
+      // If already open and visible, just focus it
       if (state.windows[id].isOpen) {
         return windowReducer(state, { type: "FOCUS", id });
       }

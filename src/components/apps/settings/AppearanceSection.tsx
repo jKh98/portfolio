@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Moon, Sun, Check, Link } from "lucide-react";
 import { useTheme } from "@/context";
-import { usePreferences } from "@/hooks";
+import { usePreferences, useAudio } from "@/hooks";
 import {
   ACCENT_COLORS,
   WALLPAPER_CATEGORIES,
@@ -97,6 +97,7 @@ export function AppearanceSection() {
   const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
   const { preferences, setAccentColor, setWallpaper } = usePreferences();
+  const { playSound } = useAudio();
 
   const [activeCategory, setActiveCategory] = useState<WallpaperCategory>(
     () => getWallpaper(preferences.wallpaper).category,
@@ -152,7 +153,10 @@ export function AppearanceSection() {
             return (
               <button
                 key={id}
-                onClick={() => setAccentColor(id)}
+                onClick={() => {
+                  setAccentColor(id);
+                  playSound("accentColorChange");
+                }}
                 aria-label={t(`apps.settings.appearance.colors.${id}`)}
                 className={cn(
                   "w-8 h-8 rounded-full border-2 transition-transform",
@@ -200,7 +204,10 @@ export function AppearanceSection() {
               entry={entry}
               isActive={preferences.wallpaper === entry.id}
               isPaired={!!entry.pairId}
-              onClick={() => setWallpaper(entry.id)}
+              onClick={() => {
+                setWallpaper(entry.id);
+                playSound("wallpaperChange");
+              }}
             />
           ))}
         </div>
