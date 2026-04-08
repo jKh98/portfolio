@@ -3,7 +3,7 @@ import { getFirestore } from "firebase/firestore";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import {
   initializeAppCheck,
-  ReCaptchaEnterpriseProvider,
+  ReCaptchaV3Provider,
 } from "firebase/app-check";
 
 const firebaseConfig = {
@@ -20,7 +20,7 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 // App Check — protects Firebase resources from abuse.
-// Requires a reCAPTCHA Enterprise site key set in VITE_RECAPTCHA_SITE_KEY.
+// Requires a reCAPTCHA v3 site key set in VITE_RECAPTCHA_SITE_KEY.
 // In development, set VITE_APPCHECK_DEBUG=true to use the debug provider.
 const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 if (recaptchaSiteKey) {
@@ -31,7 +31,7 @@ if (recaptchaSiteKey) {
   }
 
   initializeAppCheck(app, {
-    provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
+    provider: new ReCaptchaV3Provider(recaptchaSiteKey),
     isTokenAutoRefreshEnabled: true,
   });
 }
