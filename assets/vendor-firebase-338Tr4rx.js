@@ -2478,7 +2478,7 @@ This typically indicates that your device does not have a healthy Internet conne
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */const jl="https://content-firebaseappcheck.googleapis.com/v1",ay="exchangeRecaptchaEnterpriseToken",cy="exchangeDebugToken",Cc={RETRIAL_MIN_WAIT:30*1e3,RETRIAL_MAX_WAIT:960*1e3},uy=1440*60*1e3;/**
+ */const jl="https://content-firebaseappcheck.googleapis.com/v1",ay="exchangeRecaptchaV3Token",cy="exchangeDebugToken",Cc={RETRIAL_MIN_WAIT:30*1e3,RETRIAL_MAX_WAIT:960*1e3},uy=1440*60*1e3;/**
  * @license
  * Copyright 2020 Google LLC
  *
@@ -2538,7 +2538,7 @@ This typically indicates that your device does not have a healthy Internet conne
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */async function io({url:n,body:t},e){const r={"Content-Type":"application/json"},s=e.getImmediate({optional:!0});if(s){const y=await s.getHeartbeatsHeader();y&&(r["X-Firebase-Client"]=y)}const o={method:"POST",body:JSON.stringify(t),headers:r};let a;try{a=await fetch(n,o)}catch(y){throw vt.create("fetch-network-error",{originalErrorMessage:y==null?void 0:y.message})}if(a.status!==200)throw vt.create("fetch-status-error",{httpStatus:a.status});let u;try{u=await a.json()}catch(y){throw vt.create("fetch-parse-error",{originalErrorMessage:y==null?void 0:y.message})}const h=u.ttl.match(/^([\d.]+)(s)$/);if(!h||!h[2]||isNaN(Number(h[1])))throw vt.create("fetch-parse-error",{originalErrorMessage:`ttl field (timeToLive) is not in standard Protobuf Duration format: ${u.ttl}`});const f=Number(h[1])*1e3,p=Date.now();return{token:u.token,expireTimeMillis:p+f,issuedAtTimeMillis:p}}function dy(n,t){const{projectId:e,appId:r,apiKey:s}=n.options;return{url:`${jl}/projects/${e}/apps/${r}:${ay}?key=${s}`,body:{recaptcha_enterprise_token:t}}}function Hl(n,t){const{projectId:e,appId:r,apiKey:s}=n.options;return{url:`${jl}/projects/${e}/apps/${r}:${cy}?key=${s}`,body:{debug_token:t}}}/**
+ */async function io({url:n,body:t},e){const r={"Content-Type":"application/json"},s=e.getImmediate({optional:!0});if(s){const y=await s.getHeartbeatsHeader();y&&(r["X-Firebase-Client"]=y)}const o={method:"POST",body:JSON.stringify(t),headers:r};let a;try{a=await fetch(n,o)}catch(y){throw vt.create("fetch-network-error",{originalErrorMessage:y==null?void 0:y.message})}if(a.status!==200)throw vt.create("fetch-status-error",{httpStatus:a.status});let u;try{u=await a.json()}catch(y){throw vt.create("fetch-parse-error",{originalErrorMessage:y==null?void 0:y.message})}const h=u.ttl.match(/^([\d.]+)(s)$/);if(!h||!h[2]||isNaN(Number(h[1])))throw vt.create("fetch-parse-error",{originalErrorMessage:`ttl field (timeToLive) is not in standard Protobuf Duration format: ${u.ttl}`});const f=Number(h[1])*1e3,p=Date.now();return{token:u.token,expireTimeMillis:p+f,issuedAtTimeMillis:p}}function dy(n,t){const{projectId:e,appId:r,apiKey:s}=n.options;return{url:`${jl}/projects/${e}/apps/${r}:${ay}?key=${s}`,body:{recaptcha_v3_token:t}}}function Hl(n,t){const{projectId:e,appId:r,apiKey:s}=n.options;return{url:`${jl}/projects/${e}/apps/${r}:${cy}?key=${s}`,body:{debug_token:t}}}/**
  * @license
  * Copyright 2020 Google LLC
  *
@@ -2630,7 +2630,37 @@ This typically indicates that your device does not have a healthy Internet conne
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */class by{constructor(t,e){this.app=t,this.heartbeatServiceProvider=e}_delete(){const{tokenObservers:t}=at(this.app);for(const e of t)Jl(this.app,e.next);return Promise.resolve()}}function Py(n,t){return new by(n,t)}function Cy(n){return{getToken:t=>hi(n,t),getLimitedUseToken:()=>Ry(n),addTokenListener:t=>Xl(n,"INTERNAL",t),removeTokenListener:t=>Jl(n.app,t)}}const Vy="@firebase/app-check",Dy="0.11.2",ky="https://www.google.com/recaptcha/enterprise.js";function Ny(n,t){const e=new Vn,r=at(n);r.reCAPTCHAState={initialized:e};const s=Oy(n),o=Vc(!0);return o?kc(n,t,o,s,e):Ly(()=>{const a=Vc(!0);if(!a)throw new Error("no recaptcha");kc(n,t,a,s,e)}),e.promise}function kc(n,t,e,r,s){e.ready(()=>{xy(n,t,e,r),s.resolve(e)})}function Oy(n){const t=`fire_app_check_${n.name}`,e=document.createElement("div");return e.id=t,e.style.display="none",document.body.appendChild(e),t}async function My(n){so(n);const e=await at(n).reCAPTCHAState.initialized.promise;return new Promise((r,s)=>{const o=at(n).reCAPTCHAState;e.ready(()=>{r(e.execute(o.widgetId,{action:"fire_app_check"}))})})}function xy(n,t,e,r){const s=e.render(r,{sitekey:t,size:"invisible",callback:()=>{at(n).reCAPTCHAState.succeeded=!0},"error-callback":()=>{at(n).reCAPTCHAState.succeeded=!1}}),o=at(n);o.reCAPTCHAState={...o.reCAPTCHAState,widgetId:s}}function Ly(n){const t=document.createElement("script");t.src=ky,t.onload=n,document.head.appendChild(t)}class th{constructor(t){this._siteKey=t,this._throttleData=null}async getToken(){var r,s,o;Uy(this._throttleData);const t=await My(this._app).catch(a=>{throw vt.create("recaptcha-error")});if(!((r=at(this._app).reCAPTCHAState)!=null&&r.succeeded))throw vt.create("recaptcha-error");let e;try{e=await io(dy(this._app,t),this._heartbeatServiceProvider)}catch(a){throw(s=a.code)!=null&&s.includes("fetch-status-error")?(this._throttleData=Fy(Number((o=a.customData)==null?void 0:o.httpStatus),this._throttleData),vt.create("initial-throttle",{time:zl(this._throttleData.allowRequestsAfter-Date.now()),httpStatus:this._throttleData.httpStatus})):a}return this._throttleData=null,e}initialize(t){this._app=t,this._heartbeatServiceProvider=Ve(t,"heartbeat"),Ny(t,this._siteKey).catch(()=>{})}isEqual(t){return t instanceof th?this._siteKey===t._siteKey:!1}}function Fy(n,t){if(n===404||n===403)return{backoffCount:1,allowRequestsAfter:Date.now()+uy,httpStatus:n};{const e=t?t.backoffCount:0,r=$s(e,1e3,2);return{backoffCount:e+1,allowRequestsAfter:Date.now()+r,httpStatus:n}}}function Uy(n){if(n&&Date.now()-n.allowRequestsAfter<=0)throw vt.create("throttled",{time:zl(n.allowRequestsAfter-Date.now()),httpStatus:n.httpStatus})}/**
+ */class by{constructor(t,e){this.app=t,this.heartbeatServiceProvider=e}_delete(){const{tokenObservers:t}=at(this.app);for(const e of t)Jl(this.app,e.next);return Promise.resolve()}}function Py(n,t){return new by(n,t)}function Cy(n){return{getToken:t=>hi(n,t),getLimitedUseToken:()=>Ry(n),addTokenListener:t=>Xl(n,"INTERNAL",t),removeTokenListener:t=>Jl(n.app,t)}}const Vy="@firebase/app-check",Dy="0.11.2";/**
+ * @license
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */const ky="https://www.google.com/recaptcha/api.js";function Ny(n,t){const e=new Vn,r=at(n);r.reCAPTCHAState={initialized:e};const s=Oy(n),o=Vc(!1);return o?kc(n,t,o,s,e):Ly(()=>{const a=Vc(!1);if(!a)throw new Error("no recaptcha");kc(n,t,a,s,e)}),e.promise}function kc(n,t,e,r,s){e.ready(()=>{xy(n,t,e,r),s.resolve(e)})}function Oy(n){const t=`fire_app_check_${n.name}`,e=document.createElement("div");return e.id=t,e.style.display="none",document.body.appendChild(e),t}async function My(n){so(n);const e=await at(n).reCAPTCHAState.initialized.promise;return new Promise((r,s)=>{const o=at(n).reCAPTCHAState;e.ready(()=>{r(e.execute(o.widgetId,{action:"fire_app_check"}))})})}function xy(n,t,e,r){const s=e.render(r,{sitekey:t,size:"invisible",callback:()=>{at(n).reCAPTCHAState.succeeded=!0},"error-callback":()=>{at(n).reCAPTCHAState.succeeded=!1}}),o=at(n);o.reCAPTCHAState={...o.reCAPTCHAState,widgetId:s}}function Ly(n){const t=document.createElement("script");t.src=ky,t.onload=n,document.head.appendChild(t)}/**
+ * @license
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */class th{constructor(t){this._siteKey=t,this._throttleData=null}async getToken(){var r,s,o;Uy(this._throttleData);const t=await My(this._app).catch(a=>{throw vt.create("recaptcha-error")});if(!((r=at(this._app).reCAPTCHAState)!=null&&r.succeeded))throw vt.create("recaptcha-error");let e;try{e=await io(dy(this._app,t),this._heartbeatServiceProvider)}catch(a){throw(s=a.code)!=null&&s.includes("fetch-status-error")?(this._throttleData=Fy(Number((o=a.customData)==null?void 0:o.httpStatus),this._throttleData),vt.create("initial-throttle",{time:zl(this._throttleData.allowRequestsAfter-Date.now()),httpStatus:this._throttleData.httpStatus})):a}return this._throttleData=null,e}initialize(t){this._app=t,this._heartbeatServiceProvider=Ve(t,"heartbeat"),Ny(t,this._siteKey).catch(()=>{})}isEqual(t){return t instanceof th?this._siteKey===t._siteKey:!1}}function Fy(n,t){if(n===404||n===403)return{backoffCount:1,allowRequestsAfter:Date.now()+uy,httpStatus:n};{const e=t?t.backoffCount:0,r=$s(e,1e3,2);return{backoffCount:e+1,allowRequestsAfter:Date.now()+r,httpStatus:n}}}function Uy(n){if(n&&Date.now()-n.allowRequestsAfter<=0)throw vt.create("throttled",{time:zl(n.allowRequestsAfter-Date.now()),httpStatus:n.httpStatus})}/**
  * @license
  * Copyright 2020 Google LLC
  *

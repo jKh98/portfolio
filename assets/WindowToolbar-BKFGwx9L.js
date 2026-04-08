@@ -1,0 +1,1 @@
+import{j as s}from"./vendor-motion-DJ4NOPWq.js";import{b as e}from"./index-D72Tqtjw.js";function n({children:r,className:o}){return s.jsx("div",{className:e("flex items-center gap-2 h-9 px-3 shrink-0","bg-[var(--bg-glass-inner)] backdrop-blur-sm","border-b border-[var(--border)]",o),children:r})}export{n as W};
