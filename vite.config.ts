@@ -43,6 +43,7 @@ export default defineConfig({
             "firebase/app",
             "firebase/firestore",
             "firebase/analytics",
+            "firebase/app-check",
           ],
         },
       },
